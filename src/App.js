@@ -1,23 +1,14 @@
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
+import FrontPage from "./Components/FrontPage/FrontPage";
+import { Routes, Route, Link } from "react-router";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Continuous integration testing!</h1>
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Routes>
+        <Route path="/" element={<FrontPage />} />
+      </Routes>
     </div>
   );
 }
