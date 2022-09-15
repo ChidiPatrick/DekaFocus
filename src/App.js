@@ -2,10 +2,14 @@ import logo from "./logo.svg";
 import "./App.scss";
 import FrontPage from "./Components/FrontPage/FrontPage";
 import { Routes, Route, Link } from "react-router";
+import { useSelector } from "react-redux";
 
 function App() {
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 5);
+  const minute = useSelector((state) => state.frontPage.minute5);
+
+  time.setSeconds(time.getSeconds() + minute);
+
   return (
     <div className="App">
       <Routes>
