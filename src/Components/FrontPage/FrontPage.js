@@ -9,6 +9,7 @@ import Button, {
 import { useState, useEffect, useRef } from "react";
 import { userTimer, useTimer } from "react-timer-hook";
 import btnStyles from "../Button/Button.module.scss";
+import { Link } from "react-dom";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,6 +22,8 @@ import {
   showContinueBtn,
   hideContinueBtn,
   resetState,
+  breakEnd,
+  breakStart,
 } from "./FrontPageSlice";
 
 /////////////////////////////////
@@ -63,6 +66,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   const onExpiry = () => {
     dispatch(resetState());
     restart(getDate(), false);
+    dispatch(breakStart());
   };
   const Style = [styles.FrontPageTime];
   let classes = [classNames(btnStyles.BtnStart)];
@@ -127,6 +131,7 @@ const FrontPage = ({ expiryTimestamp }) => {
           </div>
         </div>
       </div>
+      {/* <Link /> */}
     </div>
   );
 };

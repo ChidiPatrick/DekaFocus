@@ -8,6 +8,7 @@ const initialState = {
   Pause: true,
   Continue: false,
   stop: false,
+  break: false,
 };
 const FrontPageSlice = createSlice({
   name: "FrontPage",
@@ -47,7 +48,12 @@ const FrontPageSlice = createSlice({
     hideStopBtn(state, action) {
       state.stop = false;
     },
-    timeElapsed: () => {},
+    breakStart(state, action) {
+      state.break = true;
+    },
+    breakEnd(state, action) {
+      state.break = false;
+    },
   },
 });
 
@@ -60,7 +66,8 @@ export const {
   hideStopBtn,
   showContinueBtn,
   hideContinueBtn,
-
+  breakEnd,
+  breakStart,
   resetState,
 } = FrontPageSlice.actions;
 export default FrontPageSlice.reducer;
