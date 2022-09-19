@@ -12,6 +12,9 @@ import btnStyles from "../Button/Button.module.scss";
 import { Link } from "react-dom";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
+import ReactAudioPlayer from "react-audio-player";
+import UIFx from "uifx";
+import bellSound from "../audioFiles/bellSound.mp3";
 import {
   showStartBtn,
   hideStartBtn,
@@ -32,6 +35,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   const Pause = useSelector((state) => state.frontPage.Pause);
   const Continue = useSelector((state) => state.frontPage.Continue);
   const stop = useSelector((state) => state.frontPage.stop);
+  const bell = new UIFx(bellSound, { volume: 0.4, throttleMs: 100 });
   console.log(Pause);
   // const [running, setRunning] = useState(true);
   // const [paused, setPaused] = useState(true);
@@ -64,6 +68,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   };
   console.log(expiryTimestamp);
   const onExpiry = () => {
+    bell.play();
     dispatch(resetState());
     restart(getDate(), false);
     dispatch(breakStart());
@@ -130,6 +135,7 @@ const FrontPage = ({ expiryTimestamp }) => {
             </button>
           </div>
         </div>
+        <ReactAudioPlayer controls />
       </div>
       {/* <Link /> */}
     </div>

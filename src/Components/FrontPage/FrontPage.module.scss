@@ -3,7 +3,14 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  background-color: rgb(221, 43, 12);
+  background-image: linear-gradient(
+    to bottom,
+    #dd2b0c,
+    #e52e1a,
+    #ec3225,
+    #f33630,
+    #fa3a3a
+  );
   height: 100vh;
 }
 .FrontPageTime {

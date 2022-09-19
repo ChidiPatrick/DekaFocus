@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./BreakUI.module.scss";
 import { userTimer, useTimer } from "react-timer-hook";
 import { useDispatch } from "react-redux";
+import tubularBell from "../audioFiles/tubularBell.mp3";
 import {
   showStartBtn,
   hideStartBtn,
@@ -15,9 +16,10 @@ import {
   breakEnd,
   breakStart,
 } from "../FrontPage/FrontPageSlice";
+import UIFx from "uifx";
 const BreakUI = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
-
+  const breakEndBell = new UIFx(tubularBell, { volume: 0.4, throttleMs: 100 });
   const {
     seconds,
     minutes,
@@ -41,6 +43,8 @@ const BreakUI = ({ expiryTimestamp }) => {
   };
   const onExpiry = () => {
     getDate();
+    dispatch(breakEnd());
+    breakEndBell.play();
   };
   const skipBreak = () => {
     dispatch(breakEnd());
