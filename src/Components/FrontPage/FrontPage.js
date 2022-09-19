@@ -135,7 +135,6 @@ const FrontPage = ({ expiryTimestamp }) => {
             </button>
           </div>
         </div>
-        <ReactAudioPlayer controls />
       </div>
       {/* <Link /> */}
     </div>
