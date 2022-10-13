@@ -4,7 +4,8 @@ import FrontPage from "./Components/FrontPage/FrontPage";
 import { Routes, Route, Link } from "react-router";
 import { useSelector } from "react-redux";
 import BreakUI from "./Components/BreakUI/BreakUI";
-
+import UserAccountUI from "./Components/UserAccount/UserAccount";
+import AddTask from "./Components/addTask/addTask";
 function App() {
   const time = new Date();
   const minute = useSelector((state) => state.frontPage.minute5);
@@ -21,6 +22,13 @@ function App() {
     <div className="App">
       <Routes>
         <Route path="/" element={frontpage} />
+        <Route path="/UserAccount" element={<UserAccountUI />} />
+        <Route path="//todayTodo" element={<AddTask />} />
+        <Route path="/tomorrowTodo" element={<AddTask />} />
+        <Route path="/upcomingTodo" element={<AddTask />} />
+        <Route path="/somedayTodo" element={<AddTask />} />
+        <Route path="/events" element={<AddTask />} />
+        <Route path="/completed" element={<AddTask />} />
       </Routes>
     </div>
   );

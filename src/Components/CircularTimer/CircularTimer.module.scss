@@ -1,0 +1,19 @@
+.CircularTimer {
+  //   background-image: linear-gradient(
+  //     to bottom,
+  //     #dd2b0c,
+  //     #e52e1a,
+  //     #ec3225,
+  //     #f33630,
+  //     #fa3a3a
+  //   );
+  background-color: aqua;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

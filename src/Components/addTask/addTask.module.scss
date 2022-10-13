@@ -1,0 +1,73 @@
+.TaskWrapper {
+  background-color: rgb(241, 241, 241);
+  min-height: 100vh;
+}
+.TaskTimeWrapper{
+  display: grid;
+  grid-template-columns: repeat(4, 85px) ;
+  justify-items: center;
+  align-content: center;
+}
+.TaskTimeEstimateWrapper ,
+.TaskTobeCompletedWrapper, 
+.ElapsedTimeWrapper,
+.TaskCompletedWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.TaskTimeUnit {
+  color: rgb(138, 138, 138);
+  font-size: 10px;
+}
+// .TaskEstimatedTime,
+.TaskTimeEstimateWrapper,
+.TaskCompletedWrapper,
+.ElapsedTimeWrapper,
+.TaskTobeCompletedWrapper {
+  font-size: 25px;
+  color: #eb2f06;
+  font-weight: 600;
+}
+.TaskHeaderWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  height: 50px;
+  margin-bottom: 10px;
+}
+
+.TaskTimePartition {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 50px;
+}
+.TaskTimeEstimateWrapper {
+  // display: grid;
+  // grid-column: 100px;
+  // justify-items: center;
+  // grid-template-rows: repeat(3);
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+  // width: 100px;
+  // flex-direction: column;
+}
+.TaskTimeWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+}
+.TaskTobeCompletedWrapper {
+  width: 50px;
+}
+
+.sort{
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+}

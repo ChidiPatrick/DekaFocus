@@ -1,0 +1,31 @@
+
+.addTaskInputNotFocused
+{
+    height: 20px;
+    padding: 10px;
+    border: none;
+    color: black;
+    width: 80%;
+    margin: auto 0;
+    margin-top: 10px;
+    font-size: 20px;
+    &:focus{
+     border: 1px solid tomato;  
+    //  background-color: red; 
+    outline: none;
+    }
+    &::placeholder{
+        font-size: 18px;
+    }
+
+}
+
+// .addTaskInputNotFocused{
+//     border: 1px solid blue;
+// }
+// .addTaskInputFocused{
+    
+//     &:focus{
+//         border: 1px solid red;
+//     }
+// }

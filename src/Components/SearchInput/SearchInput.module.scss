@@ -1,0 +1,17 @@
+.search {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+    height: 30px;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+
+    &::placeholder {
+        font-size: 17px;
+
+    }
+  }
+  

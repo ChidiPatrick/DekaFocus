@@ -1,8 +1,4 @@
-.FrontPageWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.FrontPageMainWrapper {
   background-image: linear-gradient(
     to bottom,
     #dd2b0c,
@@ -11,6 +7,14 @@
     #f33630,
     #fa3a3a
   );
+  position: relative;
+}
+.FrontPageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
   height: 100vh;
 }
 .FrontPageTime {
@@ -46,4 +50,12 @@
   // display: flex;
   // justify-content: center;
   // align-items: center;
+}
+.UserAccountLink {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  // background-color: #fff;
+  color: #fff;
+  font-size: 20px;
 }

@@ -5,16 +5,21 @@ const initialState = {
   minute15: 900,
   minute25: 1500,
   minute45: 2700,
+  currentTime: null,
   running: true,
   Pause: true,
   Continue: false,
   stop: false,
   break: false,
+  counting: false,
 };
 const FrontPageSlice = createSlice({
   name: "FrontPage",
   initialState,
   reducers: {
+    updateCurrnetTime(state, action) {
+      state.currentTime = action.payload;
+    },
     resetState(state, action) {
       state.minute5 = 5;
       state.minute15 = 900;
@@ -24,6 +29,12 @@ const FrontPageSlice = createSlice({
       state.Pause = true;
       state.Continue = false;
       state.stop = false;
+    },
+    startCounting(state, action) {
+      state.counting = true;
+    },
+    endCounting(state, action) {
+      state.counting = false;
     },
     hideStartBtn(state, action) {
       state.running = false;
@@ -70,5 +81,8 @@ export const {
   breakEnd,
   breakStart,
   resetState,
+  startCounting,
+  endCounting,
+  updateCurrnetTime,
 } = FrontPageSlice.actions;
 export default FrontPageSlice.reducer;
