@@ -1,0 +1,29 @@
+.PomodoroSettingWrapper{
+    background-color: #fff;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0;
+}
+.taskSetting{
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    margin-top: 10px;
+    padding: 10px;
+}
+.stopWatchIconWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+.stopWatchIcon{
+    fill: rgb(192, 192, 192);
+}
+.stopWatchIconClicked{
+    fill: tomato;
+}
+.PomodoroSettingHeader{
+    color: rgb(192, 192, 192);
+}

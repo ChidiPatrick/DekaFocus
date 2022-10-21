@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import BreakUI from "./Components/BreakUI/BreakUI";
 import UserAccountUI from "./Components/UserAccount/UserAccount";
 import AddTask from "./Components/addTask/addTask";
+import Setting from "./Components/Settings/Settings"
+import Settings from "./Components/Settings/Settings";
 function App() {
   const time = new Date();
   const minute = useSelector((state) => state.frontPage.minute5);
@@ -29,6 +31,7 @@ function App() {
         <Route path="/somedayTodo" element={<AddTask />} />
         <Route path="/events" element={<AddTask />} />
         <Route path="/completed" element={<AddTask />} />
+        <Route path="/settings" element={<Settings/>}/>
       </Routes>
     </div>
   );

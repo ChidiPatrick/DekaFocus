@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import {ButtonBack} from "../NavButtons/NavButton";
 import { TbArrowsDownUp } from "react-icons/tb";
 import AddTaskInput from "../addTaskInput/addTaskInput"
+import PomodoroSetting from "../PomodoroSetting/PomodoroSetting"
 const AddTask = () => {
   const navigate = useNavigate();
   const moveToPreviousePage = () => {
@@ -57,6 +58,7 @@ const AddTask = () => {
       </div>
     
       <AddTaskInput/>
+      <PomodoroSetting/>
     </div>
   );
 };
