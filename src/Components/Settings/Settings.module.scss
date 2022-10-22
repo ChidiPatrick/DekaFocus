@@ -117,3 +117,45 @@
     justify-content: center;
     align-items: center;
 }
+.minutes{
+    width: 100%;
+    // border: none;
+}
+.minuteList{
+    width: 100%;
+}
+.minuteList{
+    width: 100%;
+}
+.minuteOption{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.selectMinutes{
+    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: none;
+    outline: none;
+    height: 50px;
+}
+.minutesLabel{
+    display: block;
+    background-color: orange;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 5px;
+}
+.inputLabel{
+    border: none;
+}
+.hidden{
+    visibility: hidden;
+    opacity: 0;
+}
