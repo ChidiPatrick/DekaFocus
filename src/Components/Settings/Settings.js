@@ -19,6 +19,7 @@ import {
 	updateShortBreakTime
 } from '../Settings/SettingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
+import Switch from 'react-switch';
 const Settings = (props) => {
 	///////////////////
 	///GLOBALS/////////
@@ -145,13 +146,6 @@ const Settings = (props) => {
 				</div>
 			</div>
 			<div className={styles.timeSettingsWrapper}>
-				{/* <div className={styles.pomodoroLength}>
-					<span className={styles.typeOfBreak}>Long Break After</span>
-					<div className={styles.pomodoroDuration}>
-						<span>45 Minutes</span>
-						<FaChevronLeft className={styles.iconBack} />
-					</div>
-				</div>  */}
 				<form className={styles.minuteList}>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
 						<span>Pomodoro Length</span>
@@ -218,6 +212,36 @@ const Settings = (props) => {
 							);
 						})}
 					</select>
+					<div className={styles.breakSwitch}>
+						<span className={styles.switchLabel}>Disable Break</span>
+						<Switch
+							className={styles.switch}
+							height={17}
+							width={40}
+							onHandleColor="#eb2f06"
+							checked={false}
+						/>
+					</div>
+					<div className={styles.AutoStartPomodoroSwitch}>
+						<span className={styles.switchLabel}>Auto Start of Next Pomodoro</span>
+						<Switch
+							className={styles.switch}
+							height={17}
+							width={40}
+							onHandleColor="#eb2f06"
+							checked={false}
+						/>
+					</div>
+					<div className={styles.AutoStartBreakSwitch}>
+						<span className={styles.switchLabel}>Auto Start of Break</span>
+						<Switch
+							className={styles.switch}
+							height={17}
+							width={40}
+							onHandleColor="#eb2f06"
+							checked={false}
+						/>
+					</div>
 				</form>
 			</div>
 		</div>
