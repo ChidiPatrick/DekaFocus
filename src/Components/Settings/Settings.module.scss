@@ -1,161 +1,156 @@
-.Setting{
-    background-color: rgb(241, 241, 241);
-
+.Setting {
+	background-color: rgb(241, 241, 241);
 }
-.accountDetails{
-    padding: 10px;
+.accountDetails {
+	padding: 10px;
 }
-.HeaderWrapper{
-    display: flex;
-    align-content: center;
-    // justify-content: center;
-    height: 60px;
-    background-color: #fff;
-    margin-bottom: 10px;
-
+.HeaderWrapper {
+	display: flex;
+	align-content: center;
+	// justify-content: center;
+	height: 60px;
+	background-color: #fff;
+	margin-bottom: 10px;
 }
 .navLink {
-    // display: flex;
-    // justify-content: center;
-    // align-content: center;
-    height: 100%;
-    margin-right: 20px;
+	// display: flex;
+	// justify-content: center;
+	// align-content: center;
+	height: 100%;
+	margin-right: 20px;
 }
-.SettingHeader{
-    // height: 50px;
-    margin: 0;
+.SettingHeader {
+	// height: 50px;
+	margin: 0;
 }
-.iconBack{
-    padding: 5px;
-    font-size: 20px;
-    font-weight: length;
-    fill: rgb(124, 124, 124);
+.iconBack {
+	padding: 5px;
+	font-size: 20px;
+	font-weight: length;
+	fill: rgb(124, 124, 124);
+}
+.accountDetails {
+	// display: flex;
+	// justify-content: space-between;
+	// align-content: center;
+	display: grid;
+	grid-template-columns: min-content 250px min-content;
+	justify-items: center;
+	align-items: center;
+}
+.syncWrapper {
+	display: flex;
+	flex-direction: column;
+}
+.sync {
+	font-size: 10px;
+}
+.Avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: grey;
+	margin: 0;
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+.userName {
+	align-self: flex-start;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	// align-content: flex-start;
+	text-align: left;
+}
+.accountDetails {
+	background-color: #fff;
+}
+.AlarmSettings {
+	background-color: #fff;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+.workAlarm {
+	text-decoration: none;
+	color: black;
+	margin: 8px 0;
+}
+.linkWrapper {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
+.alarmTone {
+	display: flex;
+	align-items: center;
+}
+.alarm {
+	margin-right: 10px;
+}
+.timeSettingsWrapper {
+	background-color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	flex-direction: column;
+}
+.pomodoroLength {
+	// padding: 10px;
+	margin: 8px 0;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+}
 
+.pomodoroDuration {
+	color: rgb(163, 162, 162);
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-.accountDetails{
-    // display: flex;
-    // justify-content: space-between;
-    // align-content: center;
-    display: grid;
-    grid-template-columns: min-content 250px min-content;
-    justify-items: center;
-    align-items: center;
+.minutes {
+	width: 100%;
+	// border: none;
 }
-.syncWrapper{
-    display: flex;
-    flex-direction: column;
+.minuteList {
+	width: 100%;
 }
-.sync{
-    font-size: 10px;
+.minuteList {
+	width: 100%;
 }
-.Avatar{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: grey;
-    margin: 0;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+.minuteOption {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
 }
-.userName{
-    align-self: flex-start;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    // align-content: flex-start;
-    text-align: left;
+.selectMinutes {
+	width: 100px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	border: none;
+	outline: none;
+	// height: 50px;
 }
-.accountDetails{
-    background-color: #fff;
+.minutesLabel {
+	display: block;
+	background-color: #fff;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	padding: 5px;
 }
-.AlarmSettings{
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    
+.inputLabel {
+	border: none;
 }
-.workAlarm{
-    text-decoration: none;
-    color: black;
-    margin: 8px 0;
-}
-.linkWrapper{
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-.alarmTone{
-    display: flex;
-    align-items: center;
-}
-.alarm{
-    margin-right: 10px;
-}
-.timeSettingsWrapper{
-    background-color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-direction: column;
-}
-.pomodoroLength{
-    // padding: 10px;
-    margin: 8px 0;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-.typeOfBreak{
-
-}
-.pomodoroDuration{
-    color: rgb(163, 162, 162);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.minutes{
-    width: 100%;
-    // border: none;
-}
-.minuteList{
-    width: 100%;
-}
-.minuteList{
-    width: 100%;
-}
-.minuteOption{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-.selectMinutes{
-    width: 100px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    border: none;
-    outline: none;
-    height: 50px;
-}
-.minutesLabel{
-    display: block;
-    background-color: orange;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: 5px;
-}
-.inputLabel{
-    border: none;
-}
-.hidden{
-    visibility: hidden;
-    opacity: 0;
+.hidden {
+	visibility: none;
+	height: 0;
+	opacity: 0;
 }
