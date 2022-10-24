@@ -16,12 +16,21 @@ import {
 	updateLongBreakAfterTime,
 	updateLongBreakTime,
 	updatePomodoroTime,
-	updateShortBreakTime
+	updateShortBreakTime,
+	disableAutoStartBreak,
+	enableAutoStartBreak,
+	enableAutoStartPomodoro,
+	disableAutoStartPomodoro,
+	disableGoForBreak,
+	enableGoForBreak
 } from '../Settings/SettingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import Switch from 'react-switch';
+// import Switch from 'react-switch';
+import Switch from '@mui/material/Switch';
 const Settings = (props) => {
 	///////////////////
+	//HOOKS//
+	const [ checked, setChecked ] = useState(false);
 	///GLOBALS/////////
 	const dispatch = useDispatch();
 	////Select Display states/////
@@ -30,6 +39,9 @@ const Settings = (props) => {
 	const shortBreakLengthSelected = useSelector((state) => state.settings.shortBreakLengthSelected);
 	const longBreakLengthSelected = useSelector((state) => state.settings.longBreakLengthSelected);
 	const longBreakAfterLengthSelected = useSelector((state) => state.settings.longBreakAfterSelected);
+	const autoStartBreak = useSelector((state) => state.settings.autoStartBreak);
+	const autoStartNextPomodoro = useSelector((state) => state.settings.autoStartNextPomodoro);
+	const goForBreak = useSelector((state) => state.settings.goForBreak);
 	/// Get Pomodoro Durations //////
 	const pomodoroCurrLength = useSelector((state) => state.settings.pomodoroCurrLength);
 	const shortBreakCurrLength = useSelector((state) => state.settings.shortBreakCurrLength);
@@ -42,7 +54,6 @@ const Settings = (props) => {
 	for (let i = 0; i <= 60; i++) {
 		Minutes.push(i + 1);
 	}
-	console.log(pomodoroLengthSelected);
 	const togglePomodoroSelect = () => {
 		if (!pomodoroLengthSelected) {
 			dispatch(showMinutes());
@@ -101,6 +112,33 @@ const Settings = (props) => {
 		let curValue = e.target.value;
 		dispatch(hideLongBreakAfter());
 		dispatch(updateLongBreakAfterTime({ currTime: curValue }));
+	};
+	////////////////////////////////////
+	//Check button handler////////
+
+	const autoStartNextPomodoroHandler = () => {
+		if (!autoStartNextPomodoro) {
+			dispatch(enableAutoStartPomodoro());
+		}
+		if (autoStartNextPomodoro) {
+			dispatch(disableAutoStartPomodoro());
+		}
+	};
+	const autoBreakStartHandler = () => {
+		if (!autoStartBreak) {
+			dispatch(enableAutoStartBreak());
+		}
+		if (autoStartBreak) {
+			dispatch(disableAutoStartBreak());
+		}
+	};
+	const disableBreakHandler = () => {
+		if (!goForBreak) {
+			dispatch(enableGoForBreak());
+		}
+		if (goForBreak) {
+			dispatch(disableGoForBreak());
+		}
 	};
 	return (
 		<div className={styles.Setting}>
@@ -212,36 +250,37 @@ const Settings = (props) => {
 							);
 						})}
 					</select>
-					<div className={styles.breakSwitch}>
+					<label className={styles.breakSwitch}>
 						<span className={styles.switchLabel}>Disable Break</span>
 						<Switch
 							className={styles.switch}
 							height={17}
 							width={40}
-							onHandleColor="#eb2f06"
-							checked={false}
+							onChange={disableBreakHandler}
+							checked={goForBreak}
 						/>
-					</div>
-					<div className={styles.AutoStartPomodoroSwitch}>
+					</label>
+					<label className={styles.AutoStartPomodoroSwitch}>
 						<span className={styles.switchLabel}>Auto Start of Next Pomodoro</span>
 						<Switch
 							className={styles.switch}
 							height={17}
 							width={40}
-							onHandleColor="#eb2f06"
-							checked={false}
+							checked={autoStartNextPomodoro}
+							onChange={autoStartNextPomodoroHandler}
 						/>
-					</div>
-					<div className={styles.AutoStartBreakSwitch}>
+					</label>
+					<label className={styles.AutoStartBreakSwitch}>
 						<span className={styles.switchLabel}>Auto Start of Break</span>
 						<Switch
 							className={styles.switch}
 							height={17}
 							width={40}
-							onHandleColor="#eb2f06"
-							checked={false}
+							checked={autoStartBreak}
+							onChange={autoBreakStartHandler}
 						/>
-					</div>
+					</label>
+					{/* <Switch color="red" /> */}
 				</form>
 			</div>
 		</div>

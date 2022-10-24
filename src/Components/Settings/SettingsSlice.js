@@ -7,7 +7,10 @@ const initialState = {
 	pomodoroCurrLength: 45,
 	shortBreakCurrLength: 10,
 	longBreakCurrLength: 15,
-	longBreakAfterCurrLength: 4
+	longBreakAfterCurrLength: 4,
+	goForBreak: false,
+	autoStartNextPomodoro: false,
+	autoStartBreak: true
 };
 
 const SettingSlice = createSlice({
@@ -53,6 +56,24 @@ const SettingSlice = createSlice({
 		updateLongBreakAfterTime(state, action) {
 			const { currTime } = action.payload;
 			state.longBreakAfterCurrLength = currTime;
+		},
+		enableAutoStartBreak(state, action) {
+			state.autoStartBreak = true;
+		},
+		disableAutoStartBreak(state, action) {
+			state.autoStartBreak = false;
+		},
+		enableAutoStartPomodoro(state, action) {
+			state.autoStartNextPomodoro = true;
+		},
+		disableAutoStartPomodoro(state, action) {
+			state.autoStartNextPomodoro = false;
+		},
+		enableGoForBreak(state, action) {
+			state.goForBreak = true;
+		},
+		disableGoForBreak(state, action) {
+			state.goForBreak = false;
 		}
 	}
 });
@@ -69,6 +90,12 @@ export const {
 	updateLongBreakAfterTime,
 	updateLongBreakTime,
 	updatePomodoroTime,
-	updateShortBreakTime
+	updateShortBreakTime,
+	disableAutoStartBreak,
+	enableAutoStartBreak,
+	enableAutoStartPomodoro,
+	disableAutoStartPomodoro,
+	disableGoForBreak,
+	enableGoForBreak
 } = SettingSlice.actions;
 export default SettingSlice.reducer;
