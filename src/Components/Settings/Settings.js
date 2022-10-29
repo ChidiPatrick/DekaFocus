@@ -278,6 +278,7 @@ const Settings = (props) => {
 							width={40}
 							checked={autoStartBreak}
 							onChange={autoBreakStartHandler}
+							// color="#ccc"
 						/>
 					</label>
 					{/* <Switch color="red" /> */}
