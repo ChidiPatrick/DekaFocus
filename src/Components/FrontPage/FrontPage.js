@@ -15,7 +15,7 @@ import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 // import ReactAudioPlayer from "react-audio-player";
 import UIFx from "uifx";
-import bellSound from "../audioFiles/bellSound.mp3";
+
 import CircularTimer from "../CircularTimer/CircularTimer";
 import {
   showStartBtn,
@@ -33,24 +33,21 @@ import {
   startCounting,
   updateCurrnetTime,
 } from "./FrontPageSlice";
+import Toness from "../audioFiles/AudioFiles";
 
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
   const time = new Date();
-  // const circularUIContext = useContext();
   const circularTime = useSelector((state) => state.frontPage.minute5);
+  let tone = useSelector((state) => state.tones.selectedTone)
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
   const Continue = useSelector((state) => state.frontPage.Continue);
   const stop = useSelector((state) => state.frontPage.stop);
   const counting = useSelector((state) => state.frontPage.counting);
-  const bell = new UIFx(bellSound, { volume: 0.4, throttleMs: 100 });
-  let circularUI;
-  // if(counting){
-  //   circularUI =
-  // }
-
+  const bell = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
+console.log(Toness);
   let minute = useSelector((state) => state.frontPage.minute5);
   const dispatch = useDispatch();
   const {
