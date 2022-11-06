@@ -1,10 +1,13 @@
 import React from 'react';
 import styles from './SignUpForm.module.scss';
 import { useFormInputValidation } from 'react-form-input-validation';
-import { PasswordChecklist } from 'react-password-checklist';
+import PasswordChecklist from "react-password-checklist"
 import {getEmail,getFirstName,getLastName,getPassword,getPasswordAgain,getUserName} from "./SignUpFormSlice"
 import { useDispatch,useSelector } from 'react-redux';
+
 const SignUpForm = (props) => {
+	const password = useSelector((state) => state.signUpSlice.password) 
+	const passwordAgain = useSelector((state) => state.signUpSlice.passwordAgain) 
 	const dispatch = useDispatch()
 		const [ fields, errors, form ] = useFormInputValidation(
 			{
@@ -41,27 +44,42 @@ const SignUpForm = (props) => {
 	// },"Password must contain at least: one uppercase,lowercase,digit and special character")
 	return (
 		<form className={styles.SignUpWrapper} noValidate autoComplete="off" onSubmit={onSubmit}>
-			<label for= 'firstName'  className={styles.label}> <span className={styles.labelTitle}>First name</span>
+			<label htmlFor= 'firstName'  className={styles.label}> <span className={styles.labelTitle}>First name</span>
 				<input id ="firstName" className={styles.inputEl} type= "text" required 
 				onChange={(e) => dispatch(getFirstName(e.target.value))}/>
 			</label>
-			<label for= 'lastName'  className={styles.label}> <span className={styles.labelTitle}>Last name</span>
+			<label htmlFor= 'lastName'  className={styles.label}> <span className={styles.labelTitle}>Last name</span>
 				<input id ="lastName" className={styles.inputEl} type= "text" required
 				onChange={(e) => dispatch(getLastName(e.target.value))}/>
 			</label>
-			<label for= 'userName'  className={styles.label}> <span className={styles.labelTitle}>User name</span>
+			<label htmlFor= 'userName'  className={styles.label}> <span className={styles.labelTitle}>User name</span>
 				<input id ="userName" className={styles.inputEl} type= "text" required
 				onChange={(e) => dispatch(getUserName(e.target.value))}/>
 			</label>
-			<label for= 'email'  className={styles.label}> <span className={styles.labelTitle}>email</span>
+			<label htmlFor= 'email'  className={styles.label}> <span className={styles.labelTitle}>email</span>
 				<input id ="email" className={styles.inputEl} type= "email" required
 				onChange={(e) => dispatch(getEmail(e.target.value))}/>
 			</label>
-			<label for= 'password'  className={styles.label}> <span className={styles.labelTitle}>Password</span>
+			<label htmlFor= 'password'  className={styles.label}> <span className={styles.labelTitle}>Password</span>
 				<input id ="password" className={styles.inputEl} type= "password" required
-				onChange={(e) => dispatch(getPassword(e.target.value))}/>
+				onChange={(e) => {
+					dispatch(getPassword(e.target.value))
+					}}/>
+					<PasswordChecklist
+						rules={['minLength',"specialChar","number","capital","match"]}
+						minLength={8}
+						value={password}
+						valueAgain={passwordAgain}
+						message={{
+							minLength: "Password must be at least 8 characters ",
+							specailChar: "Password must contain special character",
+							Number: "Password must contain at least one digit",
+							capital: "Password must contain at least one uppercase character"
+						}}
+						/>
+				
 			</label>
-			<label for= 'confirmPassword'  className={styles.label}> <span className={styles.labelTitle}>Confirm Password</span>
+			<label htmlFor= 'confirmPassword'  className={styles.label}> <span className={styles.labelTitle}>Confirm Password</span>
 				<input id ="confirmPassword" className={styles.inputEl} type= "password" required
 				onChange={(e) => dispatch(getPasswordAgain(e.target.value))}/>
 			</label>
