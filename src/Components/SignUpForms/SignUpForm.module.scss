@@ -1,0 +1,46 @@
+.SignUpWrapper {
+	// display: flex;
+	// justify-content: center;
+	// align-items: center;
+	// flex-direction: column;
+	// width: 100%;
+	margin: 0 10px;
+	min-height: 100vh;
+	// font-size: 20px;
+}
+.inputEl {
+	width: 100%;
+	padding: 10px;
+	margin: 10px 0;
+	height: 15px;
+	border: none;
+	font-size: 20px;
+	border-bottom: solid 1px grey;
+	&::placeholder {
+		font-size: 18px;
+		// text-align: center;
+	}
+	&:focus{
+		outline: none;
+		border: none;
+		border-bottom: solid 1px tomato;
+	}
+}
+.label {
+	display: flex;
+	// justify-content: flex-start;
+	align-items: flex-start;
+	flex-direction: column;
+	width: 100%;
+}
+.labelTitle{
+	display: block;
+}
+.submitBtn {
+	height: 40px;
+	padding: 10px;
+	background-color: tomato;
+	color: #fff;
+	border: none;
+	font-size: 20px;
+}

@@ -148,11 +148,11 @@ const Settings = (props) => {
 				</Link>
 				<h3 className={styles.SettingHeader}>Settings</h3>
 			</div>
-			<div className={styles.accountDetails}>
+			<Link to="/signUPForm" className={styles.accountDetails}>
 				<figure className={styles.Avatar} />
 				<div className={styles.userName}>Mr. Somebody</div>
 				<FaChevronRight className={styles.iconBack} />
-			</div>
+			</Link>
 			<div className={styles.projects}>projects</div>
 			<div className={styles.AlarmSettings}>
 				<div className={styles.linkWrapper}>
