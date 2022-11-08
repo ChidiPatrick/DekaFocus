@@ -85,7 +85,7 @@ const validate = values => {
 		},
 		validate,
 		onSubmit: values => {
-       alert(JSON.stringify(values, null, 2));
+    //    alert(JSON.stringify(values, null, 2));
 	   userData.push(values)
 	   console.log(userData);
 	   dispatch(getUserData({...values}))

@@ -13,19 +13,24 @@ export const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-
+const docsContainer = []
 export const createUserCollection = async (userName, data) => {
 	
 	try {
-		const docRef = await setDoc(doc(db, 'users', userName), {...data});
+		const docRef = await addDoc(collection(db,"Users"),{...data});
+		console.log(docRef.id);
 	} catch (err) {
 		console.log(err);
 	}
 };
 export const getUsersData = async () => {
-	const usersCollectionRef = collection(db, "users")
+	const usersCollectionRef = collection(db, "Users")
 	await getDocs(usersCollectionRef)
 	.then(res => {
 		console.log(res.docs);
+		res.docs.forEach(doc => {
+			docsContainer.push({...doc.data(), id: doc.id })
+		})
 	})
+	console.log(docsContainer);
 }
