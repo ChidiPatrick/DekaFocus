@@ -1,6 +1,7 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, setDoc, collection, addDoc, doc } from 'firebase/firestore';
-
+import {getUserData} from "../SignUpForms/SignUpFormSlice"
+import {useDispatch, useSelector} from "react-redux"
 export const firebaseConfig = {
 	apiKey: 'AIzaSyDgPSVF17YyYfv05yNIKxgdXUSpndfYeUE',
 	authDomain: 'dekafocusetodo.firebaseapp.com',
@@ -13,14 +14,14 @@ export const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 
-export const createUserCollection = async (userName = 'User name') => {
+export const createUserCollection = async (userName, data) => {
+	
 	try {
-		const docRef = await setDoc(doc(db, 'users', userName), {
-			fullName: 'Patrick Chidiebele',
-			email: 'okafor@gmail.com',
-			password: 12345
-		});
+		const docRef = await setDoc(doc(db, 'users', userName), {...data});
 	} catch (err) {
 		console.log(err);
 	}
 };
+export const getUsers = async () => {
+	const users
+}

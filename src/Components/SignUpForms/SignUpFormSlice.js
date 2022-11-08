@@ -5,7 +5,9 @@ const initialState = {
     userName: "",
     email: "",
     password: "",
-    passwordAgain: ""
+    passwordAgain: "",
+    modalState: false,
+    userData : {}
 }
 const SignUpFormSlice = createSlice({
     name: "signUpSlice",
@@ -28,9 +30,32 @@ const SignUpFormSlice = createSlice({
         },
         getPasswordAgain: (state,action) => {
             state.passwordAgain = action.payload
+        },
+        showModal: (state,action) => {
+            state.modalState = true
+            console.log(`current state: ${state.modalState}`);
+        },
+        hideModal: (state,action) => {
+            state.modalState = false
+             console.log(`current state: ${state.modalState}`);
+        },
+        getUserData: (state,action) => {
+            state.userData = action.payload
+            console.log(state.userData);
         }
     }
 
 })
-export const {getEmail,getFirstName,getLastName,getPassword,getPasswordAgain,getUserName} = SignUpFormSlice.actions
+export const {
+    getEmail
+    ,getFirstName,
+    getLastName,
+    getPassword,
+    getPasswordAgain,
+    getUserName,
+    showModal,
+    hideModal,
+    getUserData
+
+} = SignUpFormSlice.actions
 export default SignUpFormSlice.reducer
