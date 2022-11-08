@@ -7,7 +7,8 @@ import { useDispatch,useSelector } from 'react-redux';
 import PopUpUI from '../PopUpUI/PopUpUI';
 import { showModal,hideModal,getUserData } from './SignUpFormSlice';
 import { useFormik} from 'formik';
-import {createUserCollection} from "../Firebase/Firebase"
+import {createUserCollection,getUsersData} from "../Firebase/Firebase"
+
 const SignUpForm = (props) => {
 	const password = useSelector((state) => state.signUpSlice.password) 
 	const passwordAgain = useSelector((state) => state.signUpSlice.passwordAgain) 
@@ -89,6 +90,7 @@ const validate = values => {
 	   console.log(userData);
 	   dispatch(getUserData({...values}))
 	   createUserCollection(values.userName,{...values})
+	   getUsersData()
      },
 	})
 	return (

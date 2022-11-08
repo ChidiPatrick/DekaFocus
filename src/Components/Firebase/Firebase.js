@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, setDoc, collection, addDoc, doc } from 'firebase/firestore';
+import { getFirestore, setDoc, collection, addDoc, doc, getDocs } from 'firebase/firestore';
 import {getUserData} from "../SignUpForms/SignUpFormSlice"
 import {useDispatch, useSelector} from "react-redux"
 export const firebaseConfig = {
@@ -22,6 +22,10 @@ export const createUserCollection = async (userName, data) => {
 		console.log(err);
 	}
 };
-export const getUsers = async () => {
-	const users
+export const getUsersData = async () => {
+	const usersCollectionRef = collection(db, "users")
+	await getDocs(usersCollectionRef)
+	.then(res => {
+		console.log(res.docs);
+	})
 }
