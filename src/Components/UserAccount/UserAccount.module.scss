@@ -24,7 +24,10 @@
 }
 .link {
   text-decoration: none;
-  color: #fff;
+  // color: #fff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 }
 .icon {
   fill: rgb(148, 145, 145);
@@ -61,7 +64,8 @@
   justify-content: flex-start;
   margin-top: 20px;
 }
-.todayTodo {
+.todayTodo
+ {
   margin-left: 10px;
 }
 .upcomingIcon {
@@ -78,4 +82,68 @@
 }
 .tomorrowIcon {
   fill: orange;
+}
+.AddProject{
+ margin-left: 10px;
+ 
+}
+.linkToAddProject{
+  // display: flex;
+  // justify-content: space-between;
+  // align-items: center;
+  text-decoration: none;
+  color: red;
+  // width: 100%;
+  display: block;
+  font-weight: 400;
+}
+.addProjectSpan{
+  width: 80%;
+  display: block;
+}
+.projectWrapper{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0;
+  color: black;
+}
+.project{
+  display: flex;
+  color: black;
+  text-decoration: none;
+  font-size: 18px;
+ 
+}
+.projectColor{
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+}
+.addProjectWrapper{
+  // width: 100%;
+  // padding: 10px;
+  margin: 0
+}
+.AddProject{
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  // align-items: center;
+  width: 100%;
+  margin: 0;
+}
+.innerWrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.addTagIcon,
+.addFolderIcon{
+  fill: red;
+  padding: 10px
+}
+.addProjectIcon{
+  font-size: 30px;
 }

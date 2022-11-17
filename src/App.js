@@ -14,6 +14,8 @@ import { doc, DocumentSnapshot, getDoc, getDocs, getFirestore, setDoc, updateDoc
 import { collection, addDoc } from 'firebase/firestore';
 import { createUserCollection, firebaseConfig } from './Components/Firebase/Firebase';
 import SignUpForm from './Components/SignUpForms/SignUpForm';
+import SignInUser from "./Components/SignUpForms/SignInUser"
+import AddProject from './Components/AddProject/AddProject';
 // const analytics = getAnalytics(app);
 
 //////////////////////////////////////
@@ -121,7 +123,9 @@ function App() {
 				<Route path="/completed" element={<AddTask />} />
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/settings/workAlarm" element={<AlarmTones />} />
-				<Route path="/signUPForm" element={<SignUpForm />} />
+				<Route path="/signUpForm" element={<SignUpForm />} />
+				<Route path="/signInForm" element={<SignInUser/>}/>
+				<Route path="/AddProject" element={<AddProject/>}/>
 			</Routes>
 		</div>
 	);

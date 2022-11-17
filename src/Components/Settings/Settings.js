@@ -148,7 +148,7 @@ const Settings = (props) => {
 				</Link>
 				<h3 className={styles.SettingHeader}>Settings</h3>
 			</div>
-			<Link to="/signUPForm" className={styles.accountDetails}>
+			<Link to="/userAccount" className={styles.accountDetails}>
 				<figure className={styles.Avatar} />
 				<div className={styles.userName}>Mr. Somebody</div>
 				<FaChevronRight className={styles.iconBack} />

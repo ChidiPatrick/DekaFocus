@@ -15,9 +15,13 @@ import { IoIosSettings, IoIosSearch } from "react-icons/io";
 import SearchInput from "../SearchInput/SearchInput"
 import { MdEventNote, MdOutlineWbTwilight } from "react-icons/md";
 import {ButtonBack} from '../NavButtons/NavButton'
-
+import AddProject from "../AddProject/AddProject";
+import { useDispatch,useSelector } from "react-redux";
+import { IoIosAdd,IoIosPricetag } from "react-icons/io";
+import { ImFolderPlus } from "react-icons/im";
 const UserAccountUI = (props) => {
-  
+  const projects = useSelector((state) => state.AddProject.projects)
+  console.log(projects);
   return (
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
@@ -25,6 +29,11 @@ const UserAccountUI = (props) => {
           <li className={styles.listItem}><ButtonBack/></li>
           <li className={styles.listItem}>
             <Link className={styles.link} to="/settings">
+              <IoIosSettings className={styles.settingLink} />
+            </Link>
+          </li>
+          <li className={styles.listItem}>
+            <Link className={styles.link} to="/signInForm">
               <IoIosSettings className={styles.settingLink} />
             </Link>
           </li>
@@ -51,40 +60,75 @@ const UserAccountUI = (props) => {
         <div className={styles.todo}>
           <Link className={styles.link} to="/todayTodo">
             <FaSun className={styles.sunIcon} />
+            <span className={styles.todayTodo}>Today</span>
           </Link>
-          <span className={styles.todayTodo}>Today</span>
+          
         </div>
         <div className={styles.todo}>
           <Link className={styles.link} to="/tomorrowTodo">
             <MdOutlineWbTwilight className={styles.tomorrowIcon} />
+            <span className={styles.todayTodo}>Tomorrow</span>
           </Link>
-          <span className={styles.todayTodo}>Tomorrow</span>
+          
         </div>
         <div className={styles.todo}>
           <Link className={styles.link} to="/upcomingTodo">
             <FaRegCalendarCheck className={styles.upcomingIcon} />
+            <span className={styles.todayTodo}>Upcoming</span>
           </Link>
-          <span className={styles.todayTodo}>Upcoming</span>
+          
         </div>
         <div className={styles.todo}>
           <Link className={styles.link} to="/somedayTodo">
             <FaRegCalendarAlt className={styles.somedayIcon} />
+            <span className={styles.todayTodo}>Someday</span>
           </Link>
-          <span className={styles.todayTodo}>Someday</span>
+          
         </div>
         <div className={styles.todo}>
           <Link className={styles.link} to="/events">
             <MdEventNote className={styles.eventIcon} />
+             <span className={styles.todayTodo}>Events</span>
           </Link>
-          <span className={styles.todayTodo}>Events</span>
+         
         </div>
         <div className={styles.todo}>
           <Link className={styles.link} to="/completed">
             <BiCheckCircle className={styles.completedIcon} />
+            <span className={styles.todayTodo}>Completed</span>
           </Link>
-          <span className={styles.todayTodo}>Completed</span>
+          
         </div>
+        <div className={styles.projects}>
+          {
+          projects.map((project,i) => {
+           return <Link to = "/AddProject" className={styles.project}>
+              <div className={styles.projectWrapper}>
+                  <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
+                  <p className={styles.projectName}>{project.projectName}</p>
+                  <span className={styles.focusTime}>45m</span>
+                  <span className={styles.numberOfTask}>3</span>
+              </div>
+            </Link>
+          })}
+        </div>
+        <div className={styles.addProjectWrapper}>
+          <Link className={styles.linkToAddProject} to="/AddProject">
+             <div className={styles.AddProject}>
+              <div className={styles.innerWrapper}>
+                <IoIosAdd className={styles.addProjectIcon} />
+              <span>Add Project</span>
+              </div>
+              <div>
+              <IoIosPricetag className={styles.addFolderIcon}/>
+              <ImFolderPlus className={styles.addTagIcon}/>
+              </div>
+              </div>
+          </Link>
+        </div>
+          
       </div>
+      
     </div>
   );
 };

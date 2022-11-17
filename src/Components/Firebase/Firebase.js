@@ -1,7 +1,17 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, setDoc, collection, addDoc, doc, getDocs } from 'firebase/firestore';
+import {
+	getAuth,
+	createUserWithEmailAndPassword, 
+	signInWithEmailAndPassword, 
+	onAuthStateChanged,
+	sendEmailVerification
+	
+
+} from "firebase/auth"
 import {getUserData} from "../SignUpForms/SignUpFormSlice"
 import {useDispatch, useSelector} from "react-redux"
+import {useNavigate} from 'react-router'
 export const firebaseConfig = {
 	apiKey: 'AIzaSyDgPSVF17YyYfv05yNIKxgdXUSpndfYeUE',
 	authDomain: 'dekafocusetodo.firebaseapp.com',
@@ -13,7 +23,9 @@ export const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app)
 const docsContainer = []
+
 export const createUserCollection = async (userName, data) => {
 	
 	try {
@@ -33,4 +45,31 @@ export const getUsersData = async () => {
 		})
 	})
 	console.log(docsContainer);
+}
+export const createNewUser = async (values) => {
+	
+	await createUserWithEmailAndPassword(auth, values.email, values.password)
+	.then(userCredentials => {
+		console.log(userCredentials);
+		sendEmailVerification(userCredentials.user)
+		return userCredentials.user.emailVerified
+	})
+}
+export const signInExistingUser = async (values) => {
+	try{
+	await signInWithEmailAndPassword(auth,values.email,values.password)
+	.then(res => {
+		// console.log(res);
+	})
+	}
+	catch(err) {
+		console.log(err);
+	}
+}
+export const authStateObserver =  () => {
+	 onAuthStateChanged(auth, (user) => {
+		 if(user) {
+			 console.log(user);
+		 }
+	 })
 }
