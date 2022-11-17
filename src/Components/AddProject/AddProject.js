@@ -6,6 +6,7 @@ import {CirclePicker} from "react-color"
 
 import ProjectInput from "./ProjectInput/ProjectInput";
 import { useDispatch,useSelector } from "react-redux";
+import { IoIosClose } from "react-icons/io";
 import { addProject,activateProjectBtn,deActivateProjectBtn,createProject } from "./AddProjectSlice";
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
@@ -16,13 +17,17 @@ const AddProject = ({title = "New Project"}) => {
     const dispatch = useDispatch()
     const [disable, setDisAble] = useState(false)
     const getInputValue =  () =>  {
+        // if(!inputRef.current.value) return
         dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""
+        dispatch(deActivateProjectBtn())
     }
     return (
         <div className={styles.AddProject}>
             <header className={styles.projectHeader}>
-                <Link to= {-1} className={styles.cancle}>X</Link>
+                <Link to= {-1} >
+                    <IoIosClose className={styles.cancle}/>
+                </Link>
                 <h3  className={styles.projectTitle}>{title}</h3>
                 <ButtonDone  disable = {!showBtn} active = {showBtn} handleClick={ getInputValue}/>
             </header>

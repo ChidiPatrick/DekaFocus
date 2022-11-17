@@ -17,8 +17,9 @@ import { MdEventNote, MdOutlineWbTwilight } from "react-icons/md";
 import {ButtonBack} from '../NavButtons/NavButton'
 import AddProject from "../AddProject/AddProject";
 import { useDispatch,useSelector } from "react-redux";
-import { IoIosAdd,IoIosPricetag } from "react-icons/io";
+import { IoIosAdd,IoIosPricetag,IoIosClose } from "react-icons/io";
 import { ImFolderPlus } from "react-icons/im";
+
 const UserAccountUI = (props) => {
   const projects = useSelector((state) => state.AddProject.projects)
   console.log(projects);
@@ -104,10 +105,15 @@ const UserAccountUI = (props) => {
           projects.map((project,i) => {
            return <Link to = "/AddProject" className={styles.project}>
               <div className={styles.projectWrapper}>
+                <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
                   <p className={styles.projectName}>{project.projectName}</p>
-                  <span className={styles.focusTime}>45m</span>
-                  <span className={styles.numberOfTask}>3</span>
+                </div>
+                  <div>
+                    <span className={styles.focusTime}>45m</span>
+                    <span className={styles.numberOfTask}>3</span>
+                  </div>
+                  
               </div>
             </Link>
           })}
