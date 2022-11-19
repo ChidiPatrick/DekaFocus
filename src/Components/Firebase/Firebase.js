@@ -12,6 +12,7 @@ import {
 import {getUserData} from "../SignUpForms/SignUpFormSlice"
 import {useDispatch, useSelector} from "react-redux"
 import {useNavigate} from 'react-router'
+import uuid from "react-uuid"
 export const firebaseConfig = {
 	apiKey: 'AIzaSyDgPSVF17YyYfv05yNIKxgdXUSpndfYeUE',
 	authDomain: 'dekafocusetodo.firebaseapp.com',
@@ -29,8 +30,12 @@ const docsContainer = []
 export const createUserCollection = async (userName, data) => {
 	
 	try {
-		const docRef = await addDoc(collection(db,"Users"),{...data});
-		console.log(docRef.id);
+		const userFolder =  collection(db, "User Folder") 
+		const docRef = doc(userFolder,userName)
+		
+		 await setDoc(docRef,{...data})
+		// const docRef = await addDoc(doc(db,"New users",`${userName}`),{...data});
+		
 	} catch (err) {
 		console.log(err);
 	}
@@ -52,7 +57,6 @@ export const createNewUser = async (values) => {
 	.then(userCredentials => {
 		console.log(userCredentials);
 		sendEmailVerification(userCredentials.user)
-		return userCredentials.user.emailVerified
 	})
 }
 export const signInExistingUser = async (values) => {
@@ -68,8 +72,10 @@ export const signInExistingUser = async (values) => {
 }
 export const authStateObserver =  () => {
 	 onAuthStateChanged(auth, (user) => {
-		 if(user) {
-			 console.log(user);
+		 if(user.emailVerified) return user.emailVerified
+		 else{
+			console.log('email not verified');
 		 }
+		 return user.emailVerified
 	 })
 }

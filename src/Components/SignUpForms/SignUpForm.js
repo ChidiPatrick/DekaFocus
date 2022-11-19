@@ -4,10 +4,13 @@ import {getEmail,getFirstName,getLastName,getPassword,getPasswordAgain,getUserNa
 import { useDispatch,useSelector } from 'react-redux';
 import { showModal,hideModal,getUserData } from './SignUpFormSlice';
 import { useFormik} from 'formik';
-import {createUserCollection,getUsersData} from "../Firebase/Firebase"
+import {createUserCollection,getUsersDatas,auth} from "../Firebase/Firebase"
 import {createNewUser} from "../Firebase/Firebase"
 import {useNavigate} from "react-router"
 import * as Yup from 'yup';
+import VerifyEmail from '../VerificationPage/VerificationPage';
+import { onAuthStateChanged } from 'firebase/auth';
+
 const SignUpForm = () => {
 	const password = useSelector((state) => state.signUpSlice.password) 
 	const passwordAgain = useSelector((state) => state.signUpSlice.passwordAgain) 
@@ -18,12 +21,19 @@ const SignUpForm = () => {
 	const modalState = useSelector((state) => state.signUpSlice.modalState)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
-	
+	const [verifyEmail, setVerifyEmail] = useState(false)
+
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	
 	/////////////////////////////////////////////
 	//Form Validation function///
 // 
+onAuthStateChanged(auth, user => {
+if(user){
+	setVerifyEmail(true)
+}
+
+})
  
  const userData = []
  const formik = useFormik({
@@ -49,14 +59,16 @@ const SignUpForm = () => {
 	   console.log(userData);
 	   dispatch(getUserData({...values}))
 	   createUserCollection(values.userName,{...values})
-	   getUsersData()
+	//    getUsersData()
 	   createNewUser(values)
-	   
-	   navigate("/settings")
+	//    const verified =  authStateObserver()
+	//    if(verified) navigate("/settings")
+	   alert("Go and verify your email")
      },
 	})
-	return (
-		<form className={styles.SignUpWrapper}  onSubmit={formik.handleSubmit}>
+	let UI = null;
+	let verifyComponent = <VerifyEmail/>
+	let form = <form className={styles.SignUpWrapper}  onSubmit={formik.handleSubmit}>
 			
 			 {/* <PopUpUI heading="ERROR" modalState={modalState} message="Fill out every field with correct and complete data"/> */}
 			<label htmlFor= 'firstName'  className={styles.label}> <span className={styles.labelTitle}>First name</span>
@@ -87,16 +99,11 @@ const SignUpForm = () => {
 				required value={formik.values.password} name = "password"/>
 			</label>
 			{formik.errors.password ? <div className={styles.required}>{formik.errors.password}</div> : null}
-			{/* <label htmlFor= 'passwordAgain'  className={styles.label}> <span className={styles.labelTitle}>Confirm Password</span>
-				<input onChange={formik.handleChange} 
-				id ="passwordAgain" className={styles.inputEl} 
-				placeholder="Yourpassword9!@#?" type= "password" required
-				value={formik.values.passwordAgain} name ="passwordAgain"/>
-			</label> */}
-			{/* {formik.errors.passwordAgain ? <div className={styles.required}>{formik.errors.passwordAgain}</div> : null} */}
 			<button  className={[ styles.inputEl, styles.submitBtn ].join(' ')} type="submit" >SignUp</button>
-		
 		</form>
+
+	return (
+		verifyEmail ? verifyComponent : form
 	);
 };
 

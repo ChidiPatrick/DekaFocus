@@ -7,6 +7,7 @@ import {CirclePicker} from "react-color"
 import ProjectInput from "./ProjectInput/ProjectInput";
 import { useDispatch,useSelector } from "react-redux";
 import { IoIosClose } from "react-icons/io";
+import uuid from "react-uuid"
 import { addProject,activateProjectBtn,deActivateProjectBtn,createProject } from "./AddProjectSlice";
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
@@ -21,6 +22,7 @@ const AddProject = ({title = "New Project"}) => {
         dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""
         dispatch(deActivateProjectBtn())
+        console.log(uuid())
     }
     return (
         <div className={styles.AddProject}>
