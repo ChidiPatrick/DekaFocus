@@ -1,5 +1,8 @@
 import React from "react";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+const postProject = createAsyncThunk("addProject/postProject", async () => {
+    // await 
+})
 const initialState = {
     projects : [],
     showProjectBtn: false,

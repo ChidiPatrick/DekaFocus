@@ -6,12 +6,16 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import Store from "./Components/Store/Store";
 import { BrowserRouter } from "react-router-dom";
+import { FirebaseAppProvider } from "reactfire";
+import { firebaseConfig } from "./Components/Firebase/Firebase";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={Store}>
     <React.StrictMode>
       <BrowserRouter>
+      <FirebaseAppProvider firebaseConfig={firebaseConfig}>
         <App />
+      </FirebaseAppProvider>
       </BrowserRouter>
     </React.StrictMode>
   </Provider>

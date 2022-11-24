@@ -2,7 +2,8 @@ import React from "react"
 import styles from "./SignUpForm.module.scss"
 import {useNavigate} from "react-router"
 import { useFormik} from 'formik';
-import {signInExistingUser,authStateObserver} from "../Firebase/Firebase"
+import {signInExistingUser,authStateObserver,auth} from "../Firebase/Firebase"
+
 import * as Yup from 'yup';
 const SignInUser = () => {
    const navigate = useNavigate()
@@ -10,7 +11,7 @@ const SignInUser = () => {
         navigate("/settings")
         
     }
-    
+   
  const formik = useFormik({
 		initialValues: {
 			email: "",
@@ -22,9 +23,11 @@ const SignInUser = () => {
 
 		}),
 		onSubmit: (values) => {
-            signInExistingUser(values)
-            goToSettings()
-            authStateObserver()
+           const user =  signInExistingUser(values)
+           if(user) navigate('/settings')
+           else{
+            alert("Sign up first!")
+           }
      },
 	})
     return (

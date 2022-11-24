@@ -143,7 +143,7 @@ const Settings = (props) => {
 	return (
 		<div className={styles.Setting}>
 			<div className={styles.HeaderWrapper}>
-				<Link to={-1} className={styles.navLink}>
+				<Link to={'/userAccount'} className={styles.navLink}>
 					<FaChevronLeft className={styles.iconBack} />
 				</Link>
 				<h3 className={styles.SettingHeader}>Settings</h3>

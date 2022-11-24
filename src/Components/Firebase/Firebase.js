@@ -6,13 +6,15 @@ import {
 	signInWithEmailAndPassword, 
 	onAuthStateChanged,
 	sendEmailVerification
-	
-
 } from "firebase/auth"
 import {getUserData} from "../SignUpForms/SignUpFormSlice"
 import {useDispatch, useSelector} from "react-redux"
 import {useNavigate} from 'react-router'
 import uuid from "react-uuid"
+import { getEmailVerificationState } from '../SignUpForms/SignUpFormSlice';
+
+
+
 export const firebaseConfig = {
 	apiKey: 'AIzaSyDgPSVF17YyYfv05yNIKxgdXUSpndfYeUE',
 	authDomain: 'dekafocusetodo.firebaseapp.com',
@@ -23,22 +25,21 @@ export const firebaseConfig = {
 	measurementId: 'G-0GZHB3MRTK'
 };
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+// export const db = getDatabase(app);
 export const auth = getAuth(app)
 const docsContainer = []
-
-export const createUserCollection = async (userName, data) => {
+export const db = getFirestore(app)
+export const createUserCollection = async (userName = uuid().slice(0,6), data) => {
+	const userCollection = collection(db,"Users")
+	const user = `${data.userName}${uuid().slice(0,8)}`
+	const userRef = doc(userCollection,user)
+	// await addDoc(userRef,{})
 	
-	try {
-		const userFolder =  collection(db, "User Folder") 
-		const docRef = doc(userFolder,userName)
-		
-		 await setDoc(docRef,{...data})
-		// const docRef = await addDoc(doc(db,"New users",`${userName}`),{...data});
-		
-	} catch (err) {
-		console.log(err);
-	}
+	//Create Project collection
+
+	const projectRef = doc(userRef, "Projects Folder", "Projects")
+	await addDoc(projectRef,{})
+
 };
 export const getUsersData = async () => {
 	const usersCollectionRef = collection(db, "Users")
@@ -51,31 +52,43 @@ export const getUsersData = async () => {
 	})
 	console.log(docsContainer);
 }
-export const createNewUser = async (values) => {
+ const createNewUser = async (values) => {
 	
 	await createUserWithEmailAndPassword(auth, values.email, values.password)
 	.then(userCredentials => {
 		console.log(userCredentials);
 		sendEmailVerification(userCredentials.user)
+		const dispatch = useDispatch()
+		
+		return userCredentials.user
 	})
 }
 export const signInExistingUser = async (values) => {
 	try{
 	await signInWithEmailAndPassword(auth,values.email,values.password)
 	.then(res => {
-		// console.log(res);
+		console.log(res);
+		if(res.user && res.user.emailVerified){
+			return true
+		}
+		else{
+			alert("Not registered")
+		}
 	})
 	}
 	catch(err) {
-		console.log(err);
+		// console.log(err);
+		alert(err)
 	}
 }
-export const authStateObserver =  () => {
-	 onAuthStateChanged(auth, (user) => {
-		 if(user.emailVerified) return user.emailVerified
-		 else{
-			console.log('email not verified');
-		 }
-		 return user.emailVerified
-	 })
-}
+
+// export const authStateObserver =  () => {
+// 	 onAuthStateChanged(auth, (user) => {
+// 		 if(user.emailVerified) return user.emailVerified
+// 		 else{
+// 			console.log('email not verified');
+// 		console.log(user.emailVerified);
+// 		 }
+// 		 return user.emailVerified
+// 	 })
+// }

@@ -1,15 +1,15 @@
 import React,{useState} from 'react';
 import styles from './SignUpForm.module.scss';
-import {getEmail,getFirstName,getLastName,getPassword,getPasswordAgain,getUserName} from "./SignUpFormSlice"
+import {getEmail,getEmailVerificationState,getFirstName,getLastName,getPassword,getPasswordAgain,getUserName} from "./SignUpFormSlice"
 import { useDispatch,useSelector } from 'react-redux';
 import { showModal,hideModal,getUserData } from './SignUpFormSlice';
 import { useFormik} from 'formik';
-import {createUserCollection,getUsersDatas,auth} from "../Firebase/Firebase"
+import {createUserCollection,getUsersDatas,auth, authStateObserver} from "../Firebase/Firebase"
 import {createNewUser} from "../Firebase/Firebase"
 import {useNavigate} from "react-router"
 import * as Yup from 'yup';
 import VerifyEmail from '../VerificationPage/VerificationPage';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged,createUserWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
 
 const SignUpForm = () => {
 	const password = useSelector((state) => state.signUpSlice.password) 
@@ -22,18 +22,31 @@ const SignUpForm = () => {
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
 	const [verifyEmail, setVerifyEmail] = useState(false)
+	const emailVerified = useSelector(state => state.signUpSlice.emailVerified)
 
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	
 	/////////////////////////////////////////////
 	//Form Validation function///
 // 
-onAuthStateChanged(auth, user => {
-if(user){
-	setVerifyEmail(true)
-}
+	// onAuthStateChanged(auth, user => {
+	// if(emailVerified){
+	// 	navigate('/settings')
+	// 	console.log(emailVerified);
+	// }
 
-})
+	// })
+	////////////////////////////////////////////////////
+	//Create new user function///
+	const createNewUser = async (values) => {
+	await createUserWithEmailAndPassword(auth, values.email, values.password)
+	.then(userCredentials => {
+		console.log(userCredentials);
+		sendEmailVerification(userCredentials.user)
+		dispatch(getEmailVerificationState(userCredentials.user.emailVerified))
+		return userCredentials.user
+	})
+}
  
  const userData = []
  const formik = useFormik({
@@ -53,22 +66,20 @@ if(user){
 			password: Yup.string().min(8, "Password must be at least 8 alpha numeric characters").required("Required")
 
 		}),
+
 		onSubmit: values => {
-    //    alert(JSON.stringify(values, null, 2));
 	   userData.push(values)
 	   console.log(userData);
 	   dispatch(getUserData({...values}))
-	   createUserCollection(values.userName,{...values})
-	//    getUsersData()
-	   createNewUser(values)
-	//    const verified =  authStateObserver()
-	//    if(verified) navigate("/settings")
-	   alert("Go and verify your email")
+	  createNewUser(values)
+	   navigate('/verifyEmail')
+	   createUserCollection(values.userName,values)
+
      },
 	})
-	let UI = null;
-	let verifyComponent = <VerifyEmail/>
-	let form = <form className={styles.SignUpWrapper}  onSubmit={formik.handleSubmit}>
+	// let form = 
+	return (
+		<form className={styles.SignUpWrapper}  onSubmit={formik.handleSubmit}>
 			
 			 {/* <PopUpUI heading="ERROR" modalState={modalState} message="Fill out every field with correct and complete data"/> */}
 			<label htmlFor= 'firstName'  className={styles.label}> <span className={styles.labelTitle}>First name</span>
@@ -102,8 +113,6 @@ if(user){
 			<button  className={[ styles.inputEl, styles.submitBtn ].join(' ')} type="submit" >SignUp</button>
 		</form>
 
-	return (
-		verifyEmail ? verifyComponent : form
 	);
 };
 

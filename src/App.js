@@ -16,6 +16,7 @@ import { createUserCollection, firebaseConfig } from './Components/Firebase/Fire
 import SignUpForm from './Components/SignUpForms/SignUpForm';
 import SignInUser from "./Components/SignUpForms/SignInUser"
 import AddProject from './Components/AddProject/AddProject';
+import VerifyEmail from './Components/VerificationPage/VerificationPage';
 // const analytics = getAnalytics(app);
 
 //////////////////////////////////////
@@ -24,80 +25,8 @@ function App() {
 	const db = getFirestore(app);
 	let folder = null;
 	createUserCollection('Patrick okafor');
-	// const initializeMyDB = async () => {
-	// 	try {
-	// 		folder = await setDoc(doc(db, 'Users folder', 'User bio'), {
-	// 			Name: 'Patrick Chidiebere',
-	// 			address: 'No. 4 Okwuego street',
-	// 			country: 'Nigeria'
-	// 		});
-	// 		// const docRef = await addDoc(collection(db, "users"),{
-	// 		//     first: "Pat",
-	// 		//     last: "Lovelace",
-	// 		//     DOB: 1996
-	// 		// })
-	// 		// s
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-	// const getData = async () => {
-	// 	try {
-	// 		const docRef = setDoc(doc(db, 'Obodo', 'SF'), {
-	// 			title: 'Engr',
-	// 			occupation: 'Software developer',
-	// 			address: 'AWAKA'
-	// 		});
+	const verified = useSelector(state => state.signUpSlice.verified)
 
-	// 		const colRef = collection(db, 'users');
-	// 		await getDocs(colRef).then((res) => {
-	// 			let books = [];
-	// 			console.log(res.docs);
-	// 			res.docs.forEach((doc) => {
-	// 				books.push({ ...doc.data(), id: doc.id });
-	// 			});
-	// 			console.log(books);
-	// 		});
-	// 	} catch (err) {
-	// 		console.log(err);
-	// 	}
-	// };
-
-	// const data = getData();
-	// console.log(data);
-	// const userBio = async () => {
-	// 	try {
-	// 		const testBio = await addDoc(collection(db, 'userBio'), {
-	// 			gender: '',
-	// 			age: 20,
-	// 			stateOfOrigin: ''
-	// 		});
-	// 	} catch (err) {}
-	// };
-	// userBio();
-	// initializeMyDB();
-	// ///////////////////////////////////////////////////
-	// const queryDocs = async () => {
-	// 	const docs = await getDocs(collection(db, 'users'));
-	// 	console.log(docs);
-	// };
-	// queryDocs();
-	// const setADoc = async (collection, document) => {
-	// 	const data = await setDoc(doc(db, collection, document), {
-	// 		first: 'Patrick',
-	// 		last: 'Chidiebele',
-	// 		DOB: 1996
-	// 	});
-	// 	console.log(data);
-	// };
-
-	// const update = async () => {
-	// 	await updateDoc(setADoc, {
-	// 		first: 'Rapheal',
-	// 		last: 'Patrick'
-	// 	});
-	// };
-	// update();
 	////////////////////////////////////////////////////
 	const time = new Date();
 	const minute = useSelector((state) => state.frontPage.minute5);
@@ -123,7 +52,8 @@ function App() {
 				<Route path="/completed" element={<AddTask />} />
 				<Route path="/settings" element={<Settings />} />
 				<Route path="/settings/workAlarm" element={<AlarmTones />} />
-				<Route path="/signUpForm" element={<SignUpForm />} />
+				<Route path="/signUpForm" element = {<SignUpForm/>} />
+				<Route path= "/verifyEmail" element= {<VerifyEmail/>}/>
 				<Route path="/signInForm" element={<SignInUser/>}/>
 				<Route path="/AddProject" element={<AddProject/>}/>
 			</Routes>
