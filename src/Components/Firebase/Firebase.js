@@ -38,7 +38,7 @@ export const createUserCollection = async (userName = uuid().slice(0,6), data) =
 	//Create Project collection
 
 	const projectRef = doc(userRef, "Projects Folder", "Projects")
-	await addDoc(projectRef,{})
+	await addDoc(projectRef,{...data})
 
 };
 export const getUsersData = async () => {
