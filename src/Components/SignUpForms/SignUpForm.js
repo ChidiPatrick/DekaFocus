@@ -10,7 +10,8 @@ import {useNavigate} from "react-router"
 import * as Yup from 'yup';
 import VerifyEmail from '../VerificationPage/VerificationPage';
 import { onAuthStateChanged,createUserWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
-
+import { createUniqueUserName } from '../AddProject/AddProjectSlice';
+import uuid from "react-uuid"
 const SignUpForm = () => {
 	const password = useSelector((state) => state.signUpSlice.password) 
 	const passwordAgain = useSelector((state) => state.signUpSlice.passwordAgain) 
@@ -73,7 +74,8 @@ const SignUpForm = () => {
 	   dispatch(getUserData({...values}))
 	  createNewUser(values)
 	   navigate('/verifyEmail')
-	   createUserCollection(values.userName,values)
+	//    dispatch(createUniqueUserName(`${values.userName}${uuid().slice(0,7)}`))
+	   createUserCollection(values)
 
      },
 	})

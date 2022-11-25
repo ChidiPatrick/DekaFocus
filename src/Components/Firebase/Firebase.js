@@ -14,7 +14,11 @@ import uuid from "react-uuid"
 import { getEmailVerificationState } from '../SignUpForms/SignUpFormSlice';
 
 
-
+const GetUserName = () => {
+	const uniqueUserName = useSelector(state => state.AddProject.uniqueUserName)
+	console.log(uniqueUserName);
+	return uniqueUserName
+}
 export const firebaseConfig = {
 	apiKey: 'AIzaSyDgPSVF17YyYfv05yNIKxgdXUSpndfYeUE',
 	authDomain: 'dekafocusetodo.firebaseapp.com',
@@ -29,18 +33,39 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 const docsContainer = []
 export const db = getFirestore(app)
-export const createUserCollection = async (userName = uuid().slice(0,6), data) => {
-	const userCollection = collection(db,"Users")
-	const user = `${data.userName}${uuid().slice(0,8)}`
-	const userRef = doc(userCollection,user)
-	// await addDoc(userRef,{})
+const creatUserBioDB = async (user,data) => {
+	try{
+
+		await setDoc(doc(db,"users",`${user}`,"userInfoFolder","userData"),{...data})
+	}
+	catch(err){
+		console.log(err);
+	}
+}
+const createUserSettings = async (user) => {
+	try{
+		await setDoc(doc(db,"users",`${user}`,"userSettingsFolder","settings"),{})
+	}
+	catch(err){
+		console.log(err);
+	}
+}
+export const createUserCollection = async ( data) => {
+	const user = `${data.userName}${uuid().slice(0,7)}`
+	try{
+		// const settingsRef = doc(db,"users",user,"settingsFolder","settings")
+		const projectRef = doc(db,"users",`${user}`,"ProjectsFolder","Projects")
+		await setDoc(projectRef,{})
+	  await	creatUserBioDB(user,data)
+	  await	createUserSettings(user)
+		
+	}
+	catch(err){
+		console.log(err);
+	}
 	
-	//Create Project collection
-
-	const projectRef = doc(userRef, "Projects Folder", "Projects")
-	await addDoc(projectRef,{...data})
-
 };
+
 export const getUsersData = async () => {
 	const usersCollectionRef = collection(db, "Users")
 	await getDocs(usersCollectionRef)

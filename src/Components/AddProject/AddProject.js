@@ -14,6 +14,7 @@ import { createUserCollection } from "../Firebase/Firebase";
 import { db, } from "../Firebase/Firebase";
 import { addDoc,setDoc,doc,collection,getDoc } from "firebase/firestore";
 
+
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
 const AddProject = ({title = "New Project"}) => {
@@ -27,6 +28,7 @@ const AddProject = ({title = "New Project"}) => {
         dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""
         dispatch(deActivateProjectBtn())
+       
         createUserCollection("AMadi",{projectName: inputRef.current.value, projectColor: blockPickerColor})
     
     }

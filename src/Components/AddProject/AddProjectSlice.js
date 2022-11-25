@@ -6,6 +6,7 @@ const postProject = createAsyncThunk("addProject/postProject", async () => {
 const initialState = {
     projects : [],
     showProjectBtn: false,
+    uniqueUserName: null,
 }
 const AddProjectSlice = createSlice({
     name: "AddProject",
@@ -22,6 +23,9 @@ const AddProjectSlice = createSlice({
         },
         createProject: (state, action) => {
             state.projects.push(action.payload)
+        },
+        createUniqueUserName: (state,action) => {
+            state.uniqueUserName = action.payload
         }
     }
 })
@@ -29,7 +33,8 @@ export const {
     addProject,
     activateProjectBtn,
     deActivateProjectBtn,
-    createProject
+    createProject,
+    createUniqueUserName
 
 } = AddProjectSlice.actions
 export default AddProjectSlice.reducer
