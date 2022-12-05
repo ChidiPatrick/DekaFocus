@@ -10,6 +10,7 @@ const initialState = {
     userData : {},
     verified: false,
     emailVerified: false,
+    userId: null,
 }
 const SignUpFormSlice = createSlice({
     name: "signUpSlice",
@@ -51,6 +52,9 @@ const SignUpFormSlice = createSlice({
         ,
         confirmVerification: (state, action) => {
             state.verified = true;
+        },
+        getUserId: (state,action) =>{
+            state.userId = action.payload
         }
     }
 
@@ -66,7 +70,8 @@ export const {
     hideModal,
     getUserData,
     confirmVerification,
-    getEmailVerificationState
+    getEmailVerificationState,
+    getUserId
 
 } = SignUpFormSlice.actions
 export default SignUpFormSlice.reducer

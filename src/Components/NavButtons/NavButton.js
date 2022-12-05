@@ -1,3 +1,4 @@
+import React from "react";
 import { HiChevronLeft } from "react-icons/hi";
 import { useNavigate } from "react-router";
 import style from "./NavButton.module.scss"

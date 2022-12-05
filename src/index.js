@@ -17,6 +17,7 @@ root.render(
         <App />
       </FirebaseAppProvider>
       </BrowserRouter>
+    
     </React.StrictMode>
   </Provider>
 );

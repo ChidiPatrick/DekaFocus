@@ -33,10 +33,11 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 const docsContainer = []
 export const db = getFirestore(app)
+
 const creatUserBioDB = async (user,data) => {
 	try{
 
-		await setDoc(doc(db,"users",`${user}`,"userInfoFolder","userData"),{...data})
+		// await addDoc(doc(db,"users",`${user}`,"userInfoFolder","userData"),{...data})
 	}
 	catch(err){
 		console.log(err);
@@ -44,7 +45,8 @@ const creatUserBioDB = async (user,data) => {
 }
 const createUserSettings = async (user) => {
 	try{
-		await setDoc(doc(db,"users",`${user}`,"userSettingsFolder","settings"),{})
+		
+		// await addDoc(doc(db,"users",`${user}`,"userSettingsFolder","settings"),{})
 	}
 	catch(err){
 		console.log(err);
@@ -53,12 +55,8 @@ const createUserSettings = async (user) => {
 export const createUserCollection = async ( data) => {
 	const user = `${data.userName}${uuid().slice(0,7)}`
 	try{
-		// const settingsRef = doc(db,"users",user,"settingsFolder","settings")
-		const projectRef = doc(db,"users",`${user}`,"ProjectsFolder","Projects")
-		await setDoc(projectRef,{})
-	  await	creatUserBioDB(user,data)
-	  await	createUserSettings(user)
-		
+		const usersCollectionRef = collection(db,"users")
+		await addDoc(collection(usersCollectionRef,"users","user"),{})
 	}
 	catch(err){
 		console.log(err);

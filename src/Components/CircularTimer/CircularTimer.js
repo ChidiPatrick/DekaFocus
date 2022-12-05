@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./CircularTimer.module.scss";
 import { userTimer, useTimer } from "react-timer-hook";
+import React from "react";
 const CircularTimer = ({ expiryTimestamp }) => {
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);

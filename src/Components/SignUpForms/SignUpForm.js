@@ -1,10 +1,9 @@
 import React,{useState} from 'react';
 import styles from './SignUpForm.module.scss';
-import {getEmail,getEmailVerificationState,getFirstName,getLastName,getPassword,getPasswordAgain,getUserName} from "./SignUpFormSlice"
 import { useDispatch,useSelector } from 'react-redux';
 import { showModal,hideModal,getUserData } from './SignUpFormSlice';
 import { useFormik} from 'formik';
-import {createUserCollection,getUsersDatas,auth, authStateObserver} from "../Firebase/Firebase"
+import {createUserCollection,getUsersDatas,auth, authStateObserver,db} from "../Firebase/Firebase"
 import {createNewUser} from "../Firebase/Firebase"
 import {useNavigate} from "react-router"
 import * as Yup from 'yup';
@@ -12,6 +11,18 @@ import VerifyEmail from '../VerificationPage/VerificationPage';
 import { onAuthStateChanged,createUserWithEmailAndPassword,sendEmailVerification } from 'firebase/auth';
 import { createUniqueUserName } from '../AddProject/AddProjectSlice';
 import uuid from "react-uuid"
+import { getFirestore, setDoc, collection, addDoc, doc, getDocs } from 'firebase/firestore';
+import {useCreateUserWithEmailAndPassword} from "react-firebase-hooks/auth"
+import {
+	getEmail,
+	getEmailVerificationState,
+	getFirstName,
+	getLastName,
+	getPassword,
+	getPasswordAgain,
+	getUserName,
+	getUserId
+} from "./SignUpFormSlice"
 const SignUpForm = () => {
 	const password = useSelector((state) => state.signUpSlice.password) 
 	const passwordAgain = useSelector((state) => state.signUpSlice.passwordAgain) 
@@ -27,27 +38,66 @@ const SignUpForm = () => {
 
 	const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 	
-	/////////////////////////////////////////////
-	//Form Validation function///
-// 
-	// onAuthStateChanged(auth, user => {
-	// if(emailVerified){
-	// 	navigate('/settings')
-	// 	console.log(emailVerified);
-	// }
-
-	// })
+	///////////////////////////////////////////////////////
+	// const [createUserWithEmailAndPassword,user,loading,error] = useCreateUserWithEmailAndPassword(auth)
 	////////////////////////////////////////////////////
 	//Create new user function///
-	const createNewUser = async (values) => {
-	await createUserWithEmailAndPassword(auth, values.email, values.password)
-	.then(userCredentials => {
-		console.log(userCredentials);
-		sendEmailVerification(userCredentials.user)
-		dispatch(getEmailVerificationState(userCredentials.user.emailVerified))
-		return userCredentials.user
+	const createUserBioCollection = async (userId,data) => {
+		const BioCollection = collection(db,"users")
+		const userRef = doc(db,"users",`${userId}`,"userInfoFolder","userData")
+			await setDoc(userRef,{...data})
+	}
+	const createUserSettingCollection = async (userId,) => {
+		const userSettingRef = doc(db,"users",`${userId}`,`userSettingsCollection/settings`)
+		await setDoc(userSettingRef,{
+			projects: [],
+			workAlarm: "bellSound.mp3",
+			beakAlarm: "tubularBell.mp3",
+			whiteNoise: "decidemp3-14575.mp3",
+			pomodoroLength: 25,
+			shortBreakLength: 5,
+			longBreakLength: 10,
+			longBreakAfter: 4,
+			disableBreak: false,
+			autoStartNextPomodoro: false,
+			autoStartBreaks: true
+		})
+	}
+	const  createUserTasksCollection = async (userId) => {
+	const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection/tasks`)
+	await setDoc(userTasksRef,{
+		tasks: {
+			today: [],
+			tomorrow: [],
+			upcoming: [],
+			someday: [],
+		},
+		completed: [],
+		projectsTasks: {},
 	})
-}
+	}
+	const createNewUser = async (values) => {
+		try{
+			 createUserWithEmailAndPassword(auth,values.email,values.password)
+		.then((user) => {
+			createUserBioCollection(user.user.uid, values)
+			dispatch(getUserId(user.user.uid))
+			localStorage.setItem('userId', user.user.uid)
+			return user.user.uid
+		})
+		.then((userId) => {
+			createUserSettingCollection(userId)
+			return userId
+		})
+		.then((userId) => {
+			createUserTasksCollection(userId)
+		})
+		}
+		catch(err){
+			console.log(err);
+		}
+		
+		}
  
  const userData = []
  const formik = useFormik({
@@ -72,10 +122,13 @@ const SignUpForm = () => {
 	   userData.push(values)
 	   console.log(userData);
 	   dispatch(getUserData({...values}))
+	   
 	  createNewUser(values)
+	 
 	   navigate('/verifyEmail')
 	//    dispatch(createUniqueUserName(`${values.userName}${uuid().slice(0,7)}`))
-	   createUserCollection(values)
+	  createUserCollection(values)
+	 
 
      },
 	})

@@ -13,6 +13,7 @@ import btnStyles from "../Button/Button.module.scss";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
+import {auth} from "../Firebase/Firebase"
 // import ReactAudioPlayer from "react-audio-player";
 import UIFx from "uifx";
 
@@ -33,10 +34,17 @@ import {
   startCounting,
   updateCurrnetTime,
 } from "./FrontPageSlice";
+import { getUserId } from "../SignUpForms/SignUpFormSlice";
 import Toness from "../audioFiles/AudioFiles";
 
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
+   
+  // useEffect(() => {
+  //  console.log(user);
+  // },[user])
+  // console.log(user);
+  const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
   let tone = useSelector((state) => state.tones.selectedTone)
@@ -47,9 +55,9 @@ const FrontPage = ({ expiryTimestamp }) => {
   const stop = useSelector((state) => state.frontPage.stop);
   const counting = useSelector((state) => state.frontPage.counting);
   const bell = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
+  // dispatch(getUserId(user.uid))
 console.log(Toness);
   let minute = useSelector((state) => state.frontPage.minute5);
-  const dispatch = useDispatch();
   const {
     seconds,
     minutes,

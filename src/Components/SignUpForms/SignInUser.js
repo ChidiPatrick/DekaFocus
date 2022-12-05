@@ -3,15 +3,18 @@ import styles from "./SignUpForm.module.scss"
 import {useNavigate} from "react-router"
 import { useFormik} from 'formik';
 import {signInExistingUser,authStateObserver,auth} from "../Firebase/Firebase"
-
+import { useAuthState, useSignInWithEmailAndPassword, useSignInWithEmailLink } from "react-firebase-hooks/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import * as Yup from 'yup';
 const SignInUser = () => {
+    // const [signInWithEmailAndPassword,user,loading,error] = useSignInWithEmailAndPassword(auth)
+    const [user,loading,error] = useAuthState(auth)
    const navigate = useNavigate()
     const goToSettings = () => {
         navigate("/settings")
         
     }
-   
+   console.log(user);
  const formik = useFormik({
 		initialValues: {
 			email: "",
@@ -23,11 +26,12 @@ const SignInUser = () => {
 
 		}),
 		onSubmit: (values) => {
-           const user =  signInExistingUser(values)
-           if(user) navigate('/settings')
-           else{
-            alert("Sign up first!")
-           }
+        signInWithEmailAndPassword(auth,values.email,values.password)
+        .then((user) => {
+            if(user) {
+                navigate('/settings')
+            }
+        })
      },
 	})
     return (

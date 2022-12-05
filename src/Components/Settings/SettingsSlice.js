@@ -1,4 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import {doc,getDoc} from "firebase/firestore"
 const initialState = {
 	pomodoroLengthSelected: false,
 	shortBreakLengthSelected: false,
@@ -10,9 +11,19 @@ const initialState = {
 	longBreakAfterCurrLength: 4,
 	goForBreak: false,
 	autoStartNextPomodoro: false,
-	autoStartBreak: true
+	autoStartBreak: true,
+	userSettings: null
 };
-
+export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (daa,{dispatch,getState}) =>{
+	try{
+	// 	const userSettings = getState()
+	// 	// const response = await getDoc()
+	// 	console.log(userSettings);
+	}
+	catch(err) {
+		console.log(err);
+	}
+})
 const SettingSlice = createSlice({
 	name: 'settings',
 	initialState,
@@ -74,6 +85,10 @@ const SettingSlice = createSlice({
 		},
 		disableGoForBreak(state, action) {
 			state.goForBreak = false;
+		},
+		getUserSettings(state,action) {
+			state.userSettings = action.payload
+			console.log(state.userSettings);
 		}
 	}
 });
@@ -96,6 +111,9 @@ export const {
 	enableAutoStartPomodoro,
 	disableAutoStartPomodoro,
 	disableGoForBreak,
-	enableGoForBreak
+	enableGoForBreak,
+	getUserSettings,
+	
+	
 } = SettingSlice.actions;
 export default SettingSlice.reducer;

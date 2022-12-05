@@ -11,13 +11,16 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "classnames": "^2.3.2",
+    "dart-sass": "^1.25.0",
     "firebase": "^9.13.0",
     "formik": "^2.2.9",
+    "node-sass": "^8.0.0",
     "react": "^18.2.0",
     "react-audio-player": "^0.17.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.2.0",
     "react-email-validator": "^1.0.2",
+    "react-firebase-hooks": "^5.1.1",
     "react-form-input-validation": "^2.1.0",
     "react-icons": "^4.4.0",
     "react-password-checklist": "^1.4.2",
@@ -26,11 +29,11 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-search-box": "^2.3.0",
+    "react-spinners": "^0.13.6",
     "react-switch": "^7.0.0",
     "react-timer-hook": "^3.0.5",
     "react-uuid": "^2.0.0",
     "reactfire": "^4.2.2",
-    "sass": "^1.54.9",
     "uifx": "^2.0.7",
     "util": "^0.12.4",
     "uuid": "^9.0.0",
@@ -62,6 +65,7 @@
     ]
   },
   "devDependencies": {
-    "prop-types": "^15.8.1"
+    "prop-types": "^15.8.1",
+    "sass": "^1.56.1"
   }
 }

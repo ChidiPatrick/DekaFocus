@@ -19,25 +19,25 @@ import AddProject from "../AddProject/AddProject";
 import { useDispatch,useSelector } from "react-redux";
 import { IoIosAdd,IoIosPricetag,IoIosClose } from "react-icons/io";
 import { ImFolderPlus } from "react-icons/im";
+import { useAuthState } from "react-firebase-hooks/auth";
+import {auth} from "../Firebase/Firebase"
 
 const UserAccountUI = (props) => {
+  const [user,loadingUser,loginError] = useAuthState(auth);
   const projects = useSelector((state) => state.AddProject.projects)
-  console.log(projects);
+  const userId = useSelector(state => state.signUpSlice.userId)
+  console.log(userId);
   return (
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
         <ul className={styles.listContainer}>
           <li className={styles.listItem}><ButtonBack/></li>
           <li className={styles.listItem}>
-            <Link className={styles.link} to="/settings">
+            <Link className={styles.link} to = {user && user.uid ? "/settings" : "/signInForm" } >
               <IoIosSettings className={styles.settingLink} />
             </Link>
           </li>
-          <li className={styles.listItem}>
-            <Link className={styles.link} to="/signInForm">
-              <IoIosSettings className={styles.settingLink} />
-            </Link>
-          </li>
+         
           <li className={styles.listItem}>
             <Link className={styles.link} to="/community">
               <FaUserFriends className={styles.icon} />
