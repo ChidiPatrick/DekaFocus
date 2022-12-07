@@ -41,7 +41,7 @@ import Person from '../PersonApi/PersonComponent';
 import SettingsComponent from './settingsComponent';
 
 const Settings = (props) => {
-	
+	const [settings,setSettings] = useState(null)
 onAuthStateChanged(auth, (user) => {
 	console.log(user.id);
 })
@@ -75,7 +75,9 @@ onAuthStateChanged(auth, (user) => {
 		/////Get data function
 		
 		///////Settings handlers ////////////////
-		const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+		
+		
+    
 		// const updatePomodoroLength = async (e) =>  {
 		// 	await updateDoc(settingsRef, {
 		// 		pomodoroLength: e.target.value
@@ -227,7 +229,7 @@ onAuthStateChanged(auth, (user) => {
 		<Suspense fallback = {loadingSpinner}>
 			<SettingsComponent resource = {resource}/>
 		</Suspense>
-	
+		
 	);
 };
 export default Settings;

@@ -32,7 +32,7 @@ import Switch from '@mui/material/Switch';
 import { useDocumentOnce } from "react-firebase-hooks/firestore";
 const SettingsComponent = ({resource}) => {
     const data = resource.data.read()
-	const settings = data.data()
+	const [settings,setSettings] = useState(data.data())
 	console.log(settings);
     const dispatch = useDispatch()
     const selected = useSelector((state) => state.settings.selected);
@@ -51,62 +51,18 @@ const SettingsComponent = ({resource}) => {
 	const longBreakAfterCurrLength = useSelector((state) => state.settings.longBreakAfterCurrLength);
 	const userId = useSelector((state) => state.signUpSlice.userId)
     const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
-	
-		const updatePomodoroLength = async (e) =>  {
-			await updateDoc(settingsRef, {
-				pomodoroLength: e.target.value
-			});
-		}
+	const [disableBreak,setDisableBreak] = useState(settings.disableBreak)
+	console.log(disableBreak);
 		
-		
-		const updateShortBreak = async (e) => {
-			await updateDoc(selectRef, {
-				shortBreakLength: e.value.target
-			})
-			
+		const toggleShortBreakSelect = () => {
+		if (!shortBreakLengthSelected) {
+			dispatch(showShortBreak());
 		}
-		const updateLongBreakLength = async (e) => {
-			await updateDoc(selectRef, {
-				longBreakLength: e.target.value
-			})
+		if (shortBreakLengthSelected) {
+			dispatch(hideShortBreak());
 		}
-		const updateLongBreakAfter = async (e) => {
-			await updateDoc(selectRef, {
-				longBreakAfter: e.target.value
-			})
-			
-		}
-		const updateAutoStartBreak = async (e) => {
-			await updateDoc(settingsRef, {
-				autoStartBreaks: e.target.value
-			});
-			
-		}
-		const updateDisableBreak = async (values) => {
-			await updateDoc(settingsRef, {
-				disableBreak: values.data().autoStartNextPomodoro
-			});
-			
-		}
-		const updateAlarmBreak = async (e) => {
-			await updateDoc(settingsRef, {
-				breakAlarm: e.target.value
-			});
-			
-		}
-		const updateShortBreakLength = async (e) => {
-			await updateDoc(settingsRef, {
-				shortBreakLength: e.target.value
-			});
-			
-		}
-		
-    const selectRef = useRef();
-	const Minutes = [];
-	let selectedTime = 45;
-	for (let i = 0; i <= 60; i++) {
-		Minutes.push(i + 1);
-	}const getPomodoroTime = (e) => {
+	};
+	const getPomodoroTime = (e) => {
 		let curValue = e.target.value;
 		console.log(typeof selectedTime);
 		dispatch(hideMinutes());
@@ -135,14 +91,7 @@ const SettingsComponent = ({resource}) => {
 			dispatch(hideMinutes());
 		}
 	};
-	const toggleShortBreakSelect = () => {
-		if (!shortBreakLengthSelected) {
-			dispatch(showShortBreak());
-		}
-		if (shortBreakLengthSelected) {
-			dispatch(hideShortBreak());
-		}
-	};
+	
 
 	const toggleLongBreakAfter = () => {
 		if (!longBreakAfterLengthSelected) {
@@ -186,6 +135,70 @@ const SettingsComponent = ({resource}) => {
 			dispatch(disableGoForBreak());
 		}
 	};
+	const updatePomodoroLength = async (e) =>  {
+			setSettings({...settings,pomodoroLength: e.target.value})
+			await updateDoc(settingsRef, {
+				pomodoroLength: e.target.value
+			});
+			togglePomodoroSelect()
+		}
+		
+		
+		const updateShortBreak = async (e) => {
+			setSettings({...settings,shortBreakLength: e.target.value})
+			await updateDoc(settingsRef, {
+				shortBreakLength: e.value.target
+			})
+			
+		}
+		const updateLongBreakLength = async (e) => {
+			setSettings({...settings,longBreakLength: e.target.value})
+			await updateDoc(settingsRef, {
+				longBreakLength: e.target.value
+			})
+			toggleLongBreak()
+		}
+		const updateLongBreakAfter = async (e) => {
+			setSettings({...settings,longBreakAfter: e.target.value})
+			await updateDoc(settingsRef, {
+				longBreakAfter: e.target.value
+			})
+			toggleLongBreakAfter()
+		}
+		const updateAutoStartBreak = async (e) => {
+			await updateDoc(settingsRef, {
+				autoStartBreaks: settings.disableBreak
+			});
+			
+		}
+		const updateDisableBreak = async (values) => {
+			// setDisableBreak({...settings})
+			await updateDoc(settingsRef, {
+				disableBreak: !disableBreak
+			});
+			
+		}
+		const updateAlarmBreak = async (e) => {
+			await updateDoc(settingsRef, {
+				breakAlarm: e.target.value
+			});
+			
+		}
+		const updateShortBreakLength = async (e) => {
+			setSettings({...settings,shortBreakLength: e.target.value})
+			await updateDoc(settingsRef, {
+				shortBreakLength: e.target.value
+			});
+			toggleShortBreakSelect()
+		}
+		
+    const selectRef = useRef();
+	const Minutes = [];
+	let selectedTime = 45;
+	for (let i = 0; i <= 60; i++) {
+		Minutes.push(i + 1);
+	}
+	
     return (
     <div className={styles.Setting}>
 			<div className={styles.HeaderWrapper}>
@@ -302,8 +315,8 @@ const SettingsComponent = ({resource}) => {
 							className={styles.switch}
 							height={17}
 							width={40}
-							onChange={disableBreakHandler}
-							checked={goForBreak}
+							onChange={updateDisableBreak}
+							checked={disableBreak}
 						/>
 					</label>
 					<label className={styles.AutoStartPomodoroSwitch}>
