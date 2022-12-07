@@ -48,9 +48,21 @@ const SignUpForm = () => {
 			await setDoc(userRef,{...data})
 	}
 	const createUserSettingCollection = async (userId,) => {
-		const userSettingRef = doc(db,"users",`${userId}`,`userSettingsCollection/settings`)
-		await setDoc(userSettingRef,{
-			projects: [],
+		// const userSettingRef = doc(db,"users",`${userId}`,`userSettingsCollection/settings`)
+		// await setDoc(userSettingRef,{
+		// 	projects: [],
+		// 	workAlarm: "bellSound.mp3",
+		// 	beakAlarm: "tubularBell.mp3",
+		// 	whiteNoise: "decidemp3-14575.mp3",
+		// 	pomodoroLength: 25,
+		// 	shortBreakLength: 5,
+		// 	longBreakLength: 10,
+		// 	longBreakAfter: 4,
+		// 	disableBreak: false,
+		// 	autoStartNextPomodoro: false,
+		// 	autoStartBreaks: true
+		// })
+		localStorage("Settings",{
 			workAlarm: "bellSound.mp3",
 			beakAlarm: "tubularBell.mp3",
 			whiteNoise: "decidemp3-14575.mp3",

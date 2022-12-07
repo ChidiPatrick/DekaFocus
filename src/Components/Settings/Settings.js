@@ -34,8 +34,11 @@ import { fetchUserSettings } from '../Settings/SettingsSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAuthState } from "react-firebase-hooks/auth";
 import Switch from '@mui/material/Switch';
-import { async } from '@firebase/util';
+// import { Switch } from 'evergreen-ui';
 import { ClipLoader } from 'react-spinners/ClipLoader';
+import { createResource } from '../PersonApi/PersonApi';
+import Person from '../PersonApi/PersonComponent';
+import SettingsComponent from './settingsComponent';
 
 const Settings = (props) => {
 	
@@ -70,28 +73,57 @@ onAuthStateChanged(auth, (user) => {
 	// const usersId = localStorage.getItem("userId")
 	console.log(userSettings);
 		/////Get data function
-		const [value,loading,error,reload] = useDocumentOnce(doc(db,"users",`${userId}`,"userSettingsCollection","settings"),
-		{
-			snapshotListenOptions: {includeMetaChanges: true},
-			source: "server"
-		}
-		)
+		
 		///////Settings handlers ////////////////
 		const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
-		const updatePomodoroLength = async (e) =>  {
-			await updateDoc(settingsRef, {
-				pomodoroLength: e.target.value
-			});
-			reload()
-		}
-		const autoStartBreakHandler = async (e) => {
-			await updateDoc(settingsRef, {
-				autoStartBreaks: e.target.value
-			});
-			reload()
-		}
-		
-	
+		// const updatePomodoroLength = async (e) =>  {
+		// 	await updateDoc(settingsRef, {
+		// 		pomodoroLength: e.target.value
+		// 	});
+		// 	reload()
+		// }
+		// const updateShortBreak = async (e) => {
+		// 	await updateDoc(selectRef, {
+		// 		shortBreakLength: e.value.target
+		// 	})
+		// 	reload()
+		// }
+		// const updateLongBreakLength = async (e) => {
+		// 	await updateDoc(selectRef, {
+		// 		longBreakAfter: e.target.value
+		// 	})
+		// 	reload()
+		// }
+		// const updateLongBreakAfter = async (e) => {
+		// 	await updateDoc(selectRef, {
+		// 		longBreakAfter: e.target.value
+		// 	})
+		// 	reload()
+		// }
+		// const updateAutoStartBreak = async (e) => {
+		// 	await updateDoc(settingsRef, {
+		// 		autoStartBreaks: e.target.value
+		// 	});
+		// 	reload()
+		// }
+		// const updateDisableBreak = async (values) => {
+		// 	await updateDoc(settingsRef, {
+		// 		disableBreak: value.data().autoStartNextPomodoro
+		// 	});
+		// 	reload()
+		// }
+		// const updateAlarmBreak = async (e) => {
+		// 	await updateDoc(settingsRef, {
+		// 		breakAlarm: e.target.value
+		// 	});
+		// 	reload()
+		// }
+		// const updateShortBreakLength = async (e) => {
+		// 	await updateDoc(settingsRef, {
+		// 		shortBreakLength: e.target.value
+		// 	});
+		// 	reload()
+		// }
 	
 	////////////////////////////////////
 	const selectRef = useRef();
@@ -185,169 +217,17 @@ onAuthStateChanged(auth, (user) => {
 			dispatch(disableGoForBreak());
 		}
 	};
-	const loadingSpinner = <p>Loading...</p>
-	// const settingsUI = 
-	return (
-		<div className={styles.Setting}>
-			<div className={styles.HeaderWrapper}>
-				<Link to={'/userAccount'} className={styles.navLink}>
-					<FaChevronLeft className={styles.iconBack} />
-				</Link>
-				<h3 className={styles.SettingHeader}>Settings</h3>
-			</div>
-			<Link to="/userAccount" className={styles.accountDetails}>
-				<figure className={styles.Avatar} />
-				<div className={styles.userName}>Mr. Somebody</div>
-				<FaChevronRight className={styles.iconBack} />
-			</Link>
-			<div className={styles.projects}>projects</div>
-			<div className={styles.AlarmSettings}>
-				<div className={styles.linkWrapper}>
-					<Link to="workAlarm" className={styles.workAlarm}>
-						Work Alarm
-					</Link>
-					<div className={styles.alarmTone}>
-						<span className={styles.alarm}>Bell2</span>
-						<FaChevronRight className={styles.iconBack} />
-					</div>
-				</div>
-				<div className={styles.linkWrapper}>
-					<Link to="workAlarm" className={styles.workAlarm}>
-						Break Alarm
-					</Link>
-					<div className={styles.alarmTone}>
-						<span className={styles.alarm}>Bell3</span>
-						<FaChevronRight className={styles.iconBack} />
-					</div>
-				</div>
-				<div className={styles.linkWrapper}>
-					<Link to="workAlarm" className={styles.workAlarm}>
-						White Noise
-					</Link>
-					<div className={styles.alarmTone}>
-						<span className={styles.alarm}>Bell3</span>
-						<FaChevronRight className={styles.iconBack} />
-					</div>
-				</div>
-			</div>
-			<div className={styles.timeSettingsWrapper}>
-				<form className={styles.minuteList}>
-					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
-						<span>Pomodoro Length</span>
-					{error && <div style={{color: "red"}}>Connectivity Error!</div>}
-					{loading && <Spinner/>}
-					{value && <span>{value.data().pomodoroLength} Minutes</span>}
-					</label>
-					<select
-						className={pomodoroLengthSelected ? styles.selectMinutes : styles.hidden}
-						onChange={updatePomodoroLength}
-					>
-						{Minutes.map((minute, i) => {
-							return (
-								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
-									{minute}
-								</option>
-							);
-						})}
-					</select>
-
-					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleShortBreakSelect}>
-					<span>Short Break Length</span>
-					{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value && <span>{value.data().shortBreakLength} Minutes</span>}
-					</label>
-					<select
-						className={shortBreakLengthSelected ? styles.selectMinutes : styles.hidden}
-						onChange={getShortBreakTime}
-					>
-						{Minutes.map((minute, i) => {
-							return (
-								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
-									{minute}
-								</option>
-							);
-						})}
-					</select>
-					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreak}>
-						<span>Long Break Length</span>
-					{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value && <span>{value.data().longBreakLength} Minutes</span>}
-					</label>
-					<select
-						className={longBreakLengthSelected ? styles.selectMinutes : styles.hidden}
-						onChange={getLongBreakTime}
-					>
-						{Minutes.map((minute, i) => {
-							return (
-								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
-									{minute}
-								</option>
-							);
-						})}
-					</select>
-					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreakAfter}>
-						<span>Long Break After</span>
-					{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value && <span>{value.data().longBreakAfter} Pomodoros</span>}
-					</label>
-					<select
-						className={longBreakAfterLengthSelected ? styles.selectMinutes : styles.hidden}
-						onChange={getLongBreakAfterTime}
-					>
-						{Minutes.map((minute, i) => {
-							return (
-								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
-									{minute}
-								</option>
-							);
-						})}
-					</select>
-					<label className={styles.breakSwitch}>
-						<span className={styles.switchLabel}>Disable Break</span>
-						{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value && <Switch
-							className={styles.switch}
-							height={17}
-							width={40}
-							onChange={disableBreakHandler}
-							checked={value.data().disableBreak}
-							/>}
-						
-					</label>
-					<label className={styles.AutoStartPomodoroSwitch}>
-						<span className={styles.switchLabel}>Auto Start of Next Pomodoro</span>
-					{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value &&<Switch
-							className={styles.switch}
-							height={17}
-							width={40}
-							checked={value.data().autoStartNextPomodoro}
-							onChange={autoStartNextPomodoroHandler}
-						/> }
-						
-					</label>
-					<label className={styles.AutoStartBreakSwitch}>
-						<span className={styles.switchLabel}>Auto Start of Break</span>
-					{error && <div style={{color: "red"}}>Connection Error!</div>}
-					{loading && <Spinner/>}
-					{value &&  <Switch
-							className={styles.switch}
-							height={17}
-							width={40}
-							checked={value.data().autoStartBreaks}
-							onChange={autoBreakStartHandler}
-							// color="#ccc"
-						/>}
-					</label>
-					{/* <Switch color="red" /> */}
-				</form>
-			</div>
+	///////TESTING SUSPENSE //////////////////
+	const resource = createResource()
+	const loadingSpinner = <div className={styles.loadingSpinner}>
+			<span className={styles.loader}></span>
 		</div>
+	return (
+		
+		<Suspense fallback = {loadingSpinner}>
+			<SettingsComponent resource = {resource}/>
+		</Suspense>
+	
 	);
 };
 export default Settings;
