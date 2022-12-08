@@ -38,6 +38,27 @@
 	justify-items: center;
 	align-items: center;
 }
+.projectsLink{
+	text-decoration: none;
+	width: 100%;
+	display: block;
+	display: flex;
+	// justify-content: space-between;
+	align-items: center;
+}
+.projectLinkContainer{
+	height: 40px;
+	background-color: #fff;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	
+	margin: 10px 0;
+	color: black;
+	font-size: 18px;
+
+}
 .syncWrapper {
 	display: flex;
 	flex-direction: column;

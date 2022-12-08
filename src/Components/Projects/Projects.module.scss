@@ -1,0 +1,62 @@
+.projectsHeader{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px;
+    border-bottom: solid 1px grey;
+    height: 30px;
+}
+.backLink{
+    margin-right: 40px;
+
+}
+.projectAndColorWrapper{
+     display: flex;
+     justify-content: flex-start;
+     align-items: center;
+     width: 90%;
+}
+.project{
+    display: flex;
+    margin-top: 30px;
+    align-items: center;
+    justify-content: space-between;
+    // flex-direction: c;
+}
+.projectsHeading{
+    
+}
+
+.projectColor{
+    display: block;
+    height: 15px;
+    width: 15px;
+    background-color: orange;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+.projecsTitle{
+    font-size: 20px;
+}
+.deleteWrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.completedProject,
+.deleteProject{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    background-color: rgba(238, 238, 238, 0.959);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+.completedProject{
+    margin-right: 10px;
+   
+    
+}
+.deleteProject{}

@@ -172,9 +172,9 @@ const SettingsComponent = ({resource}) => {
 			
 		}
 		const updateDisableBreak = async (values) => {
-			// setDisableBreak({...settings})
+			setDisableBreak({...settings,disableBreak: !disableBreak})
 			await updateDoc(settingsRef, {
-				disableBreak: !disableBreak
+				disableBreak: !settings.disableBreak
 			});
 			
 		}
@@ -202,7 +202,7 @@ const SettingsComponent = ({resource}) => {
     return (
     <div className={styles.Setting}>
 			<div className={styles.HeaderWrapper}>
-				<Link to={'/userAccount'} className={styles.navLink}>
+				<Link to= "/userAccount" className={styles.navLink}>
 					<FaChevronLeft className={styles.iconBack} />
 				</Link>
 				<h3 className={styles.SettingHeader}>Settings</h3>
@@ -212,7 +212,12 @@ const SettingsComponent = ({resource}) => {
 				<div className={styles.userName}>Mr. Somebody</div>
 				<FaChevronRight className={styles.iconBack} />
 			</Link>
-			<div className={styles.projects}>projects</div>
+			<Link to ="/Projects" className={styles.projectsLink}>
+				<div className={styles.projectLinkContainer}>
+					<p>Projects</p>
+					<FaChevronRight className={styles.iconBack} />
+				</div>
+			</Link>
 			<div className={styles.AlarmSettings}>
 				<div className={styles.linkWrapper}>
 					<Link to="workAlarm" className={styles.workAlarm}>
@@ -309,17 +314,17 @@ const SettingsComponent = ({resource}) => {
 							);
 						})}
 					</select>
-					<label className={styles.breakSwitch}>
+					{/* <label className={styles.breakSwitch}>
 						<span className={styles.switchLabel}>Disable Break</span>
 						<Switch
 							className={styles.switch}
 							height={17}
 							width={40}
 							onChange={updateDisableBreak}
-							checked={disableBreak}
+							checked={settings.disableBreak}
 						/>
-					</label>
-					<label className={styles.AutoStartPomodoroSwitch}>
+					</label> */}
+					{/* <label className={styles.AutoStartPomodoroSwitch}>
 						<span className={styles.switchLabel}>Auto Start of Next Pomodoro</span>
 						<Switch
 							className={styles.switch}
@@ -339,7 +344,7 @@ const SettingsComponent = ({resource}) => {
 							onChange={autoBreakStartHandler}
 							// color="#ccc"
 						/>
-					</label>
+					</label> */}
 					{/* <Switch color="red" /> */}
 				</form>
 			</div>

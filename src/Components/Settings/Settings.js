@@ -8,6 +8,7 @@ import { db,auth,app } from '../Firebase/Firebase';
 import {doc,collection,getDoc,updateDoc} from "firebase/firestore"
 import { getAuth,onAuthStateChanged } from 'firebase/auth';
 import Spinner from '../Spinner/Spinner';
+import Projects from '../Projects/Projects';
 import {
 	showMinutes,
 	hideMinutes,
@@ -37,7 +38,7 @@ import Switch from '@mui/material/Switch';
 // import { Switch } from 'evergreen-ui';
 import { ClipLoader } from 'react-spinners/ClipLoader';
 import { createResource } from '../PersonApi/PersonApi';
-import Person from '../PersonApi/PersonComponent';
+
 import SettingsComponent from './settingsComponent';
 
 const Settings = (props) => {
@@ -225,11 +226,9 @@ onAuthStateChanged(auth, (user) => {
 			<span className={styles.loader}></span>
 		</div>
 	return (
-		
 		<Suspense fallback = {loadingSpinner}>
 			<SettingsComponent resource = {resource}/>
 		</Suspense>
-		
 	);
 };
 export default Settings;

@@ -22,6 +22,7 @@ import VerifyEmail from './Components/VerificationPage/VerificationPage';
 import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
+import Projects from './Components/Projects/Projects';
 
 // const analytics = getAnalytics(app);
 
@@ -55,9 +56,8 @@ function App() {
 		frontpage = <FrontPage expiryTimestamp={time} />;
 	}
 	return (
-		<Suspense fallback ={<p>Loading...</p>}>
+		
 		<div className="App">
-			
 			<Routes>
 				<Route path="/" element={frontpage} />
 				<Route path="/UserAccount" element={<UserAccountUI />} />
@@ -73,9 +73,10 @@ function App() {
 				<Route path= "/verifyEmail" element= {<VerifyEmail/>}/>
 				<Route path="/signInForm" element={<SignInUser/>}/>
 				<Route path="/AddProject" element={<AddProject/>}/>
+				<Route path="/Projects" element={<Projects/>}/>
 			</Routes>
 		</div>
-		</Suspense>
+		
 	);
 }
 
