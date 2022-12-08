@@ -1,35 +1,22 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { Link } from "react-router-dom"
 import styles from "./Projects.module.scss"
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { useSelector } from "react-redux";
+import { createResource } from "../PersonApi/PersonApi";
+import ProjectComponent from "../Projects/ProjectsComponent"
 const Projects = () => {
-    const data = [...Array(6)]
+    const projects = useSelector(state => state.settings.projects)
+    console.log(projects);
+    const loadingSpinner = <div className={styles.loadingSpinner}>
+			<span className={styles.loader}></span>
+		</div>
+    const resource = createResource()
     return (
-        <div className={styles.projectsContainer}>
-            <header className={styles.projectsHeader}>
-                <Link to = {-1}  className={styles.backLink}>
-                    <FaChevronRight/>
-                </Link>
-                <h3 className={styles.projectsHeading}>Projects</h3>
-            </header>
-            <div className={styles.projectsWrapper}>
-                {data.map(doc => {
-                    return (
-                        <div className={styles.project}>
-                    <div className={styles.projectAndColorWrapper}>
-                        <span className={styles.projectColor}></span>
-                        <div className={styles.projecsTitle}>Project</div>
-                    </div>
-                    <div className={styles.deleteWrapper}>
-                        <span className={styles.completedProject}><ImRadioUnchecked/></span>
-                        <div className={styles.deleteProject}><ImBin/></div>
-                    </div>
-                </div>
-                    )
-                })}
-            </div>
-        </div>
+        <Suspense fallback = {loadingSpinner}>
+        <ProjectComponent resource={resource}/>
+        </Suspense>
     )
 }
 export default Projects

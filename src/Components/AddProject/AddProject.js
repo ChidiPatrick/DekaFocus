@@ -12,19 +12,30 @@ import { addProject,activateProjectBtn,deActivateProjectBtn,createProject } from
 // import { } from "firebase/firestore";
 import { createUserCollection } from "../Firebase/Firebase";
 import { db, } from "../Firebase/Firebase";
-import { addDoc,setDoc,doc,collection,getDoc } from "firebase/firestore";
+import { addDoc,setDoc,doc,collection,getDoc,updateDoc, arrayUnion } from "firebase/firestore";
 
 
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
 const AddProject = ({title = "New Project"}) => {
+    const userId =  useSelector((state) => state.signUpSlice.userId)
+    const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
      const showBtn = useSelector(state => state.AddProject.showProjectBtn)
     const [blockPickerColor,setBlockPickerColor] = useState("#eee")
     const inputRef = useRef()
     const dispatch = useDispatch()
     const [disable, setDisAble] = useState(false)
+    const addProject = async () => {
+        await updateDoc(settingsRef,{
+            projects: arrayUnion({
+                projectColor: blockPickerColor,
+                projectTitle:  inputRef.current.value
+            })
+        })
+    }
     const getInputValue =  () =>  {
-        // if(!inputRef.current.value) return
+        
+        addProject()
         dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""
         dispatch(deActivateProjectBtn())
@@ -32,6 +43,7 @@ const AddProject = ({title = "New Project"}) => {
         createUserCollection("AMadi",{projectName: inputRef.current.value, projectColor: blockPickerColor})
     
     }
+    
     return (
         <div className={styles.AddProject}>
             <header className={styles.projectHeader}>

@@ -26,7 +26,8 @@ import {
 	disableAutoStartPomodoro,
 	disableGoForBreak,
 	enableGoForBreak,
-	getUserSettings
+	getUserSettings,
+	getUserProjects
 } from '../Settings/SettingsSlice';
 import Switch from '@mui/material/Switch';
 import { useDocumentOnce } from "react-firebase-hooks/firestore";
@@ -35,6 +36,7 @@ const SettingsComponent = ({resource}) => {
 	const [settings,setSettings] = useState(data.data())
 	console.log(settings);
     const dispatch = useDispatch()
+	dispatch(getUserProjects(settings.projects))
     const selected = useSelector((state) => state.settings.selected);
 	const pomodoroLengthSelected = useSelector((state) => state.settings.pomodoroLengthSelected);
 	const shortBreakLengthSelected = useSelector((state) => state.settings.shortBreakLengthSelected);

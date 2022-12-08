@@ -12,7 +12,8 @@ const initialState = {
 	goForBreak: false,
 	autoStartNextPomodoro: false,
 	autoStartBreak: true,
-	userSettings: null
+	userSettings: null,
+	projects: null
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (daa,{dispatch,getState}) =>{
 	try{
@@ -89,6 +90,9 @@ const SettingSlice = createSlice({
 		getUserSettings(state,action) {
 			state.userSettings = action.payload
 			console.log(state.userSettings);
+		},
+		getUserProjects(state,action) {
+			state.projects = action.payload
 		}
 	}
 });
@@ -113,6 +117,7 @@ export const {
 	disableGoForBreak,
 	enableGoForBreak,
 	getUserSettings,
+	getUserProjects
 	
 	
 } = SettingSlice.actions;

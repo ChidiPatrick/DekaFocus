@@ -11,7 +11,6 @@ const FetchPerson = async () => {
         console.log(data);
          return data
     }
-   
 }
 
 const wrapPromise = (promise) => {
