@@ -14,11 +14,11 @@ root.render(
   <Provider store={Store}>
     <React.StrictMode>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
-        <Router>
-        <PersistGate loading = {<div>Loading...</div>} persistor={persistor}>
+         <PersistGate loading = {<div>Loading...</div>} persistor={persistor}>
+        <BrowserRouter>
         <App />
+        </BrowserRouter>
         </PersistGate >
-        </Router>
       </FirebaseAppProvider>
     </React.StrictMode>
   </Provider>
