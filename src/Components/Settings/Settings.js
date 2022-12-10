@@ -42,7 +42,7 @@ import { createResource } from '../PersonApi/PersonApi';
 import SettingsComponent from './settingsComponent';
 
 const Settings = (props) => {
-	const [settings,setSettings] = useState(null)
+	
 onAuthStateChanged(auth, (user) => {
 	console.log(user.id);
 })
@@ -67,66 +67,16 @@ onAuthStateChanged(auth, (user) => {
 	const longBreakCurrLength = useSelector((state) => state.settings.longBreakCurrLength);
 	const longBreakAfterCurrLength = useSelector((state) => state.settings.longBreakAfterCurrLength);
 	const userId = useSelector((state) => state.signUpSlice.userId)
+	const [settings,setSettings] = useState(userSettings)
 	//////////////////////////////////////
 	// const [user, loading, error ] = useAuthState(auth)
 	let userData = []
-	console.log(userId);
+	console.log(pomodoroCurrLength);
 	// const usersId = localStorage.getItem("userId")
 	console.log(userSettings);
-		/////Get data function
-		
-		///////Settings handlers ////////////////
-		
-		
-    
-		// const updatePomodoroLength = async (e) =>  {
-		// 	await updateDoc(settingsRef, {
-		// 		pomodoroLength: e.target.value
-		// 	});
-		// 	reload()
-		// }
-		// const updateShortBreak = async (e) => {
-		// 	await updateDoc(selectRef, {
-		// 		shortBreakLength: e.value.target
-		// 	})
-		// 	reload()
-		// }
-		// const updateLongBreakLength = async (e) => {
-		// 	await updateDoc(selectRef, {
-		// 		longBreakAfter: e.target.value
-		// 	})
-		// 	reload()
-		// }
-		// const updateLongBreakAfter = async (e) => {
-		// 	await updateDoc(selectRef, {
-		// 		longBreakAfter: e.target.value
-		// 	})
-		// 	reload()
-		// }
-		// const updateAutoStartBreak = async (e) => {
-		// 	await updateDoc(settingsRef, {
-		// 		autoStartBreaks: e.target.value
-		// 	});
-		// 	reload()
-		// }
-		// const updateDisableBreak = async (values) => {
-		// 	await updateDoc(settingsRef, {
-		// 		disableBreak: value.data().autoStartNextPomodoro
-		// 	});
-		// 	reload()
-		// }
-		// const updateAlarmBreak = async (e) => {
-		// 	await updateDoc(settingsRef, {
-		// 		breakAlarm: e.target.value
-		// 	});
-		// 	reload()
-		// }
-		// const updateShortBreakLength = async (e) => {
-		// 	await updateDoc(settingsRef, {
-		// 		shortBreakLength: e.target.value
-		// 	});
-		// 	reload()
-		// }
+	/////Get data function	
+    const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+	///////Settings handlers ////////////////
 	
 	////////////////////////////////////
 	const selectRef = useRef();
@@ -140,25 +90,23 @@ onAuthStateChanged(auth, (user) => {
 	///////////////////////////////////
 	//GET SELECTED MINUTE
 	const getPomodoroTime = (e) => {
-		let curValue = e.target.value;
-		console.log(typeof selectedTime);
 		dispatch(hideMinutes());
-		dispatch(updatePomodoroTime({ currTime: curValue }));
+		dispatch(updatePomodoroTime(e.target.value));
 	};
 	const getShortBreakTime = (e) => {
 		let curValue = e.target.value;
 		dispatch(hideShortBreak());
-		dispatch(updateShortBreakTime({ currTime: curValue }));
+		dispatch(updateShortBreakTime(e.target.value));
 	};
 	const getLongBreakTime = (e) => {
 		let curValue = e.target.value;
 		dispatch(hideLongBreak());
-		dispatch(updateLongBreakTime({ currTime: curValue }));
+		dispatch(updateLongBreakTime(e.target.value));
 	};
 	const getLongBreakAfterTime = (e) => {
-		let curValue = e.target.value;
+		
 		dispatch(hideLongBreakAfter());
-		dispatch(updateLongBreakAfterTime({ currTime: curValue }));
+		dispatch(updateLongBreakAfterTime(e.target.value));
 	};
 	////////////////////////////////////
 	//Check button handler////////
@@ -220,15 +168,167 @@ onAuthStateChanged(auth, (user) => {
 			dispatch(disableGoForBreak());
 		}
 	};
+	const updatePomodoroLength =  (e) =>  {
+			// await updateDoc(settingsRef, {
+			// 	pomodoroLength: e.target.value
+			// });
+			getPomodoroTime(e)
+			togglePomodoroSelect()
+		}
+		const updateShortBreakLength =  (e) => {
+			getShortBreakTime(e)
+			toggleShortBreakSelect()
+			// await updateDoc(settingsRef, {
+			// 	shortBreakLength: e.target.value
+			// });
+			
+		}
+		const updateLongBreakLength =  (e) => {
+			// await updateDoc(settingsRef, {
+			// 	longBreakLength: e.target.value
+			// })
+			getLongBreakTime(e)
+			toggleLongBreak()
+		}
+		const updateLongBreakAfter =  (e) => {
+			// await updateDoc(settingsRef, {
+			// 	longBreakAfter: e.target.value
+			// })
+			getLongBreakAfterTime(e)
+			toggleLongBreakAfter()
+		}
+		const updateAutoStartBreak = async (e) => {
+			await updateDoc(settingsRef, {
+				autoStartBreaks: settings.disableBreak
+			});
+			
+		}
+		
 	///////TESTING SUSPENSE //////////////////
 	const resource = createResource()
 	const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
 		</div>
 	return (
-		<Suspense fallback = {loadingSpinner}>
-			<SettingsComponent resource = {resource}/>
-		</Suspense>
+		//  <Suspense fallback= {loadingSpinner}>
+		// 	<SettingsComponent resource = {resource}/>
+		//   </Suspense>
+		<div className={styles.Setting}>
+			<div className={styles.HeaderWrapper}>
+				<Link to= "/userAccount" className={styles.navLink}>
+					<FaChevronLeft className={styles.iconBack} />
+				</Link>
+				<h3 className={styles.SettingHeader}>Settings</h3>
+			</div>
+			<Link to="/userAccount" className={styles.accountDetails}>
+				<figure className={styles.Avatar} />
+				<div className={styles.userName}>Mr. Somebody</div>
+				<FaChevronRight className={styles.iconBack} />
+			</Link>
+			<Link to ="/Projects" className={styles.projectsLink}>
+				<div className={styles.projectLinkContainer}>
+					<p>Projects</p>
+					<FaChevronRight className={styles.iconBack} />
+				</div>
+			</Link>
+			<div className={styles.AlarmSettings}>
+				
+					<Link to="workAlarm" className={styles.linkWrapper}>
+						<div>Work Alarm</div>
+						<div className={styles.alarmTone}>
+						<span className={styles.alarm}>Bell2</span>
+						<FaChevronRight className={styles.iconBack} />
+						</div>
+					</Link>
+					
+				
+				
+					<Link to="workAlarm" className={styles.linkWrapper}>
+						<div>Break Alarm</div>
+						<div className={styles.alarmTone}>
+						<span className={styles.alarm}>Bell3</span>
+						<FaChevronRight className={styles.iconBack} />
+						</div>
+					</Link>
+	
+					<Link to="workAlarm" className={styles.linkWrapper}>
+						<div>White Noise</div>
+						<div className={styles.alarmTone}>
+						<span className={styles.alarm}>Bell3</span>
+						<FaChevronRight className={styles.iconBack} />
+						</div>
+					</Link>
+			</div>
+			<div className={styles.timeSettingsWrapper}>
+				<form className={styles.minuteList}>
+					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
+						<span>Pomodoro Length</span>
+						<span>{pomodoroCurrLength} Minutes</span>
+					</label>
+					<select
+						className={pomodoroLengthSelected ? styles.selectMinutes : styles.hidden}
+						onChange={updatePomodoroLength}
+					>
+						{Minutes.map((minute, i) => {
+							return (
+								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
+									{minute}
+								</option>
+							);
+						})}
+					</select>
+
+					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleShortBreakSelect}>
+						<span>Short Break Length</span>
+						<span>{shortBreakCurrLength} Minutes</span>
+					</label>
+					<select
+						className={shortBreakLengthSelected ? styles.selectMinutes : styles.hidden}
+						onChange={updateShortBreakLength}
+					>
+						{Minutes.map((minute, i) => {
+							return (
+								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
+									{minute}
+								</option>
+							);
+						})}
+					</select>
+					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreak}>
+						<span>Long Break Length</span>
+						<span>{longBreakCurrLength} Minutes</span>
+					</label>
+					<select
+						className={longBreakLengthSelected ? styles.selectMinutes : styles.hidden}
+						onChange={updateLongBreakLength}
+					>
+						{Minutes.map((minute, i) => {
+							return (
+								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
+									{minute}
+								</option>
+							);
+						})}
+					</select>
+					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreakAfter}>
+						<span>Long Break After</span>
+						<span>{longBreakAfterCurrLength} Pomodoros</span>
+					</label>
+					<select
+						className={longBreakAfterLengthSelected ? styles.selectMinutes : styles.hidden}
+						onChange={updateLongBreakAfter}
+					>
+						{Minutes.map((minute, i) => {
+							return (
+								<option ref={selectRef} className={styles.minuteOption} value={minute} key={i}>
+									{minute}
+								</option>
+							);
+						})}
+					</select>
+				</form>
+			</div>
+		</div>
 	);
 };
 export default Settings;

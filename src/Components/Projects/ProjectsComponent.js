@@ -21,12 +21,12 @@ const Projects = ({resource}) => {
                 <h3 className={styles.projectsHeading}>Projects</h3>
             </header>
             <div className={styles.projectsWrapper}>
-                {projects.map((doc,id) => {
+                {projects.map((project,id) => {
                     return (
                     <div className={styles.project} key ={id}>
                     <div className={styles.projectAndColorWrapper}>
-                        <span className={styles.projectColor}></span>
-                        <div className={styles.projecsTitle}>Project</div>
+                        <span style={{backgroundColor: project.projectColor}} className={styles.projectColor}></span>
+                        <div className={styles.projecsTitle}>{[project.projectTitle.slice(0,20).padEnd(20,".")]}</div>
                     </div>
                     <div className={styles.deleteWrapper}>
                         <span className={styles.completedProject}><ImRadioUnchecked/></span>

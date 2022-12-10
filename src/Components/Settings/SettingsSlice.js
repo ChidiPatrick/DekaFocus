@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {doc,getDoc} from "firebase/firestore"
+import { db } from '../Firebase/Firebase';
 const initialState = {
 	pomodoroLengthSelected: false,
 	shortBreakLengthSelected: false,
@@ -15,11 +16,15 @@ const initialState = {
 	userSettings: null,
 	projects: null
 };
-export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (daa,{dispatch,getState}) =>{
+export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
-	// 	const userSettings = getState()
-	// 	// const response = await getDoc()
-	// 	console.log(userSettings);
+		const settingsRef = doc(db,"users",`${userId}`)
+		const data = await getDoc(settingsRef)
+    	if(data.exists()){
+        console.log(data.data());
+		dispatch(getUserProjects(data.data().projects))
+         return data
+   	 }
 	}
 	catch(err) {
 		console.log(err);
@@ -54,20 +59,19 @@ const SettingSlice = createSlice({
 			state.longBreakLengthSelected = false;
 		},
 		updatePomodoroTime(state, action) {
-			const { currTime } = action.payload;
-			state.pomodoroCurrLength = currTime;
+			state.pomodoroCurrLength = action.payload
 		},
 		updateShortBreakTime(state, action) {
-			const { currTime } = action.payload;
-			state.shortBreakCurrLength = currTime;
+			
+			state.shortBreakCurrLength = action.payload;
 		},
 		updateLongBreakTime(state, action) {
-			const { currTime } = action.payload;
-			state.longBreakCurrLength = currTime;
+			
+			state.longBreakCurrLength = action.payload;
 		},
 		updateLongBreakAfterTime(state, action) {
-			const { currTime } = action.payload;
-			state.longBreakAfterCurrLength = currTime;
+			
+			state.longBreakAfterCurrLength = action.payload;
 		},
 		enableAutoStartBreak(state, action) {
 			state.autoStartBreak = true;
@@ -93,6 +97,7 @@ const SettingSlice = createSlice({
 		},
 		getUserProjects(state,action) {
 			state.projects = action.payload
+			console.log(action.payload);
 		}
 	}
 });

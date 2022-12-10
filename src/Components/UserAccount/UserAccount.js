@@ -24,9 +24,9 @@ import {auth} from "../Firebase/Firebase"
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
-  const projects = useSelector((state) => state.AddProject.projects)
+  const projects = useSelector((state) => state.settings.projects)
   const userId = useSelector(state => state.signUpSlice.userId)
-  console.log(userId);
+  
   return (
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
@@ -107,13 +107,12 @@ const UserAccountUI = (props) => {
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
-                  <p className={styles.projectName}>{project.projectName}</p>
+                  <p className={styles.projectName}>{project.projectTitle}</p>
                 </div>
                   <div>
                     <span className={styles.focusTime}>45m</span>
                     <span className={styles.numberOfTask}>3</span>
                   </div>
-                  
               </div>
             </Link>
           })}

@@ -23,6 +23,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
 import Projects from './Components/Projects/Projects';
+import {fetchUserSettings} from "./Components/Settings/SettingsSlice"
 
 // const analytics = getAnalytics(app);
 
@@ -33,6 +34,7 @@ function App() {
 	const app = initializeApp(firebaseConfig);
 	const db = getFirestore(app);
 	let folder = null;
+	
 	createUserCollection('Patrick okafor');
 	const verified = useSelector(state => state.signUpSlice.verified)
 	// console.log(user);
@@ -41,6 +43,7 @@ function App() {
 		if(user) {
 			dispatch(getUserId(user.uid))
 			console.log(user.uid);
+			dispatch(fetchUserSettings(user.uid))
 		}
 	})
 	////////////////////////////////////////////////////

@@ -51,10 +51,11 @@ const SettingsComponent = ({resource}) => {
 	const shortBreakCurrLength = useSelector((state) => state.settings.shortBreakCurrLength);
 	const longBreakCurrLength = useSelector((state) => state.settings.longBreakCurrLength);
 	const longBreakAfterCurrLength = useSelector((state) => state.settings.longBreakAfterCurrLength);
+	
 	const userId = useSelector((state) => state.signUpSlice.userId)
     const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
 	const [disableBreak,setDisableBreak] = useState(settings.disableBreak)
-	console.log(disableBreak);
+	// console.log(user);
 		
 		const toggleShortBreakSelect = () => {
 		if (!shortBreakLengthSelected) {
@@ -253,7 +254,7 @@ const SettingsComponent = ({resource}) => {
 				<form className={styles.minuteList}>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
 						<span>Pomodoro Length</span>
-						<span>{settings.pomodoroLength} Minutes</span>
+						<span>{pomodoroCurrLength} Minutes</span>
 					</label>
 					<select
 						className={pomodoroLengthSelected ? styles.selectMinutes : styles.hidden}
