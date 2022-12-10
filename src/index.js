@@ -5,7 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import {Store,persistor} from "./Components/Store/Store";
-import { BrowserRouter,HashRouter } from "react-router-dom";
+import { BrowserRouter,HashRouter as Router} from "react-router-dom";
 import { FirebaseAppProvider } from "reactfire";
 import { firebaseConfig } from "./Components/Firebase/Firebase";
 import {PersistGate} from "redux-persist/integration/react"
@@ -13,13 +13,13 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={Store}>
     <React.StrictMode>
-      <HashRouter>
       <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+        <Router>
         <PersistGate loading = {<div>Loading...</div>} persistor={persistor}>
         <App />
         </PersistGate >
+        </Router>
       </FirebaseAppProvider>
-      </HashRouter>
     </React.StrictMode>
   </Provider>
 );
