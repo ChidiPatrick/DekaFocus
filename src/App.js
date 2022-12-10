@@ -64,7 +64,7 @@ function App() {
 			<Routes>
 				<Route path="/" element={frontpage} />
 				<Route path="/UserAccount" element={<UserAccountUI />} />
-				<Route path="//todayTodo" element={<AddTask />} />
+				<Route path="/todayTodo" element={<AddTask />} />
 				<Route path="/tomorrowTodo" element={<AddTask />} />
 				<Route path="/upcomingTodo" element={<AddTask />} />
 				<Route path="/somedayTodo" element={<AddTask />} />
