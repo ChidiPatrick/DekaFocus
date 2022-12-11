@@ -24,10 +24,10 @@ import {auth} from "../Firebase/Firebase"
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
-  // const projects = useSelector((state) => state.settings.projects)
+  const projects = useSelector((state) => state.settings.projects)
   const userId = useSelector(state => state.signUpSlice.userId)
-  const projects = [...Array(8)]
-  
+  // const projects = [...Array(8)]
+  console.log(projects);
   return (
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
@@ -103,7 +103,8 @@ const UserAccountUI = (props) => {
         </div>
         <div className={styles.projects}>
           {
-          projects.map((project,i) => {
+
+          projects && projects.map((project,i) => {
            return <Link to = "/AddProject" className={styles.project}>
               <div className={styles.projectWrapper}>
                 {/* <div className={styles.colorAndProjectWrapper}>
