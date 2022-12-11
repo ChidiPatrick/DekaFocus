@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import styles from "./UserAccount.module.scss";
 import {
@@ -21,13 +21,40 @@ import { IoIosAdd,IoIosPricetag,IoIosClose } from "react-icons/io";
 import { ImFolderPlus } from "react-icons/im";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "../Firebase/Firebase"
+import { async } from "@firebase/util";
+import { db } from "../Firebase/Firebase";
+import {doc,getDoc} from "firebase/firestore"
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
-  const projects = useSelector((state) => state.settings.projects)
+  // const projects = useSelector((state) => state.settings.projects)
+  const [projects,setProjects] = useState(null)
   const userId = useSelector(state => state.signUpSlice.userId)
+  /////////Get projects /////////////////
+  const fetchProjects = async (userId) => {
+    try{
+		const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+		const data = await getDoc(settingsRef)
+    	if(data.exists()){
+        console.log(data.data());
+		    setProjects(data.data().projects)
+         return data
+   	 }
+	}
+	catch(err) {
+		console.log(err);
+	}
+  }
+   
+  useEffect(() => {
+     fetchProjects(userId)
+  }, [])
+  
   // const projects = [...Array(8)]
   console.log(projects);
+  const loadingSpinner = <div className={styles.loadingSpinner}>
+			<span className={styles.loader}></span>
+		</div>
   return (
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
@@ -104,8 +131,8 @@ const UserAccountUI = (props) => {
         <div className={styles.projects}>
           {
 
-          projects && projects.map((project,i) => {
-           return <Link to = "/AddProject" className={styles.project}>
+          projects ? projects.map((project,i) => {
+           return <Link to = "/AddProject" className={styles.project} key = {i}>
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
@@ -117,7 +144,8 @@ const UserAccountUI = (props) => {
                   </div>
               </div>
             </Link>
-          })}
+          }) : loadingSpinner
+        }
         </div>
         <div className={styles.addProjectWrapper}>
           <Link className={styles.linkToAddProject} to="/AddProject">

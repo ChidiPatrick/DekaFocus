@@ -23,6 +23,7 @@ export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", 
     	if(data.exists()){
         console.log(data.data());
 		dispatch(getUserProjects(data.data().projects))
+		console.log(data.data().projects);
          return data
    	 }
 	}
