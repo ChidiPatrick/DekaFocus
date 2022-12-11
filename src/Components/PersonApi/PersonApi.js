@@ -9,6 +9,7 @@ const FetchPerson = async () => {
     const data = await getDoc(settingsRef)
     if(data.exists()){
         console.log(data);
+        // dispatch(getUser)
          return data
     }
 }

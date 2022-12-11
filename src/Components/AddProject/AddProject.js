@@ -13,8 +13,7 @@ import { addProject,activateProjectBtn,deActivateProjectBtn,createProject } from
 import { createUserCollection } from "../Firebase/Firebase";
 import { db, } from "../Firebase/Firebase";
 import { addDoc,setDoc,doc,collection,getDoc,updateDoc, arrayUnion } from "firebase/firestore";
-
-
+import { fetchUserSettings } from "../Settings/SettingsSlice";
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
 const AddProject = ({title = "New Project"}) => {
@@ -32,10 +31,11 @@ const AddProject = ({title = "New Project"}) => {
                 projectTitle:  inputRef.current.value
             })
         })
+        dispatch(fetchUserSettings(userId))
     }
     const getInputValue =  () =>  {
+        // dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         addProject()
-        dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""
         dispatch(deActivateProjectBtn())
        

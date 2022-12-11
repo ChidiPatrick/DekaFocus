@@ -28,29 +28,10 @@ import {doc,getDoc} from "firebase/firestore"
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
   const projects = useSelector((state) => state.settings.projects)
-  // const [projects,setProjects] = useState(null)
+  // const [projects,setProjects] = useState(projectsData)
   const userId = useSelector(state => state.signUpSlice.userId)
   /////////Get projects /////////////////
-  const fetchProjects = async (userId) => {
-    try{
-		const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
-		const data = await getDoc(settingsRef)
-    	if(data.exists()){
-        console.log(data.data());
-		    // setProjects(data.data().projects)
-         return data
-   	 }
-	}
-	catch(err) {
-		console.log(err);
-	}
-  }
-   
-  // useEffect(() => {
-  //    fetchProjects(userId)
-  // }, [])
   
-  // const projects = [...Array(8)]
   console.log(projects);
   const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
