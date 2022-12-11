@@ -26,8 +26,16 @@ const rootReducer = combineReducers({
 export const persistedReducer = persistReducer(persistConfig,rootReducer)
 
 export const Store =  configureStore({
-  reducer: persistedReducer,
-  middleware: [thunk]
+  // reducer: persistedReducer,
+  // middleware: [thunk]
+  reducer: {
+    frontPage: FrontPageSlice,
+    PomodoroSetting: PomodoroSettingSlice,
+    settings: SettingSlice,
+    tones: TonesSlice,
+    signUpSlice: SignUpFormSlice,
+    AddProject: AddProjectSlice,
+}
 });
 
 export const persistor = persistStore(Store)

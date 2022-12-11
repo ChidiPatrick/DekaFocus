@@ -24,8 +24,9 @@ import {auth} from "../Firebase/Firebase"
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
-  const projects = useSelector((state) => state.settings.projects)
+  // const projects = useSelector((state) => state.settings.projects)
   const userId = useSelector(state => state.signUpSlice.userId)
+  const projects = [...Array(8)]
   
   return (
     <div className={styles.UserAccountUI}>
@@ -105,10 +106,10 @@ const UserAccountUI = (props) => {
           projects.map((project,i) => {
            return <Link to = "/AddProject" className={styles.project}>
               <div className={styles.projectWrapper}>
-                <div className={styles.colorAndProjectWrapper}>
+                {/* <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
                   <p className={styles.projectName}>{project.projectTitle}</p>
-                </div>
+                </div> */}
                   <div>
                     <span className={styles.focusTime}>45m</span>
                     <span className={styles.numberOfTask}>3</span>
