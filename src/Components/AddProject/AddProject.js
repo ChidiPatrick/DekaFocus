@@ -34,7 +34,6 @@ const AddProject = ({title = "New Project"}) => {
         })
     }
     const getInputValue =  () =>  {
-        
         addProject()
         dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
         inputRef.current.value = ""

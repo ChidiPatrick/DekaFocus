@@ -47,22 +47,10 @@ const SignUpForm = () => {
 		const userRef = doc(db,"users",`${userId}`,"userInfoFolder","userData")
 			await setDoc(userRef,{...data})
 	}
-	const createUserSettingCollection = async (userId,) => {
-		// const userSettingRef = doc(db,"users",`${userId}`,`userSettingsCollection/settings`)
-		// await setDoc(userSettingRef,{
-		// 	projects: [],
-		// 	workAlarm: "bellSound.mp3",
-		// 	beakAlarm: "tubularBell.mp3",
-		// 	whiteNoise: "decidemp3-14575.mp3",
-		// 	pomodoroLength: 25,
-		// 	shortBreakLength: 5,
-		// 	longBreakLength: 10,
-		// 	longBreakAfter: 4,
-		// 	disableBreak: false,
-		// 	autoStartNextPomodoro: false,
-		// 	autoStartBreaks: true
-		// })
-		localStorage("Settings",{
+	const createUserSettingCollection = async (userId) => {
+		const userSettingRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+		await setDoc(userSettingRef,{
+			projects: [],
 			workAlarm: "bellSound.mp3",
 			beakAlarm: "tubularBell.mp3",
 			whiteNoise: "decidemp3-14575.mp3",
@@ -94,7 +82,7 @@ const SignUpForm = () => {
 		.then((user) => {
 			createUserBioCollection(user.user.uid, values)
 			dispatch(getUserId(user.user.uid))
-			localStorage.setItem('userId', user.user.uid)
+			// localStorage.setItem('userId', user.user.uid)
 			return user.user.uid
 		})
 		.then((userId) => {
