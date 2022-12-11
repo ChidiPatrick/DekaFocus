@@ -107,10 +107,10 @@ const UserAccountUI = (props) => {
           projects && projects.map((project,i) => {
            return <Link to = "/AddProject" className={styles.project}>
               <div className={styles.projectWrapper}>
-                {/* <div className={styles.colorAndProjectWrapper}>
+                <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
                   <p className={styles.projectName}>{project.projectTitle}</p>
-                </div> */}
+                </div>
                   <div>
                     <span className={styles.focusTime}>45m</span>
                     <span className={styles.numberOfTask}>3</span>
