@@ -109,7 +109,7 @@ const UserAccountUI = (props) => {
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
-                  <p className={styles.projectName}>{project.projectName}</p>
+                  <p className={styles.projectName}>{project.projectTitle}</p>
                 </div>
                   <div>
                     <span className={styles.focusTime}>45m</span>

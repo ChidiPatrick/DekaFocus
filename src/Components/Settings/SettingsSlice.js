@@ -18,7 +18,7 @@ const initialState = {
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
-		const settingsRef = doc(db,"users",`${userId}`)
+		const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
 		const data = await getDoc(settingsRef)
     	if(data.exists()){
         console.log(data.data());
