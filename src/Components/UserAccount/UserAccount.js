@@ -134,7 +134,7 @@ const UserAccountUI = (props) => {
       <div className={styles.projects}>
           {
 
-          projects ? projects.map((project,i) => {
+          projects && projects.map((project,i) => {
            return <Link to = "/AddProject" className={styles.project} key = {i}>
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
@@ -147,7 +147,7 @@ const UserAccountUI = (props) => {
                   </div>
               </div>
             </Link>
-          }) : loadingSpinner
+          })
         }
         </div>
         <div className={styles.addProjectWrapper}>
