@@ -24,7 +24,7 @@ import {auth} from "../Firebase/Firebase"
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
-  const projects = useSelector((state) => state.AddProject.projects)
+  const projects = useSelector((state) => state.settings.projects)
   const userId = useSelector(state => state.signUpSlice.userId)
   // const projects = [...Array(8)]
   console.log(projects);
