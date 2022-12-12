@@ -13,6 +13,7 @@ const initialState = {
 	goForBreak: false,
 	autoStartNextPomodoro: false,
 	autoStartBreak: true,
+	workAlarm: "Bell2",
 	userSettings: null,
 	projects: null
 };

@@ -5,6 +5,8 @@ import UIFx from 'uifx';
 
 import { getSelectedTone } from './TonesSlice';
 import Tonez from '../audioFiles/AudioFiles';
+import { db } from '../Firebase/Firebase';
+import {doc,updateDoc } from 'firebase/firestore';
 // import { getSelectedTone } from './TonesSlice';
 const Tones = (props) => {
 	const bell = new UIFx(Tonez.Bell, { volume: 0.4, throttleMs: 100 });
@@ -17,10 +19,17 @@ const Tones = (props) => {
 	const notifictions = new UIFx(Tonez.Notification, { volume: 0.4, throttleMs: 100 });
 	const thrill = new UIFx(Tonez.Thriller, { volume: 0.4, throttleMs: 100 });
 	const tubular_Bell = new UIFx(Tonez.TubularBell, { volume: 0.4, throttleMs: 100 });
-console.log(thrill)
+	const seletedTone = useSelector(state => state.tones.seletedTone)
+	const userId = useSelector(state => state.signUpSlice.userId)
+
 const dispatch = useDispatch()
-console.log(announcement)
-// dispatch(getSelectedTone({tone: announcement}))
+/////////////////Update Firestore ////////////////////
+ const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+ const updateWorkAlarm = async (tone) => {
+	await updateDoc(settingsRef, {
+		workAlarm: tone
+	})
+ }
 	const tones = [];
 	for (let i = 0; i <= 10; i++) {
 		tones.push(i);
@@ -28,6 +37,7 @@ console.log(announcement)
 	console.log(tones);
 	const getTone = (targetEl) => {
 		dispatch(getSelectedTone(targetEl.innerText))
+		updateWorkAlarm(targetEl.innerText)
 	}
 	return (
 		<div className={styles.TonesWrapper}>

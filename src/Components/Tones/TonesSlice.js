@@ -2,17 +2,16 @@ import React from "react";
 import {creacteSlice, createSlice} from "@reduxjs/toolkit"
 // import 
 const initialState = {
-    selectedTone: "Bell",
+    workAlarm: "Bell2",
+    breakAlarm: "Impact"
 };
 const TonesSlice = createSlice({
     name: "Tones",
     initialState,
     reducers: {
         getSelectedTone(state,action){
-            let tone = action.payload
-            console.log(typeof tone)
-            state.selectedTone = tone
-
+            state.selectedTone = action.payload
+            console.log( action.payload);
         } 
     }
 })

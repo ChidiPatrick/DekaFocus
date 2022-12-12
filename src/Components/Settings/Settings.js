@@ -66,17 +66,20 @@ onAuthStateChanged(auth, (user) => {
 	const shortBreakCurrLength = useSelector((state) => state.settings.shortBreakCurrLength);
 	const longBreakCurrLength = useSelector((state) => state.settings.longBreakCurrLength);
 	const longBreakAfterCurrLength = useSelector((state) => state.settings.longBreakAfterCurrLength);
+	const workAlarm = useSelector(state => state.tones.workAlarm)
+	const breakAlarm = useSelector(state => state.tones.breakAlarm)
 	const userId = useSelector((state) => state.signUpSlice.userId)
 	const [settings,setSettings] = useState(userSettings)
 	//////////////////////////////////////
 	// const [user, loading, error ] = useAuthState(auth)
+	dispatch(getUserSettings())
 	let userData = []
-	console.log(pomodoroCurrLength);
+	console.log(workAlarm);
 	// const usersId = localStorage.getItem("userId")
 	console.log(userSettings);
 	/////Get data function	
     const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
-	///////Settings handlers ////////////////
+	/////// Settings handlers ////////////////
 	
 	////////////////////////////////////
 	const selectRef = useRef();
@@ -168,34 +171,38 @@ onAuthStateChanged(auth, (user) => {
 			dispatch(disableGoForBreak());
 		}
 	};
-	const updatePomodoroLength =  (e) =>  {
-			// await updateDoc(settingsRef, {
-			// 	pomodoroLength: e.target.value
-			// });
+	const updatePomodoroLength = async (e) =>  {
 			getPomodoroTime(e)
 			togglePomodoroSelect()
+			await updateDoc(settingsRef, {
+				pomodoroLength: e.target.value
+			});
+			dispatch(getUserSettings())
 		}
-		const updateShortBreakLength =  (e) => {
+		const updateShortBreakLength = async (e) => {
 			getShortBreakTime(e)
 			toggleShortBreakSelect()
-			// await updateDoc(settingsRef, {
-			// 	shortBreakLength: e.target.value
-			// });
+			await updateDoc(settingsRef, {
+				shortBreakLength: e.target.value
+			});
+			dispatch(getUserSettings())
 			
 		}
-		const updateLongBreakLength =  (e) => {
-			// await updateDoc(settingsRef, {
-			// 	longBreakLength: e.target.value
-			// })
+		const updateLongBreakLength = async (e) => {
 			getLongBreakTime(e)
 			toggleLongBreak()
+			await updateDoc(settingsRef, {
+				longBreakLength: e.target.value
+			})
+			dispatch(getUserSettings())
 		}
-		const updateLongBreakAfter =  (e) => {
-			// await updateDoc(settingsRef, {
-			// 	longBreakAfter: e.target.value
-			// })
+		const updateLongBreakAfter = async  (e) => {
 			getLongBreakAfterTime(e)
 			toggleLongBreakAfter()
+			await updateDoc(settingsRef, {
+				longBreakAfter: e.target.value
+			})
+			dispatch(getUserSettings())
 		}
 		const updateAutoStartBreak = async (e) => {
 			await updateDoc(settingsRef, {
@@ -232,21 +239,18 @@ onAuthStateChanged(auth, (user) => {
 				</div>
 			</Link>
 			<div className={styles.AlarmSettings}>
-				
 					<Link to="workAlarm" className={styles.linkWrapper}>
 						<div>Work Alarm</div>
 						<div className={styles.alarmTone}>
-						<span className={styles.alarm}>Bell2</span>
+						<span className={styles.alarm}> {settings ? settings.workAlarm : workAlarm} </span>
 						<FaChevronRight className={styles.iconBack} />
 						</div>
 					</Link>
-					
-				
-				
+	
 					<Link to="workAlarm" className={styles.linkWrapper}>
 						<div>Break Alarm</div>
 						<div className={styles.alarmTone}>
-						<span className={styles.alarm}>Bell3</span>
+						<span className={styles.alarm}>{settings ? settings.breakAlarm : breakAlarm }</span>
 						<FaChevronRight className={styles.iconBack} />
 						</div>
 					</Link>
@@ -263,7 +267,7 @@ onAuthStateChanged(auth, (user) => {
 				<form className={styles.minuteList}>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
 						<span>Pomodoro Length</span>
-						<span>{pomodoroCurrLength} Minutes</span>
+						<span>{settings ? settings.pomodoroLength : pomodoroCurrLength} Minutes</span>
 					</label>
 					<select
 						className={pomodoroLengthSelected ? styles.selectMinutes : styles.hidden}
@@ -280,7 +284,7 @@ onAuthStateChanged(auth, (user) => {
 
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleShortBreakSelect}>
 						<span>Short Break Length</span>
-						<span>{shortBreakCurrLength} Minutes</span>
+						<span>{settings ? settings.shortBreakLength : shortBreakCurrLength} Minutes</span>
 					</label>
 					<select
 						className={shortBreakLengthSelected ? styles.selectMinutes : styles.hidden}
@@ -296,7 +300,7 @@ onAuthStateChanged(auth, (user) => {
 					</select>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreak}>
 						<span>Long Break Length</span>
-						<span>{longBreakCurrLength} Minutes</span>
+						<span>{settings ? settings.longBreakLength : longBreakCurrLength} Minutes</span>
 					</label>
 					<select
 						className={longBreakLengthSelected ? styles.selectMinutes : styles.hidden}
@@ -312,7 +316,7 @@ onAuthStateChanged(auth, (user) => {
 					</select>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={toggleLongBreakAfter}>
 						<span>Long Break After</span>
-						<span>{longBreakAfterCurrLength} Pomodoros</span>
+						<span>{settings ? settings.longBreakAfter : longBreakAfterCurrLength} Pomodoros</span>
 					</label>
 					<select
 						className={longBreakAfterLengthSelected ? styles.selectMinutes : styles.hidden}
