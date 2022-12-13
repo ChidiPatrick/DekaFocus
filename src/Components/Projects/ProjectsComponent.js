@@ -22,11 +22,12 @@ const Projects = ({resource}) => {
             </header>
             <div className={styles.projectsWrapper}>
                 {projects.map((project,id) => {
+                    console.log(project.projectTitle.length > 8)
                     return (
                     <div className={styles.project} key ={id}>
                     <div className={styles.projectAndColorWrapper}>
                         <span style={{backgroundColor: project.projectColor}} className={styles.projectColor}></span>
-                        <div className={styles.projecsTitle}>{[project.projectTitle.slice(0,20).padEnd(20,".")]}</div>
+                        <div className={styles.projecsTitle}>{project.projectTitle.length > 25 ?  project.projectTitle.slice(0,25).padEnd(25,".") : project.projectTitle }</div>
                     </div>
                     <div className={styles.deleteWrapper}>
                         <span className={styles.completedProject}><ImRadioUnchecked/></span>
