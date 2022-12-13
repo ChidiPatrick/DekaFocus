@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import {auth} from "../Firebase/Firebase"
+import {persistor} from "../Store/Store"
 // import ReactAudioPlayer from "react-audio-player";
 import UIFx from "uifx";
 
@@ -39,7 +40,7 @@ import Toness from "../audioFiles/AudioFiles";
 
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
-   
+   persistor.purge()
   // useEffect(() => {
   //  console.log(user);
   // },[user])
@@ -47,14 +48,15 @@ const FrontPage = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
-  let tone = useSelector((state) => state.tones.selectedTone)
+  let tone = useSelector((state) => state.tones.workAlarm)
+  
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
   const Continue = useSelector((state) => state.frontPage.Continue);
   const stop = useSelector((state) => state.frontPage.stop);
   const counting = useSelector((state) => state.frontPage.counting);
-  const bell = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
+  const bell = new UIFx(Toness.Bell, { volume: 0.4, throttleMs: 100 });
   // dispatch(getUserId(user.uid))
 console.log(Toness);
   let minute = useSelector((state) => state.frontPage.minute5);

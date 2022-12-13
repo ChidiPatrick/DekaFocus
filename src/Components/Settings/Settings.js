@@ -40,9 +40,9 @@ import { ClipLoader } from 'react-spinners/ClipLoader';
 import { createResource } from '../PersonApi/PersonApi';
 
 import SettingsComponent from './settingsComponent';
+import {persistor} from "../Store/Store"
 
-const Settings = (props) => {
-	
+const Settings = (props) => {	
 onAuthStateChanged(auth, (user) => {
 	console.log(user.id);
 })
@@ -178,6 +178,8 @@ onAuthStateChanged(auth, (user) => {
 				pomodoroLength: e.target.value
 			});
 			dispatch(getUserSettings())
+			
+			// 
 		}
 		const updateShortBreakLength = async (e) => {
 			getShortBreakTime(e)
@@ -247,7 +249,7 @@ onAuthStateChanged(auth, (user) => {
 						</div>
 					</Link>
 	
-					<Link to="workAlarm" className={styles.linkWrapper}>
+					<Link to="breakAlarm" className={styles.linkWrapper}>
 						<div>Break Alarm</div>
 						<div className={styles.alarmTone}>
 						<span className={styles.alarm}>{settings ? settings.breakAlarm : breakAlarm }</span>

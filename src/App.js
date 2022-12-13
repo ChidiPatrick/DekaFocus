@@ -9,7 +9,8 @@ import UserAccountUI from './Components/UserAccount/UserAccount';
 import AddTask from './Components/addTask/addTask';
 import Setting from './Components/Settings/Settings';
 import Settings from './Components/Settings/Settings';
-import AlarmTones from './Components/AlarmTones/AlarmTone';
+import WorkAlarmTones from './Components/AlarmTones/workAlarm';
+import BreakAlarmTones from './Components/AlarmTones/breakAlarm';
 import { initializeApp } from 'firebase/app';
 import { onAuthStateChanged } from 'firebase/auth';
 import { doc, DocumentSnapshot, getDoc, getDocs, getFirestore, setDoc, updateDoc, query } from 'firebase/firestore';
@@ -71,7 +72,8 @@ function App() {
 				<Route path="/events" element={<AddTask />} />
 				<Route path="/completed" element={<AddTask />} />
 				<Route path="/settings" element={<Settings />} />
-				<Route path="/settings/workAlarm" element={<AlarmTones />} />
+				<Route path="/settings/workAlarm" element={<WorkAlarmTones />} />
+				<Route path="/settings/breakAlarm" element={<BreakAlarmTones />} />
 				<Route path="/signUpForm" element = {<SignUpForm/>} />
 				<Route path= "/verifyEmail" element= {<VerifyEmail/>}/>
 				<Route path="/signInForm" element={<SignInUser/>}/>

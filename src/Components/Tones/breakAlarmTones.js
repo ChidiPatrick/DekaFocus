@@ -3,12 +3,12 @@ import { useDispatch,useSelector } from 'react-redux';
 import styles from './Tones.module.scss';
 import UIFx from 'uifx';
 
-import { getSelectedTone } from './TonesSlice';
+import { getWorkAlarmTone,getBreakAlarmTone } from './TonesSlice';
 import Tonez from '../audioFiles/AudioFiles';
 import { db } from '../Firebase/Firebase';
 import {doc,updateDoc } from 'firebase/firestore';
 // import { getSelectedTone } from './TonesSlice';
-const Tones = (props) => {
+const BreakAlarmTones = (props) => {
 	const bell = new UIFx(Tonez.Bell, { volume: 0.4, throttleMs: 100 });
 	const announcement = new UIFx(Tonez.Announcement, { volume: 0.4, throttleMs: 100 });
 	const impact = new UIFx(Tonez.Impact, { volume: 0.4, throttleMs: 100 });
@@ -36,7 +36,7 @@ const dispatch = useDispatch()
 	}
 	console.log(tones);
 	const getTone = (targetEl) => {
-		dispatch(getSelectedTone(targetEl.innerText))
+		dispatch(getBreakAlarmTone(targetEl.innerText))
 		updateWorkAlarm(targetEl.innerText)
 	}
 	return (
@@ -98,4 +98,4 @@ const dispatch = useDispatch()
 	);
 };
 
-export default Tones;
+export default BreakAlarmTones;

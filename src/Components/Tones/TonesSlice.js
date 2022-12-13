@@ -2,18 +2,22 @@ import React from "react";
 import {creacteSlice, createSlice} from "@reduxjs/toolkit"
 // import 
 const initialState = {
-    workAlarm: "Bell2",
+    workAlarm: "Bell",
     breakAlarm: "Impact"
 };
 const TonesSlice = createSlice({
     name: "Tones",
     initialState,
     reducers: {
-        getSelectedTone(state,action){
-            state.selectedTone = action.payload
+        getWorkAlarmTone(state,action){
+            state.workAlarm = action.payload
             console.log( action.payload);
-        } 
+        },
+        getBreakAlarmTone(state,action) {
+            state.breakAlarm = action.payload
+        }
+         
     }
 })
-export const {getSelectedTone} = TonesSlice.actions;
+export const {getWorkAlarmTone,getBreakAlarmTone} = TonesSlice.actions;
 export default TonesSlice.reducer

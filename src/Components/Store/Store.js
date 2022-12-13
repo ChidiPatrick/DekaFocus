@@ -8,12 +8,12 @@ import AddProjectSlice from "../AddProject/AddProjectSlice";
 import storage from "redux-persist/lib/storage"
 import {persistReducer,persistStore} from "redux-persist"
 import thunk from "redux-thunk";
-import autoMergeLevel2 from "redux-persist/es/stateReconciler/autoMergeLevel1";
+import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 
 const persistConfig = {
   key: "root",
   storage,
-  stateReconciler: autoMergeLevel2
+  stateReconciler: autoMergeLevel1
 }
 const rootReducer = combineReducers({
     frontPage: FrontPageSlice,
