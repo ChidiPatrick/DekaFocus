@@ -8,7 +8,7 @@ import Button, {
 } from "../Button/Button";
 import { IoIosArrowDown } from "react-icons/io";
 import { useState, useEffect, useRef } from "react";
-import { userTimer, useTimer } from "react-timer-hook";
+import {  useTimer } from "react-timer-hook";
 import btnStyles from "../Button/Button.module.scss";
 import { Link } from "react-router-dom";
 import classNames from "classnames";
@@ -40,26 +40,18 @@ import Toness from "../audioFiles/AudioFiles";
 
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
-   persistor.purge()
-  // useEffect(() => {
-  //  console.log(user);
-  // },[user])
-  // console.log(user);
   const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
   let tone = useSelector((state) => state.tones.workAlarm)
-  
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
   const Continue = useSelector((state) => state.frontPage.Continue);
   const stop = useSelector((state) => state.frontPage.stop);
   const counting = useSelector((state) => state.frontPage.counting);
+  const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const bell = new UIFx(Toness.Bell, { volume: 0.4, throttleMs: 100 });
-  // dispatch(getUserId(user.uid))
-console.log(Toness);
-  let minute = useSelector((state) => state.frontPage.minute5);
   const {
     seconds,
     minutes,
@@ -77,11 +69,23 @@ console.log(Toness);
       onExpiry();
     },
   });
+  console.log(expiryTimestamp);
+  useEffect(() => {
+    console.log(running);
+  },[])
+  // dispatch(getUserId(user.uid))
+console.log(Toness);
+  let minute = useSelector((state) => state.settings.pomodoroCurrLength);
+  
 
   const getDate = () => {
     const time = new Date();
-    return time.setSeconds(time.getSeconds() + 5);
+    time.setSeconds(time.getSeconds() + (60 * pomodoroTime));
+    console.log(time);
+    return time
+    // return expiryTimestamp
   };
+  // getDate()
   console.log(expiryTimestamp);
   const onExpiry = () => {
     bell.play();
@@ -117,7 +121,10 @@ console.log(Toness);
     dispatch(hideContinueBtn());
     dispatch(hideStopBtn());
   };
-
+  console.log(isRunning);
+  useEffect(() => {
+    // start()
+},[])
   return (
     <div className={styles.FrontPageMainWrapper}>
       <Link to="/UserAccount" className={styles.UserAccountLink}>

@@ -1,5 +1,4 @@
 import React,{ Suspense } from 'react';
-
 import './App.scss';
 import FrontPage from './Components/FrontPage/FrontPage';
 import { Routes, Route, Link } from 'react-router';
@@ -48,16 +47,23 @@ function App() {
 		}
 	})
 	////////////////////////////////////////////////////
-	const time = new Date();
-	const minute = useSelector((state) => state.frontPage.minute5);
-	time.setSeconds(time.getSeconds() + minute);
+	const minute = useSelector((state) => state.settings.pomodoroCurrLength);
+	const shortBreakLength = useSelector(state => state.settings.shortBreakCurrLength)
+	console.log(minute);
+	const timeMinutes = new Date();
+	const timeSeconds = new Date()
+	
+	
+	///Implement time conversion here /////
+	timeMinutes.setSeconds(timeMinutes.getSeconds() +  60 * minute);
+	timeSeconds.setSeconds(timeSeconds.getSeconds() + (60 * shortBreakLength))
 	const displayBreak = useSelector((state) => state.frontPage.break);
-	console.log(displayBreak);
+	console.log(timeMinutes);
 	let frontpage = null;
 	if (displayBreak) {
-		frontpage = <BreakUI expiryTimestamp={time} />;
+		frontpage = <BreakUI expiryTimestamp={timeSeconds} />;
 	} else {
-		frontpage = <FrontPage expiryTimestamp={time} />;
+		frontpage = <FrontPage expiryTimestamp={timeMinutes} />;
 	}
 	return (
 		

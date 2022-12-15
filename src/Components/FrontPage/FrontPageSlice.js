@@ -21,10 +21,10 @@ const FrontPageSlice = createSlice({
       state.currentTime = action.payload;
     },
     resetState(state, action) {
-      state.minute5 = 5;
-      state.minute15 = 900;
-      state.minute25 = 1500;
-      state.minute45 = 2700;
+      // state.minute5 = 5;
+      // state.minute15 = 900;
+      // state.minute25 = 1500;
+      // state.minute45 = 2700;
       state.running = true;
       state.Pause = true;
       state.Continue = false;

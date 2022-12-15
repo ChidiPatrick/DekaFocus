@@ -24,6 +24,7 @@ import {auth} from "../Firebase/Firebase"
 import { async } from "@firebase/util";
 import { db } from "../Firebase/Firebase";
 import {doc,getDoc} from "firebase/firestore"
+import { HiChevronLeft } from "react-icons/hi";
 
 const UserAccountUI = (props) => {
   const [user,loadingUser,loginError] = useAuthState(auth);
@@ -40,7 +41,11 @@ const UserAccountUI = (props) => {
     <div className={styles.UserAccountUI}>
       <nav className={styles.Nav}>
         <ul className={styles.listContainer}>
-          <li className={styles.listItem}><ButtonBack/></li>
+          <li className={styles.listItem}>
+            <Link to = "/" className ={styles.backBtn}>
+              <HiChevronLeft className={styles.navigateBackIcon}/>
+            </Link>
+          </li>
           <li className={styles.listItem}>
             <Link className={styles.link} to = {user && user.uid ? "/settings" : "/signInForm" } >
               <IoIosSettings className={styles.settingLink} />
