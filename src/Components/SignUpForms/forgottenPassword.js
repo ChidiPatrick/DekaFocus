@@ -6,15 +6,12 @@ import {signInExistingUser,authStateObserver,auth} from "../Firebase/Firebase"
 import { useAuthState, useSignInWithEmailAndPassword, useSignInWithEmailLink } from "react-firebase-hooks/auth";
 import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import * as Yup from 'yup';
-const SignInUser = () => {
-    // const [signInWithEmailAndPassword,user,loading,error] = useSignInWithEmailAndPassword(auth)
+const PasswordReset = () => {
     const [user,loading,error] = useAuthState(auth)
    const navigate = useNavigate()
     const goToSettings = () => {
         navigate("/settings")
-        
     }
-   console.log(user);
  const formik = useFormik({
 		initialValues: {
 			email: "",
@@ -63,18 +60,12 @@ const SignInUser = () => {
             <div className={styles.CTAButtons}>
                 <input 
                 type = "submit" 
-                className ={[styles.ctaBtn,styles.signIn].join(" ")} 
-                value ="SignIn"
-                // onClick={goToSettings}
-                />
-                <input 
-                type = "submit" 
-                className ={[styles.ctaBtn,styles.signUp].join(' ')} 
-                value ="SignUp"
-                onClick={() => navigate("/signUpForm")}
+                className ={styles.forgottenPassword} 
+                value ="Reset Password"
+                // onClick={() => navigate("/settings")}
                 />
             </div>
         </form>
     )
 }
-export default SignInUser
+export default PasswordReset

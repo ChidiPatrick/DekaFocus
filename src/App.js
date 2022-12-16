@@ -24,7 +24,7 @@ import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
 import Projects from './Components/Projects/Projects';
 import {fetchUserSettings} from "./Components/Settings/SettingsSlice"
-import PasswordReset from './Components/SignUpForms/SignInUser';
+import PasswordReset from './Components/SignUpForms/forgottenPassword';
 
 // const analytics = getAnalytics(app);
 

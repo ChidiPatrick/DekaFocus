@@ -47,7 +47,9 @@ const UserAccountUI = (props) => {
             </Link>
           </li>
           <li className={styles.listItem}>
-            <Link className={styles.link} to = {user && user.uid ? "/settings" : "/signInForm" } >
+            {/* <Link className={styles.link} to = {user && user.uid ? "/settings" : "/signInForm" } >
+             */}
+             <Link className={styles.link} to = "/signInForm">
               <IoIosSettings className={styles.settingLink} />
             </Link>
           </li>

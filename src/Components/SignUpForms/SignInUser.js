@@ -4,10 +4,10 @@ import {useNavigate} from "react-router"
 import { useFormik} from 'formik';
 import {signInExistingUser,authStateObserver,auth} from "../Firebase/Firebase"
 import { useAuthState, useSignInWithEmailAndPassword, useSignInWithEmailLink } from "react-firebase-hooks/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword,sendPasswordResetEmail } from "firebase/auth";
 import * as Yup from 'yup';
 import { Link } from "react-router-dom";
-const PasswordReset = () => {
+const SignInUser = () => {
     // const [signInWithEmailAndPassword,user,loading,error] = useSignInWithEmailAndPassword(auth)
     const [user,loading,error] = useAuthState(auth)
    const navigate = useNavigate()
@@ -74,9 +74,9 @@ const PasswordReset = () => {
                 value ="SignUp"
                 onClick={() => navigate("/signUpForm")}
                 />
-                <Link to = "/forgottenPassword" >Forgetten Password?</Link>
             </div>
+            <Link to = "/forgottenPassword" className= {styles.forgottenPassword} >Forgetten assword?</Link>
         </form>
     )
 }
-export default PasswordReset
+export default SignInUser

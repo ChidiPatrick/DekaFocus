@@ -67,6 +67,14 @@
 		// color: tomato;
 	}
 }
+.forgottenPassword{
+	background-color: tomato;
+	color:  #fff;
+	padding: 10px;
+	width: 150px;
+	font-size: 20px;
+	border-radius: 100px;
+}
 .signUp{
 	border: solid 1px tomato;
 	background-color: transparent;
@@ -79,5 +87,10 @@
 .CTAButtons{
 	display: flex;
 	margin-top: 30px;
-
 }
+// .forgottenPassword{
+// 	color: tomato;
+// 	display: block;
+// 	margin-top: 20px;
+
+// }
