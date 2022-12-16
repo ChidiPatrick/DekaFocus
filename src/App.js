@@ -24,6 +24,7 @@ import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
 import Projects from './Components/Projects/Projects';
 import {fetchUserSettings} from "./Components/Settings/SettingsSlice"
+import PasswordReset from './Components/SignUpForms/SignInUser';
 
 // const analytics = getAnalytics(app);
 
@@ -85,6 +86,7 @@ function App() {
 				<Route path="/signInForm" element={<SignInUser/>}/>
 				<Route path="/AddProject" element={<AddProject/>}/>
 				<Route path="/Projects" element={<Projects/>}/>
+				<Route path = "/forgottenPassword" element = {<PasswordReset/>}/>
 			</Routes>
 		</div>
 		

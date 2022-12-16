@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, } from "react";
 import styles from "./FrontPage.module.scss";
 import Button, {
   ButtonContinue,
@@ -10,7 +10,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useState, useEffect, useRef } from "react";
 import {  useTimer } from "react-timer-hook";
 import btnStyles from "../Button/Button.module.scss";
-import { Link } from "react-router-dom";
+import { Link,  useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import {auth} from "../Firebase/Firebase"
@@ -34,6 +34,8 @@ import {
   endCounting,
   startCounting,
   updateCurrnetTime,
+  turnOffCountDownRunning,
+  turnOnCountDownRunning
 } from "./FrontPageSlice";
 import { getUserId } from "../SignUpForms/SignUpFormSlice";
 import Toness from "../audioFiles/AudioFiles";
@@ -51,7 +53,9 @@ const FrontPage = ({ expiryTimestamp }) => {
   const stop = useSelector((state) => state.frontPage.stop);
   const counting = useSelector((state) => state.frontPage.counting);
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
+  const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
   const bell = new UIFx(Toness.Bell, { volume: 0.4, throttleMs: 100 });
+  const navigate = useNavigate()
   const {
     seconds,
     minutes,
@@ -69,29 +73,38 @@ const FrontPage = ({ expiryTimestamp }) => {
       onExpiry();
     },
   });
-  console.log(expiryTimestamp);
+  
   useEffect(() => {
-    console.log(running);
-  },[])
-  // dispatch(getUserId(user.uid))
+    if(countDownRunning) {
+      start()
+    }
+    else {
+      return
+    }
+  },[countDownRunning])
+  
+ 
 console.log(Toness);
   let minute = useSelector((state) => state.settings.pomodoroCurrLength);
-  
-
   const getDate = () => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + (60 * pomodoroTime));
     console.log(time);
     return time
-    // return expiryTimestamp
+   
   };
-  // getDate()
+   useEffect(() => {
+    if(!isRunning && !countDownRunning){
+      restart(getDate(),false)
+    }
+  },[countDownRunning])
   console.log(expiryTimestamp);
   const onExpiry = () => {
     bell.play();
     dispatch(resetState());
     restart(getDate(), false);
     dispatch(breakStart());
+    dispatch(turnOffCountDownRunning())
   };
   const Style = [styles.FrontPageTime];
   let classes = [classNames(btnStyles.BtnStart)];
@@ -100,8 +113,9 @@ console.log(Toness);
     start();
     dispatch(hideStartBtn());
     dispatch(startCounting());
+    dispatch(turnOnCountDownRunning())
   };
-  dispatch(updateCurrnetTime({ minute }));
+  // dispatch(updateCurrnetTime({ minute }));
   const pauseCountDown = () => {
     pause();
     dispatch(hidePauseBtn());
@@ -120,23 +134,18 @@ console.log(Toness);
     dispatch(showStartBtn());
     dispatch(hideContinueBtn());
     dispatch(hideStopBtn());
+    dispatch(turnOffCountDownRunning())
   };
-  console.log(isRunning);
-  useEffect(() => {
-    // start()
-},[])
+  
   return (
     <div className={styles.FrontPageMainWrapper}>
       <Link to="/UserAccount" className={styles.UserAccountLink}>
         <IoIosArrowDown />
       </Link>
       <div className={styles.FrontPageWrapper}>
-        {/* <Link to="/UserAccount">
-          <IoIosArrowDown />
-        </Link> */}
         <div className={styles.FrontPageTime}>
           <div className={styles.timer}>
-            {minutes} : {seconds}
+            { minutes} : { seconds }
           </div>
           <div className={styles.BtnWrapper}>
             <button

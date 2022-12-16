@@ -4,10 +4,9 @@ import {useNavigate} from "react-router"
 import { useFormik} from 'formik';
 import {signInExistingUser,authStateObserver,auth} from "../Firebase/Firebase"
 import { useAuthState, useSignInWithEmailAndPassword, useSignInWithEmailLink } from "react-firebase-hooks/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import * as Yup from 'yup';
-import { Link } from "react-router-dom";
-const PasswordReset = () => {
+const SignInUser = () => {
     // const [signInWithEmailAndPassword,user,loading,error] = useSignInWithEmailAndPassword(auth)
     const [user,loading,error] = useAuthState(auth)
    const navigate = useNavigate()
@@ -27,11 +26,11 @@ const PasswordReset = () => {
 
 		}),
 		onSubmit: (values) => {
-        signInWithEmailAndPassword(auth,values.email,values.password)
+        sendPasswordResetEmail(auth,values.email)
         .then((user) => {
-            if(user) {
-                navigate('/settings')
-            }
+            // if(user) {
+            //     navigate('/settings')
+            // }
         })
      },
 	})
@@ -50,7 +49,7 @@ const PasswordReset = () => {
             </label>
             {formik.errors.userName ? <div className={styles.required}>{formik.errors.userName}</div> : null}
             <label htmlFor="password" className={styles.label}>
-                <span>Password</span>
+                <span>New Password</span>
                 <input 
                 type ="password" 
                 className={styles.inputEl} 
@@ -74,9 +73,8 @@ const PasswordReset = () => {
                 value ="SignUp"
                 onClick={() => navigate("/signUpForm")}
                 />
-                <Link to = "/forgottenPassword" >Forgetten Password?</Link>
             </div>
         </form>
     )
 }
-export default PasswordReset
+export default SignInUser

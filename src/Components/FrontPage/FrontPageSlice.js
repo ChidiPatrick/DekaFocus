@@ -12,6 +12,7 @@ const initialState = {
   stop: false,
   break: false,
   counting: false,
+  countDownRunning: false
 };
 const FrontPageSlice = createSlice({
   name: "FrontPage",
@@ -66,6 +67,12 @@ const FrontPageSlice = createSlice({
     breakEnd(state, action) {
       state.break = false;
     },
+    turnOnCountDownRunning(state,action) {
+      state.countDownRunning = true
+    },
+    turnOffCountDownRunning(state,action) {
+      state.countDownRunning = false
+    }
   },
 });
 
@@ -84,5 +91,7 @@ export const {
   startCounting,
   endCounting,
   updateCurrnetTime,
+  turnOffCountDownRunning,
+  turnOnCountDownRunning
 } = FrontPageSlice.actions;
 export default FrontPageSlice.reducer;
