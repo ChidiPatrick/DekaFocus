@@ -75,7 +75,7 @@ const SignInUser = () => {
                 onClick={() => navigate("/signUpForm")}
                 />
             </div>
-            <Link to = "/forgottenPassword" className= {styles.forgottenPassword} >Forgetten assword?</Link>
+            <Link to = "/forgottenPassword" className= {styles.forgottenPasswordLink} >Forgot Password?</Link>
         </form>
     )
 }

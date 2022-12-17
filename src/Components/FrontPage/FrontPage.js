@@ -84,8 +84,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   },[countDownRunning])
   
  
-console.log(Toness);
-  let minute = useSelector((state) => state.settings.pomodoroCurrLength);
+
   const getDate = () => {
     const time = new Date();
     time.setSeconds(time.getSeconds() + (60 * pomodoroTime));
@@ -97,8 +96,8 @@ console.log(Toness);
     if(!isRunning && !countDownRunning){
       restart(getDate(),false)
     }
-  },[countDownRunning])
-  console.log(expiryTimestamp);
+  },[countDownRunning,isRunning])
+  // console.log(expiryTimestamp);
   const onExpiry = () => {
     bell.play();
     dispatch(resetState());
