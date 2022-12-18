@@ -72,12 +72,12 @@ const dispatch = useDispatch()
 			<div className={styles.tone} onClick={(e) => {thrill.play()
 			getTone(e.target)
 			}}>
-				<span className={styles.theTone}>Thrill</span>
+				<span className={styles.theTone}>Thriller</span>
 			</div>
 			<div className={styles.tone} onClick={(e) => {decision.play()
 			getTone(e.target)
 			}}>
-				<span className={styles.theTone}>Decision</span>
+				<span className={styles.theTone}>Decide</span>
 			</div>
 			<div className={styles.tone} onClick={(e) => {ding.play()
 			getTone(e.target)
@@ -92,7 +92,7 @@ const dispatch = useDispatch()
 			<div className={styles.tone} onClick={(e) => {tubular_Bell.play()
 			getTone(e.target)
 			}}>
-				<span className={styles.theTone}>Tubular Bell</span>
+				<span className={styles.theTone}>TubularBell</span>
 			</div>
 		</div>
 	);

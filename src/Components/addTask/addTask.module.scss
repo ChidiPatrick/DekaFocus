@@ -71,3 +71,46 @@
   border: none;
   font-size: 20px;
 }
+.addTaskInputNotFocused
+{
+    height: 20px;
+    padding: 10px;
+    border: none;
+    color: black;
+    width: 80%;
+    margin: auto 0;
+    margin-top: 10px;
+    font-size: 20px;
+    border-radius: 10px;
+    &:focus{
+     border: 1px solid tomato;  
+    border-radius: 10px;
+    outline: none;
+    }
+    &::placeholder{
+        font-size: 18px;
+    }
+
+}
+.tasksWrapper{
+  margin-top: 20px;
+  font-size: 18px;
+}
+.taskContainer{
+  background-color: #fff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 3px 1px;
+}
+.circle{
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid grey;
+  margin-right: 10px;
+
+}

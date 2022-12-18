@@ -7,11 +7,13 @@ import {useDispatch,useSelector} from "react-redux"
 import {showStopWatchIcon,blurStopWatchIcon} from "../PomodoroSetting/PomodoroSettingSlice"
 import StopWatch from '../StopWatch/StopWatch';
 import StopWatchNumber from '../StopWatch/StopWatchNumber';
+import { hidePomodoroSettings } from '../PomodoroSetting/PomodoroSettingSlice';
 // import classames from "./classnames"
-const PomodoroSetting = (props) => {
+const PomodoroSetting = ({handleAddTask}) => {
     const iconState = useSelector((state) => state.PomodoroSetting.stopWatchIcon)
    const [selected,setSelected] = useState(false)  
    const [selectedClocks,setSelectedClocks] = useState(0)
+   const inputElementFocused = useSelector(state => state.PomodoroSetting.inputElementFocused)
     const dispatch = useDispatch()
     const [clicked,setClicked] = useState(false)
     const iconRef = useRef()
@@ -28,7 +30,7 @@ const PomodoroSetting = (props) => {
    const numbStopWatchIcons = [...Array(6)]
 
     return (
-        <div className={style.PomodoroSettingWrapper}>
+        <div className={ inputElementFocused ? style.PomodoroSettingWrapper : style.hidePomodoroSettings}>
             <h6 className={style.PomodoroSettingHeader}>Estimated Pomodoros</h6>
             <div className={style.stopWatchIconWrapper} >
             <StopWatchNumber/>
@@ -38,7 +40,7 @@ const PomodoroSetting = (props) => {
                 <TbFlag className={style.flagIcon}/>
                 <div className={style.tag}>Tag</div>
                 <div className={style.Task}>Task</div>
-                <button className= {style.doneBtn}>Done</button>
+                <button className= {style.doneBtn} onClick ={() => handleAddTask()}>Done</button>
             </div>
         </div>
     )

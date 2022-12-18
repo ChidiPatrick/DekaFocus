@@ -15,7 +15,10 @@ const initialState = {
 	autoStartBreak: true,
 	workAlarm: "Bell2",
 	userSettings: null,
-	projects: null
+	projects: null,
+	tasks: null,
+	taskProjectTitle: null,
+	projectTasks: []
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -100,6 +103,16 @@ const SettingSlice = createSlice({
 		getUserProjects(state,action) {
 			state.projects = action.payload
 			console.log(action.payload);
+		},
+		getProjectTasks(state,action) {
+			state.tasks = action.payload
+		},
+		getProjectTitle(state,action) {
+			state.taskProjectTitle = action.payload
+		},
+		getProjectCurrTasks(state,action){
+			state.projectTasks.push(action.payload)
+			// console.log(state.projectTasks);
 		}
 	}
 });
@@ -124,8 +137,9 @@ export const {
 	disableGoForBreak,
 	enableGoForBreak,
 	getUserSettings,
-	getUserProjects
-	
-	
+	getUserProjects,
+	getProjectTasks,
+	getProjectTitle,
+	getProjectCurrTasks
 } = SettingSlice.actions;
 export default SettingSlice.reducer;

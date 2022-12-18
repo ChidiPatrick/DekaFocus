@@ -28,7 +28,14 @@ const AddProject = ({title = "New Project"}) => {
         await updateDoc(settingsRef,{
             projects: arrayUnion({
                 projectColor: blockPickerColor,
-                projectTitle:  inputRef.current.value
+                projectTitle:  inputRef.current.value,
+                tasks: {
+                    completedTasks: 0,
+                    tasksToBeCompleted: 0,
+                    estimatedTime: 0,
+                    elaspedTime: 0,
+                    projectTasks: []
+                }
             })
         })
         dispatch(fetchUserSettings(userId))

@@ -45,7 +45,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
-  let tone = useSelector((state) => state.tones.workAlarm)
+  const tone = useSelector((state) => state.tones.workAlarm)
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
@@ -54,7 +54,10 @@ const FrontPage = ({ expiryTimestamp }) => {
   const counting = useSelector((state) => state.frontPage.counting);
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
-  const bell = new UIFx(Toness.Bell, { volume: 0.4, throttleMs: 100 });
+
+   console.log(typeof tone);
+  const workAlarm = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
+  console.log(tone);
   const navigate = useNavigate()
   const {
     seconds,
@@ -99,7 +102,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   },[countDownRunning,isRunning])
   // console.log(expiryTimestamp);
   const onExpiry = () => {
-    bell.play();
+    workAlarm.play();
     dispatch(resetState());
     restart(getDate(), false);
     dispatch(breakStart());
