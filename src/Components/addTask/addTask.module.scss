@@ -1,8 +1,12 @@
 .TaskWrapper {
   background-color: rgb(241, 241, 241);
   min-height: 100vh;
+  position: relative;
+ 
+  
 }
 .TaskTimeWrapper{
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(4, 85px) ;
   justify-items: center;
@@ -113,4 +117,22 @@
   border: 2px solid grey;
   margin-right: 10px;
 
+}
+.hideShowFinishedTaskContainer{
+ width: 100%;
+
+}
+.hideShowFinishedTask{
+   background-color: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 52%;
+  margin: 10px auto;
+  border-radius: 100px;
+}
+.dropDownIcon{
+  margin-left: 5px;
+  font-size: 18px;
 }

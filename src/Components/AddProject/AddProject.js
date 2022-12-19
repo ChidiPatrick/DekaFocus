@@ -34,6 +34,7 @@ const AddProject = ({title = "New Project"}) => {
                     tasksToBeCompleted: 0,
                     estimatedTime: 0,
                     elaspedTime: 0,
+                    //ProjectTasks is an Array that contains all the tasks related to this specific project
                     projectTasks: []
                 }
             })

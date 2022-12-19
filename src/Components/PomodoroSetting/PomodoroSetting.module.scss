@@ -1,9 +1,14 @@
 .PomodoroSettingWrapper{
+    position: absolute;
+    top: 45%;
+    left: 0;
+    z-index: 100;
     background-color: #fff;
     height: 100px;
     display: flex;
     flex-direction: column;
     margin: 10px 0;
+    width: 100%;
 }
 .taskSetting{
     display: flex;
@@ -26,8 +31,10 @@
 }
 .PomodoroSettingHeader{
     color: rgb(192, 192, 192);
+    color: tomato
 }
 .hidePomodoroSettings{
-visibility: hidden;
-opacity: 1
+    visibility: hidden;
+    // opacity: 1;
+    height: 0
 }

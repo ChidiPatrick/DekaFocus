@@ -1,4 +1,4 @@
-import React,{useRef} from "react";
+import React,{useRef,useState} from "react";
 import style from "./addTask.module.scss";
 import { useNavigate } from "react-router";
 import {ButtonBack} from "../NavButtons/NavButton";
@@ -10,6 +10,8 @@ import { ImOpt } from "react-icons/im";
 import { getProjectCurrTasks } from "../Settings/SettingsSlice";
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { hidePomodoroSettings,showPomodoroSettings } from "../PomodoroSetting/PomodoroSettingSlice";
+import CompletedTasks from "../CompletedTask/CompletedTask";
+import { IoMdArrowDropdown } from "react-icons/io";
 const AddTask = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -17,20 +19,35 @@ const AddTask = () => {
   const tasks = useSelector(state => state.settings.tasks)
   const projectTitle = useSelector(state => state.settings.taskProjectTitle)
   const projectCurrTask = useSelector(state => state.settings.projectTasks)
+  const [showUI,setShowUI] = useState(false)
+  const [showFinishedTasks,setShowFinishedTask] = useState((false))
+  
   const moveToPreviousePage = () => {
     navigate(-1);
   };
    const inputRef = useRef()
     ///Add task handler////////
     const handleAddTask = () => {
+    if(inputRef.current.value === ""){
+      setShowUI(false)
+       return
+      }
     inputRef.current.blur()
-    if(inputRef.current.value === "") return
     dispatch(getProjectCurrTasks(inputRef.current.value))
+    setShowUI(false)
     inputRef.current.value = ""
-    dispatch(hidePomodoroSettings())
+    // dispatch(hidePomodoroSettings())
   }
   const handleComplete = () => {
     console.log("clicked");
+  }
+  const toggleDisplay = () => {
+    if(showFinishedTasks) {
+      setShowFinishedTask(false)
+    }
+    else{
+      setShowFinishedTask(true)
+    }
   }
   return (
     <div className={style.TaskWrapper}>
@@ -83,18 +100,26 @@ const AddTask = () => {
     <input type = "text" placeholder="+ Add a task..." 
         className={ style.addTaskInputNotFocused }
         ref={inputRef}
-       onClick={dispatch(showPomodoroSettings())}
+       onClick={() => setShowUI(true)}
         />
+         
      <div className={style.tasksWrapper}>
         {projectCurrTask.map((task, i) => {
-        return (<div className={style.taskContainer}>
+        return (<div className={style.taskContainer} key ={i}>
           {/* <ImBin className={style.trashBin}/> */}
           <div className={style.circle} onClick = {handleComplete}></div>
            <div className={style.task}>{task}</div>
         </div>)
       } )}
       </div>
-      <PomodoroSetting handleAddTask={handleAddTask}/>
+      <div className={style.hideShowFinishedTaskContainer} onClick ={toggleDisplay}>
+        <div className={style.hideShowFinishedTask}>
+          <span >{showFinishedTasks ? "Hide" : "Show"} completed tasks </span>
+          <IoMdArrowDropdown className={style.dropDownIcon}/>
+        </div>
+      </div>
+      <CompletedTasks showFinishedTasks={showFinishedTasks} projectCurrTask ={projectCurrTask}/>
+     <PomodoroSetting showUI ={showUI} handleAddTask={handleAddTask}/>
     </div>
   );
 }

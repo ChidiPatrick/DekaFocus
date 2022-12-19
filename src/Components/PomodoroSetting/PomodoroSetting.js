@@ -9,7 +9,7 @@ import StopWatch from '../StopWatch/StopWatch';
 import StopWatchNumber from '../StopWatch/StopWatchNumber';
 import { hidePomodoroSettings } from '../PomodoroSetting/PomodoroSettingSlice';
 // import classames from "./classnames"
-const PomodoroSetting = ({handleAddTask}) => {
+const PomodoroSetting = ({handleAddTask,showUI}) => {
     const iconState = useSelector((state) => state.PomodoroSetting.stopWatchIcon)
    const [selected,setSelected] = useState(false)  
    const [selectedClocks,setSelectedClocks] = useState(0)
@@ -30,7 +30,7 @@ const PomodoroSetting = ({handleAddTask}) => {
    const numbStopWatchIcons = [...Array(6)]
 
     return (
-        <div className={ inputElementFocused ? style.PomodoroSettingWrapper : style.hidePomodoroSettings}>
+        <div className={ showUI ? style.PomodoroSettingWrapper : style.hidePomodoroSettings}>
             <h6 className={style.PomodoroSettingHeader}>Estimated Pomodoros</h6>
             <div className={style.stopWatchIconWrapper} >
             <StopWatchNumber/>

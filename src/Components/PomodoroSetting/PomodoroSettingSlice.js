@@ -27,6 +27,5 @@ export const {
     showStopWatchIcon,
     hidePomodoroSettings,
     showPomodoroSettings
-
 } = PomodoroSettingSlice.actions;
 export default PomodoroSettingSlice.reducer
