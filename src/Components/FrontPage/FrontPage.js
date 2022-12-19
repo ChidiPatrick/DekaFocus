@@ -55,7 +55,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
 
-   console.log( tone);
+   console.log( Toness[tone]);
   const workAlarm = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
   console.log(tone);
   const navigate = useNavigate()
