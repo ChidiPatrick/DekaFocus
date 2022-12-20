@@ -13,7 +13,15 @@ const FetchPerson = async () => {
          return data
     }
 }
-
+const FetchProjectTasks = async (projectId) => {
+    const userId =  useSelector((state) => state.signUpSlice.userId)
+    const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+    const data = await getDoc(settingsRef)
+    console.log(data.data().projects[projectId]);
+    return data
+    //    return data.data().projects[projectId].tasks
+    
+}
 const wrapPromise = (promise) => {
     let status = "pending";
     let result = '';
@@ -40,6 +48,7 @@ const wrapPromise = (promise) => {
 }
 export const createResource = () => {
     return {
-        data: wrapPromise(FetchPerson())
+        data: wrapPromise(FetchPerson()),
+        tasks: wrapPromise(FetchProjectTasks())
     }
 }

@@ -1,4 +1,4 @@
-import React,{useRef,useState} from "react";
+import React,{useRef,useState,Suspense} from "react";
 import style from "./addTask.module.scss";
 import { useNavigate } from "react-router";
 import {ButtonBack} from "../NavButtons/NavButton";
@@ -12,6 +12,9 @@ import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { hidePomodoroSettings,showPomodoroSettings } from "../PomodoroSetting/PomodoroSettingSlice";
 import CompletedTasks from "../CompletedTask/CompletedTask";
 import { IoMdArrowDropdown } from "react-icons/io";
+import AddTaskComponent from "./addTaskComponent";
+import { createResource } from "../PersonApi/PersonApi";
+
 const AddTask = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
@@ -49,78 +52,14 @@ const AddTask = () => {
       setShowFinishedTask(true)
     }
   }
+  const resource = createResource()
+	const loadingSpinner = <div className={style.loadingSpinner}>
+			<span className={style.loader}></span>
+		</div>
   return (
-    <div className={style.TaskWrapper}>
-      <div className={style.TaskHeaderWrapper}>
-        <ButtonBack/>
-        {/* <button className={style.backBtn} onClick={moveToPreviousePage}>
-          <HiChevronLeft className={style.navigateBackIcon} />
-        </button> */}
-        <h2 className={style.TaskHeader}>{projectTitle.length > 20 ? projectTitle.slice(0,17).padEnd(20,"."): projectTitle}</h2>
-        <button className={style.sort} >
-          <TbArrowsDownUp />
-        </button>
-      </div>
-      <div className={style.TaskTimeWrapper}>
-        <div className={style.TaskTimeEstimateWrapper}>
-          <div className={style.TaskTimePartition}>
-            <span className={style.TaskTimeUnit}>HH</span>
-            <span className={style.TaskTimeUnit}>MM</span>
-          </div>
-          <div className={style.TaskEstimatedTime}>{tasks.estimatedTime}</div>
-          <span className={style.TaskTimeUnit}>Estimated Time</span>
-        </div>
-        <div className={style.TaskTobeCompletedWrapper}>
-        <div className={style.TaskTimePartition}>
-            <span className={style.TaskTimeUnit}>&nbsp;</span>
-            <span className={style.TaskTimeUnit}>&nbsp;</span>
-          </div>
-          <div className={style.TaskTobeCompleted}>{tasks.tasksToBeCompleted}</div>
-          <span className={style.TaskTimeUnit}>Tasks todo</span>
-        </div>
-        <div className={style.ElapsedTimeWrapper}>
-          <div className={style.TaskTimePartition}>
-            <span className={style.TaskTimeUnit}>HH</span>
-            <span className={style.TaskTimeUnit}>MM</span>
-          </div>
-          <div className={style.TaskEstimatedTime}>{tasks.elaspedTime}</div>
-          <span className={style.TaskTimeUnit}>Elasped Time</span>
-        </div>
-        <div className={style.TaskCompletedWrapper}>
-        <div className={style.TaskTimePartition}>
-            <span className={style.TaskTimeUnit}>&nbsp;</span>
-            <span className={style.TaskTimeUnit}>&nbsp;</span>
-          </div>
-          <div className={style.TaskEstimatedTime}>{tasks.completedTasks}</div>
-          <span className={style.TaskTimeUnit}>Completed Tasks</span>
-        </div>
-      </div>
-      
-      
-    <input type = "text" placeholder="+ Add a task..." 
-        className={ style.addTaskInputNotFocused }
-        ref={inputRef}
-       onClick={() => setShowUI(true)}
-        />
-         
-     <div className={style.tasksWrapper}>
-        {projectCurrTask.map((task, i) => {
-        return (<div className={style.taskContainer} key ={i}>
-          {/* <ImBin className={style.trashBin}/> */}
-          <div className={style.circle} onClick = {handleComplete}></div>
-           <div className={style.task}>{task}</div>
-        </div>)
-      } )}
-      </div>
-      <div className={style.hideShowFinishedTaskContainer} onClick ={toggleDisplay}>
-        <div className={style.hideShowFinishedTask}>
-          <span >{showFinishedTasks ? "Hide" : "Show"} completed tasks </span>
-          <IoMdArrowDropdown className={style.dropDownIcon}/>
-        </div>
-      </div>
-      <CompletedTasks showFinishedTasks={showFinishedTasks} projectCurrTask ={projectCurrTask}/>
-     <PomodoroSetting showUI ={showUI} handleAddTask={handleAddTask}/>
-    </div>
+    <Suspense fallback = {loadingSpinner} >
+      <AddTaskComponent resource = {resource}/>
+    </Suspense>
   );
 }
 ;
