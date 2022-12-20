@@ -47,7 +47,7 @@ import Decide from "../audioFiles/Decide.mp3"
 import Ding from "../audioFiles/Ding.mp3"
 import Notification from "../audioFiles/Notification.mp3"
 import Thriller from "../audioFiles/Thriller.mp3"
-import TubularBell from "../audioFiles/TubularBell.mp3"
+// import TubularBell from "../audioFiles/TubularBell.mp3"
 import Announcement from "../audioFiles/Announcement.mp3"
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
@@ -89,9 +89,9 @@ const FrontPage = ({ expiryTimestamp }) => {
   case "Thriller":
     tone = Thriller;
     break;
-  case "TubularBell":
-    tone = TubularBell;
-    break;
+  // case "TubularBell":
+  //   tone = TubularBell;
+  //   break;
   case "Announcement":
     tone = Announcement;
     break;
