@@ -38,14 +38,23 @@ import {
   turnOnCountDownRunning
 } from "./FrontPageSlice";
 import { getUserId } from "../SignUpForms/SignUpFormSlice";
-import Toness from "../audioFiles/AudioFiles";
-
+import Toness from "../audioFiles/AudioFiles"
+import Bell from "../audioFiles/Bell.mp3"
+import Impact  from "../audioFiles/Impact.mp3"
+import Buzzer from "../audioFiles/Buzzer.mp3"
+import Swoosh from "../audioFiles/Swoosh.mp3"
+import Decide from "../audioFiles/Decide.mp3"
+import Ding from "../audioFiles/Ding.mp3"
+import Notification from "../audioFiles/Notification.mp3"
+import Thriller from "../audioFiles/Thriller.mp3"
+import TubularBell from "../audioFiles/TubularBell.mp3"
+import Announcement from "../audioFiles/Announcement.mp3"
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
-  const tone = useSelector((state) => state.tones.workAlarm)
+  let tone = useSelector((state) => state.tones.workAlarm)
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
@@ -54,9 +63,41 @@ const FrontPage = ({ expiryTimestamp }) => {
   const counting = useSelector((state) => state.frontPage.counting);
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
-
-   console.log( Toness[tone]);
-  const workAlarm = new UIFx(Toness[tone], { volume: 0.4, throttleMs: 100 });
+ ////////////////////////////////////////////////////////////
+ switch(tone){
+  case "Bell":
+    tone = Bell;
+    break;
+  case "Impact":
+    tone = Impact;
+    break;
+  case "Ding":
+    tone = Ding;
+    break;
+  case "Buzzer":
+    tone = Buzzer;
+    break;
+  case "Decide":
+    tone = Decide;
+    break;
+  case "Notification":
+    tone = Notification;
+    break;
+  case "Swoosh":
+  tone = Swoosh;
+    break;
+  case "Thriller":
+    tone = Thriller;
+    break;
+  case "TubularBell":
+    tone = TubularBell;
+    break;
+  case "Announcement":
+    tone = Announcement;
+    break;
+ }
+   console.log(tone);
+  const workAlarm = new UIFx(tone, { volume: 0.4, throttleMs: 100 });
   console.log(tone);
   const navigate = useNavigate()
   const {
