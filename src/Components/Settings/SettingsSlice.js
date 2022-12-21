@@ -35,6 +35,9 @@ export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", 
 		console.log(err);
 	}
 })
+const fetchTasks = createAsyncThunk("settings/fetchProjectTasks",async (projectId,{dispatch,getState}) =>{
+
+})
 const SettingSlice = createSlice({
 	name: 'settings',
 	initialState,
