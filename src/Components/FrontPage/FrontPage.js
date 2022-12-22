@@ -54,7 +54,7 @@ const FrontPage = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
   const time = new Date();
   const circularTime = useSelector((state) => state.frontPage.minute5);
-  let tone = useSelector((state) => state.tones.workAlarm)
+  const tone = useSelector((state) => state.tones.workAlarm)
   time.setSeconds(time.getSeconds() + circularTime);
   const running = useSelector((state) => state.frontPage.running);
   const Pause = useSelector((state) => state.frontPage.Pause);
@@ -64,40 +64,45 @@ const FrontPage = ({ expiryTimestamp }) => {
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
  ////////////////////////////////////////////////////////////
- switch(tone){
-  case "Bell":
-    tone = Bell;
-    break;
-  case "Impact":
-    tone = Impact;
-    break;
-  case "Ding":
-    tone = Ding;
-    break;
-  case "Buzzer":
-    tone = Buzzer;
-    break;
-  case "Decide":
-    tone = Decide;
-    break;
-  case "Notification":
-    tone = Notification;
-    break;
-  case "Swoosh":
-  tone = Swoosh;
-    break;
-  case "Thriller":
-    tone = Thriller;
-    break;
-  case "TubularBell":
-    tone = TubularBell;
-    break;
-  case "Announcement":
-    tone = Announcement;
-    break;
- }
-   console.log(tone);
-  const workAlarm = new UIFx(tone, { volume: 0.4, throttleMs: 100 });
+//  switch(tone){
+//   case "Bell":
+//     tone = Bell;
+//     break;
+//   case "Impact":
+//     tone = Impact;
+//     break;
+//   case "Ding":
+//     tone = Ding;
+//     break;
+//   case "Buzzer":
+//     tone = Buzzer;
+//     break;
+//   case "Decide":
+//     tone = Decide;
+//     break;
+//   case "Notification":
+//     tone = Notification;
+//     break;
+//   case "Swoosh":
+//   tone = Swoosh;
+//     break;
+//   case "Thriller":
+//     tone = Thriller;
+//     break;
+//   case "TubularBell":
+//     tone = TubularBell;
+//     break;
+//   case "Announcement":
+//     tone = Announcement;
+//     break;
+//  }
+   console.log(typeof tone);
+   ///Create an object of tones///
+   const tones = {
+    Bell,Swoosh,Thriller,TubularBell,Announcement,Notification,Buzzer,Decide,Ding,Impact
+   }
+   console.log(tones[tone]);
+  const workAlarm = new UIFx(tones[tone], { volume: 0.4, throttleMs: 100 });
   console.log(tone);
   const navigate = useNavigate()
   const {
