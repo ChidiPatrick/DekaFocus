@@ -5,29 +5,54 @@ import styles from "./Projects.module.scss"
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { useSelector,useDispatch } from "react-redux";
-import { arrayRemove, doc,updateDoc } from "firebase/firestore";
+import { arrayRemove, deleteField, doc,updateDoc } from "firebase/firestore";
 import { db } from "../Firebase/Firebase";
 import { fetchUserSettings } from "../Settings/SettingsSlice";
+import {persistor} from "../Store/Store"
+import { async } from "@firebase/util";
 const Projects = ({resource}) => {
     const data = resource.data.read()
     const dispatch = useDispatch()
     const userId = useSelector(state => state.signUpSlice.userId)
+    const userTasks = useSelector(state => state.settings.userTasks)
+    const projects = useSelector(state => state.settings.projects)
+    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
     const navigate = useNavigate()
     
 	const [settings,setSettings] = useState(data.data())
-    console.log(settings);
-    const projects = settings.projects
+    console.log(userTasks);
+    // const projects = settings.projects
     const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
 		</div>
         //////Project deletion function //////////////
+        const deleteProjectTasks = async (projectTaskId) => {
+            await updateDoc(userTasksRef,{
+            [`projectsTasks.${projectTaskId}`]: deleteField()
+            })
+        }
         const deleteProject = async (projectId) =>  {
              const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+             console.log('clicked');
              await updateDoc(settingsRef,{
                 projects: arrayRemove(projects[projectId])
              })
              dispatch(fetchUserSettings())
+             persistor.purge()
              navigate(0)
+        }
+        const deleteProjectAndTasks = async(projectId,projectTaskId) => {
+            try{
+                deleteProjectTasks(projectTaskId)
+               deleteProject(projectId)
+              
+            }
+            catch(err){
+                console.log(err);
+            }
+            
+          
+            
         }
     return ( 
         <div className={styles.projectsContainer}>
@@ -39,7 +64,8 @@ const Projects = ({resource}) => {
             </header>
             <div className={styles.projectsWrapper}>
                 {projects.map((project,id) => {
-                    console.log(project.projectTitle.length > 8)
+                    console.log(project.projectTitle.split(" ").join(""))
+                    const projectTaskId = project.projectTitle.split(" ").join("")
                     return (
                     <div className={styles.project} key ={id}>
                     <div className={styles.projectAndColorWrapper}>
@@ -48,7 +74,7 @@ const Projects = ({resource}) => {
                     </div>
                     <div className={styles.deleteWrapper}>
                         {/* <span className={styles.completedProject}><ImRadioUnchecked/></span> */}
-                        <div className={styles.deleteProject} onClick ={ () => deleteProject(id)}><ImBin/></div>
+                        <div className={styles.deleteProject} onClick ={ () => deleteProjectAndTasks(id,projectTaskId)}><ImBin/></div>
                     </div>
                 </div>
                     )

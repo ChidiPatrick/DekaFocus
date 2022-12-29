@@ -13,37 +13,42 @@ import { addProject,activateProjectBtn,deActivateProjectBtn,createProject } from
 import { createUserCollection } from "../Firebase/Firebase";
 import { db, } from "../Firebase/Firebase";
 import { addDoc,setDoc,doc,collection,getDoc,updateDoc, arrayUnion } from "firebase/firestore";
-import { fetchUserSettings } from "../Settings/SettingsSlice";
+import { fetchUserSettings,FetchTasks } from "../Settings/SettingsSlice";
 ////////////////////////////////////////////////////////////////
 ///Addproject Component
 const AddProject = ({title = "New Project"}) => {
     const userId =  useSelector((state) => state.signUpSlice.userId)
     const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection/tasks`)
      const showBtn = useSelector(state => state.AddProject.showProjectBtn)
     const [blockPickerColor,setBlockPickerColor] = useState("#eee")
     const inputRef = useRef()
     const dispatch = useDispatch()
     const [disable, setDisAble] = useState(false)
-    const addProject = async () => {
+    const addProject = async (projectTitle) => {
         await updateDoc(settingsRef,{
             projects: arrayUnion({
                 projectColor: blockPickerColor,
                 projectTitle:  inputRef.current.value,
-                tasks: {
-                    completedTasks: 0,
-                    tasksToBeCompleted: 0,
-                    estimatedTime: 0,
-                    elaspedTime: 0,
-                    //ProjectTasks is an Array that contains all the tasks related to this specific project
-                    projectTasks: []
-                }
+                
             })
         })
+        const projectName = projectTitle.split(" ").join("")
+        await updateDoc(userTasksRef,{
+         [`projectsTasks.${projectName}`]:  {
+                        completedTasks: 0,
+                        tasksToBeCompleted: 0,
+                        estimatedTime: 0,
+                        elaspedTime: 0,
+                        tasks: []
+                    }
+        })
         dispatch(fetchUserSettings(userId))
+        dispatch(FetchTasks(userId))
     }
     const getInputValue =  () =>  {
         // dispatch(createProject({projectName: inputRef.current.value, projectColor: blockPickerColor}))
-        addProject()
+        addProject(inputRef.current.value)
         inputRef.current.value = ""
         dispatch(deActivateProjectBtn())
        

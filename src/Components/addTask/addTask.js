@@ -1,4 +1,4 @@
-import React,{useRef,useState,Suspense} from "react";
+import React,{useRef,useState,Suspense,useEffect} from "react";
 import style from "./addTask.module.scss";
 import { useNavigate } from "react-router";
 import {ButtonBack} from "../NavButtons/NavButton";
@@ -7,7 +7,7 @@ import { TbArrowsDownUp } from "react-icons/tb";
 import PomodoroSetting from "../PomodoroSetting/PomodoroSetting"
 import { useDispatch, useSelector } from "react-redux";
 import { ImOpt } from "react-icons/im";
-import { getProjectCurrTasks } from "../Settings/SettingsSlice";
+import { getProjectT, getProjectTodos } from "../Settings/SettingsSlice";
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { hidePomodoroSettings,showPomodoroSettings } from "../PomodoroSetting/PomodoroSettingSlice";
 import CompletedTasks from "../CompletedTask/CompletedTask";
@@ -19,12 +19,20 @@ const AddTask = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const projects = useSelector(state => state.settings.projects)
-  const tasks = useSelector(state => state.settings.tasks)
+  const currTaskArray = useSelector(state => state.settings.currTasks)
   const projectTitle = useSelector(state => state.settings.taskProjectTitle)
   const projectCurrTask = useSelector(state => state.settings.projectTasks)
+  const taskDataAvailable = useSelector(state => state.settings.taskDataAvailable)
   const [showUI,setShowUI] = useState(false)
   const [showFinishedTasks,setShowFinishedTask] = useState((false))
-  
+  const [tasks,setTasks] = useState(null)
+  console.log(taskDataAvailable);
+  useEffect(() => {
+    if(currTaskArray){
+      setTasks(currTaskArray)
+    }
+  }, [currTaskArray])
+  console.log(tasks);
   const moveToPreviousePage = () => {
     navigate(-1);
   };
@@ -36,10 +44,9 @@ const AddTask = () => {
        return
       }
     inputRef.current.blur()
-    dispatch(getProjectCurrTasks(inputRef.current.value))
+    dispatch(getProjectTodos(inputRef.current.value))
     setShowUI(false)
     inputRef.current.value = ""
-    // dispatch(hidePomodoroSettings())
   }
   const handleComplete = () => {
     console.log("clicked");
@@ -52,15 +59,11 @@ const AddTask = () => {
       setShowFinishedTask(true)
     }
   }
-  const resource = createResource()
+  // const resource = createResource()
 	const loadingSpinner = <div className={style.loadingSpinner}>
 			<span className={style.loader}></span>
 		</div>
-  return (
-    <Suspense fallback = {loadingSpinner} >
-      <AddTaskComponent resource = {resource}/>
-    </Suspense>
-  );
+  return ( taskDataAvailable ?  <AddTaskComponent/> : loadingSpinner)
 }
 ;
 

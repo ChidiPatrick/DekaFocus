@@ -23,8 +23,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
 import Projects from './Components/Projects/Projects';
-import {fetchUserSettings} from "./Components/Settings/SettingsSlice"
+import {fetchUserSettings,FetchTasks} from "./Components/Settings/SettingsSlice"
 import PasswordReset from './Components/SignUpForms/forgottenPassword';
+
 
 // const analytics = getAnalytics(app);
 
@@ -45,6 +46,8 @@ function App() {
 			dispatch(getUserId(user.uid))
 			console.log(user.uid);
 			dispatch(fetchUserSettings(user.uid))
+			dispatch(FetchTasks(user.uid))
+
 		}
 	})
 	////////////////////////////////////////////////////

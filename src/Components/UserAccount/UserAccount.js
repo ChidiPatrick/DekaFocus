@@ -1,5 +1,5 @@
-import React,{useState,useEffect} from "react";
-import { Link } from "react-router-dom";
+import React,{useState,useEffect,useRef} from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./UserAccount.module.scss";
 import {
   FaChartLine,
@@ -25,35 +25,65 @@ import { async } from "@firebase/util";
 import { db } from "../Firebase/Firebase";
 import {doc,getDoc} from "firebase/firestore"
 import { HiChevronLeft } from "react-icons/hi";
-import { getProjectTasks,getProjectTitle } from "../Settings/SettingsSlice";
+import { 
+  getProjectTasks,
+  getProjectTitle,
+  getProjectTodos,
+  setProjectId,
+  setCurrTasks ,
+  setClickedProjectId,
+  setCompletedTasks,
+	setEstimatedTime,
+	setTasksToBeCompleted,
+	setTimeElasped
+} from "../Settings/SettingsSlice";
+import { FetchTasks } from "../Settings/SettingsSlice";
 
 const UserAccountUI = (props) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [user,loadingUser,loginError] = useAuthState(auth);
   const projects = useSelector((state) => state.settings.projects)
   const tasks = useSelector(state => state.settings.tasks)
   // const [projects,setProjects] = useState(projectsData)
   const userId = useSelector(state => state.signUpSlice.userId)
+  const userTasks = useSelector(state => state.settings.userTasks)
+  const projectCurrTask = useSelector(state => state.settings.projectTasks)
   /////////Get projects /////////////////
-  
-  console.log(projects);
+  const linkRef = useRef()
+  console.log(userTasks);
   const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
 		</div>
-
+    const getProjectTaskData = (projectTask) => {
+      dispatch(setCompletedTasks(projectTask.completedTasks))
+      dispatch(setTasksToBeCompleted(projectTask.tasksToBeCompleted))
+      dispatch(setTimeElasped(projectTask.elaspedTime))
+      dispatch(setEstimatedTime(projectTask.estimatedTime))
+    }
     const selectProject = (projectId) => {
       projects.filter((project,index) => {
         if (index === projectId){
-          dispatch(getProjectTasks(project.tasks))
+          const taskName = project.projectTitle.split(" ").join("")
+          console.log(userTasks[taskName])
+          dispatch(setClickedProjectId(taskName))
+          dispatch(setCurrTasks(userTasks[taskName]))
+          dispatch(getProjectTasks(userTasks[taskName].tasks))
           dispatch(getProjectTitle(project.projectTitle))
-          console.log(project);
+          dispatch(setProjectId(projectId))
+          getProjectTaskData(userTasks[taskName])
+          navigate("/todayTodo")
+          // console.log(linkRef.current);
           return 
         }
       })
     }
+    
+    
     const handleClicked =  (projectId) => {
       //1.Get selected project from projects object and dispatch add task action
       selectProject(projectId)
+     
       //2. Get selected project's task object
       //3. Add task to task store
       console.log("clicked");
@@ -143,7 +173,7 @@ const UserAccountUI = (props) => {
           {
 
           projects && projects.map((project,i) => {
-           return <Link to = "/todayTodo" className={styles.project} onClick = {() => handleClicked(i)} key = {i}>
+           return <div  className={styles.project} ref = {linkRef} onClick = {() => handleClicked(i)} key = {i}>
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
@@ -154,7 +184,7 @@ const UserAccountUI = (props) => {
                     <span className={styles.numberOfTask}>3</span>
                   </div>
               </div>
-            </Link>
+            </div>
           })
         }
         </div>

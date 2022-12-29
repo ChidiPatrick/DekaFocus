@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {doc,getDoc} from "firebase/firestore"
+import { act } from 'react-dom/test-utils';
 import { db } from '../Firebase/Firebase';
 const initialState = {
 	pomodoroLengthSelected: false,
@@ -15,10 +16,22 @@ const initialState = {
 	autoStartBreak: true,
 	workAlarm: "Bell2",
 	userSettings: null,
-	projects: null,
+	projects: [],
+	currTasks: null,
+	userTasks: null,
+	/// Projects parent tasks object
 	tasks: null,
-	taskProjectTitle: null,
-	projectTasks: []
+	////////
+	taskHeader: null,
+	///Container for clicked project tasks to perform
+	projectTasks: [],
+	projectId: 0,
+	currTasksArray: null,
+	clickedProjectIdentitfier: null,
+	tasksToBeCompleted: 0,
+	completedTasks: 0,
+	elapsedTime: 0,
+	estimatedTime: 0,
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -35,8 +48,22 @@ export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", 
 		console.log(err);
 	}
 })
-const fetchTasks = createAsyncThunk("settings/fetchProjectTasks",async (projectId,{dispatch,getState}) =>{
-
+export const FetchTasks = createAsyncThunk("settings/fetchProjectTasks",async (userId,{dispatch,getState}) =>{
+	try{
+		const tasksRef = doc(db,"users",`${userId}`,"userTasksCollection","tasks")
+		const data = await getDoc(tasksRef)
+    	if(data.exists()){
+		const projectsTasks = data.data().projectsTasks
+		console.log(projectsTasks);
+		// const tasks = projectsTasks
+		dispatch(setUserTasks(projectsTasks))
+		dispatch(setTaskDataAvailable())
+         return projectsTasks
+   	 }
+	}
+	catch(err) {
+		console.log(err);
+	}
 })
 const SettingSlice = createSlice({
 	name: 'settings',
@@ -101,21 +128,58 @@ const SettingSlice = createSlice({
 		},
 		getUserSettings(state,action) {
 			state.userSettings = action.payload
-			console.log(state.userSettings);
+			
 		},
 		getUserProjects(state,action) {
 			state.projects = action.payload
-			console.log(action.payload);
 		},
 		getProjectTasks(state,action) {
 			state.tasks = action.payload
 		},
-		getProjectTitle(state,action) {
-			state.taskProjectTitle = action.payload
+		updateCurrProjectTasks(state,action){
+			state.tasks.push(action.payload)
 		},
-		getProjectCurrTasks(state,action){
+		getProjectTitle(state,action) {
+			state.taskHeader = action.payload
+		},
+		getProjectTodos(state,action){
+			// const newTask = []
+			// newTask.push(action.payload)
+			// state.projectTasks = [...state.projectTasks,...newTask] 
 			state.projectTasks.push(action.payload)
 			// console.log(state.projectTasks);
+		},
+		setProjectId(state,action){
+			state.projectId = action.payload
+		},
+		setCurrTasks(state,action){
+			state.currTasks = action.payload
+
+		},
+		
+		setUserTasks(state,action){
+			state.userTasks = action.payload
+		},
+		setClickedProjectId(state,action) {
+			state.clickedProjectIdentitfier = action.payload
+		},
+		setTaskDataAvailable(state,action){
+			state.taskDataAvailable = true
+		},
+		setTasksToBeCompleted(state,action){
+			state.tasksToBeCompleted = action.payload
+		},
+		updateTasksToBeCompleted(state, action){
+			state.tasksToBeCompleted = state.tasksToBeCompleted + 1
+		},
+		setTimeElasped(state,action){
+			state.elapsedTime = action.payload
+		},
+		setCompletedTasks(state,action){
+			state.completedTasks = action.payload
+		},
+		setEstimatedTime(state,action){
+			state.estimatedTime = action.payload
 		}
 	}
 });
@@ -143,6 +207,17 @@ export const {
 	getUserProjects,
 	getProjectTasks,
 	getProjectTitle,
-	getProjectCurrTasks
+	getProjectTodos,
+	setProjectId,
+	setCurrTasks,
+	setUserTasks,
+	setClickedProjectId,
+	setTaskDataAvailable,
+	updateCurrProjectTasks,
+	setCompletedTasks,
+	setEstimatedTime,
+	setTasksToBeCompleted,
+	setTimeElasped,
+	updateTasksToBeCompleted
 } = SettingSlice.actions;
 export default SettingSlice.reducer;
