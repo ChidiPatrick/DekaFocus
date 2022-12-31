@@ -32,6 +32,7 @@ const initialState = {
 	completedTasks: 0,
 	elapsedTime: 0,
 	estimatedTime: 0,
+	numbSelectedPomodoro: 1
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{

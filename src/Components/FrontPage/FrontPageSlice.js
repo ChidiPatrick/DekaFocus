@@ -12,7 +12,8 @@ const initialState = {
   stop: false,
   break: false,
   counting: false,
-  countDownRunning: false
+  countDownRunning: false,
+  triggerPlayFromTask: false
 };
 const FrontPageSlice = createSlice({
   name: "FrontPage",
@@ -72,6 +73,9 @@ const FrontPageSlice = createSlice({
     },
     turnOffCountDownRunning(state,action) {
       state.countDownRunning = false
+    },
+    setTriggerPlayFromTask(state,action){
+      state.triggerPlayFromTask = true
     }
   },
 });
@@ -92,6 +96,7 @@ export const {
   endCounting,
   updateCurrnetTime,
   turnOffCountDownRunning,
-  turnOnCountDownRunning
+  turnOnCountDownRunning,
+  setTriggerPlayFromTask
 } = FrontPageSlice.actions;
 export default FrontPageSlice.reducer;

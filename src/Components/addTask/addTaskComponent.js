@@ -14,6 +14,7 @@ import CompletedTasks from "../CompletedTask/CompletedTask";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { db } from "../Firebase/Firebase";
 import { updateDoc,doc, arrayUnion, increment } from "firebase/firestore";
+import { setTriggerPlayFromTask } from "../FrontPage/FrontPageSlice";
 import { async } from "@firebase/util";
 //////////////////////////////////////////////////
 ////Add task Component//////////////
@@ -47,6 +48,17 @@ const AddTaskComponent = ({resource}) => {
     navigate(-1);
   };
   console.log([]);
+  const calculateMinutesAndHours = (minutes) => {
+    const remainingMinutes = minutes % 60
+    const hours = minutes / 60
+    // const 
+    console.log(`Minutes: ${remainingMinutes}minutes, Hours: ${parseInt(hours)}hrs`);
+    
+    return [parseInt(hours),remainingMinutes]
+  }
+
+  const estimatedTimeArray = calculateMinutesAndHours(estimatedTime)
+  const timeElapsedArray = calculateMinutesAndHours(timeElapsed)
   /////////Update Tasks in the server ////
   const taskUpdateHandler = async (task,oldTaskObject,updatedTaskArray) => {
     const oldObjectTasksArray = oldTaskObject.tasks
@@ -100,13 +112,12 @@ const AddTaskComponent = ({resource}) => {
     else{
       setShowFinishedTask(true)
     }
-  } 
-  const updateTasks = async (projectId,task) => {
-    
-    await updateDoc(settingsRef,{
-       tasks : arrayUnion()
-    })
   }
+  const handleStart = () => {
+    navigate('/')
+    dispatch(setTriggerPlayFromTask())
+  } 
+  
   return (
     <div className={style.TaskWrapper}>
       <div className={style.TaskHeaderWrapper}>
@@ -125,7 +136,15 @@ const AddTaskComponent = ({resource}) => {
             <span className={style.TaskTimeUnit}>HH</span>
             <span className={style.TaskTimeUnit}>MM</span>
           </div>
-          <div className={style.TaskEstimatedTime}>{estimatedTime}</div>
+          <div className={style.TaskEstimatedTime}>
+            <span>
+               {estimatedTimeArray[0] < 10 ? `0${estimatedTimeArray[0]}` : estimatedTimeArray[0]}
+            </span>
+             <span>:</span>
+             <span>
+               {estimatedTimeArray[1] < 10 ? `0${estimatedTimeArray[1]}` : estimatedTimeArray[1]}
+             </span>
+          </div>
           <span className={style.TaskTimeUnit}>Estimated Time</span>
         </div>
         <div className={style.TaskTobeCompletedWrapper}>
@@ -141,7 +160,17 @@ const AddTaskComponent = ({resource}) => {
             <span className={style.TaskTimeUnit}>HH</span>
             <span className={style.TaskTimeUnit}>MM</span>
           </div>
-          <div className={style.TaskEstimatedTime}>{timeElapsed}</div>
+          <div className={style.TaskEstimatedTime}>
+            <span>
+               {timeElapsedArray[0] < 10 ? `0${timeElapsedArray[0]}` : timeElapsedArray[0]}
+            </span>
+             <span>:</span>
+             <span>
+              
+                {timeElapsedArray[1] < 10 ? `0${timeElapsedArray[1]}` : timeElapsedArray[1]}
+              
+             </span>
+          </div>
           <span className={style.TaskTimeUnit}>Elasped Time</span>
         </div>
         <div className={style.TaskCompletedWrapper}>
@@ -166,7 +195,10 @@ const AddTaskComponent = ({resource}) => {
         return (<div className={style.taskContainer} key ={i}>
           {/* <ImBin className={style.trashBin}/> */}
           <div className={style.circle} onClick = {handleComplete}></div>
-           <div className={style.task}>{task}</div>
+           <div className={style.task}>
+            <span>{task}</span>
+            <span onClick={handleStart}>Play</span>
+          </div>
         </div>)
       } ) : null}
       </div>

@@ -63,39 +63,10 @@ const FrontPage = ({ expiryTimestamp }) => {
   const counting = useSelector((state) => state.frontPage.counting);
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
+  const triggerPlayFromTask = useSelector(state => state.frontPage.triggerPlayFromTask)
+  console.log(triggerPlayFromTask);
  ////////////////////////////////////////////////////////////
-//  switch(tone){
-//   case "Bell":
-//     tone = Bell;
-//     break;
-//   case "Impact":
-//     tone = Impact;
-//     break;
-//   case "Ding":
-//     tone = Ding;
-//     break;
-//   case "Buzzer":
-//     tone = Buzzer;
-//     break;
-//   case "Decide":
-//     tone = Decide;
-//     break;
-//   case "Notification":
-//     tone = Notification;
-//     break;
-//   case "Swoosh":
-//   tone = Swoosh;
-//     break;
-//   case "Thriller":
-//     tone = Thriller;
-//     break;
-//   case "TubularBell":
-//     tone = TubularBell;
-//     break;
-//   case "Announcement":
-//     tone = Announcement;
-//     break;
-//  }
+
    console.log(typeof tone);
    ///Create an object of tones///
    const tones = {
@@ -132,7 +103,11 @@ const FrontPage = ({ expiryTimestamp }) => {
     }
   },[countDownRunning])
   
- 
+  useEffect(() => {
+    if(triggerPlayFromTask){
+      start()
+    }
+  },[triggerPlayFromTask])
 
   const getDate = () => {
     const time = new Date();
@@ -163,6 +138,11 @@ const FrontPage = ({ expiryTimestamp }) => {
     dispatch(startCounting());
     dispatch(turnOnCountDownRunning())
   };
+   useEffect(() => {
+    if(triggerPlayFromTask){
+      start()
+    }
+  },[triggerPlayFromTask])
   // dispatch(updateCurrnetTime({ minute }));
   const pauseCountDown = () => {
     pause();
