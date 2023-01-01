@@ -35,7 +35,8 @@ import {
   setCompletedTasks,
 	setEstimatedTime,
 	setTasksToBeCompleted,
-	setTimeElasped
+	setTimeElasped,
+  setTotalEstimatedTaskTime
 } from "../Settings/SettingsSlice";
 import { FetchTasks } from "../Settings/SettingsSlice";
 

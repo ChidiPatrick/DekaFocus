@@ -32,7 +32,8 @@ const initialState = {
 	completedTasks: 0,
 	elapsedTime: 0,
 	estimatedTime: 0,
-	numbSelectedPomodoro: 1
+	numbSelectedPomodoro: 1,
+	totalEstimatedTasksTime: 0
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -181,6 +182,12 @@ const SettingSlice = createSlice({
 		},
 		setEstimatedTime(state,action){
 			state.estimatedTime = action.payload
+		},
+		setNumSelectedPomodoro(state,action){
+			state.numbSelectedPomodoro = action.payload
+		},
+		setTotalEstimatedTaskTime(state,action){
+			state.totalEstimatedTasksTime = action.payload
 		}
 	}
 });
@@ -219,6 +226,8 @@ export const {
 	setEstimatedTime,
 	setTasksToBeCompleted,
 	setTimeElasped,
-	updateTasksToBeCompleted
+	updateTasksToBeCompleted,
+	setNumSelectedPomodoro,
+	setTotalEstimatedTaskTime
 } = SettingSlice.actions;
 export default SettingSlice.reducer;

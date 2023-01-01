@@ -38,10 +38,13 @@ const AddTaskComponent = ({resource}) => {
   const tasksToBeCompleted = useSelector(state => state.settings.tasksToBeCompleted)
   const estimatedTime = useSelector(state => state.settings.estimatedTime)
   const completedTasks = useSelector(state => state.settings.completedTasks)
+  const pomodoroCurrLength = useSelector(state => state.settings.pomodoroCurrLength)
+  const totalEstimatedTasksTime = useSelector(state => state.settings.totalEstimatedTasksTime)
+  const numbSelectedPomodoro = useSelector(state => state.settings.numbSelectedPomodoro)
   const [showUI,setShowUI] = useState(false)
   const [showFinishedTasks,setShowFinishedTask] = useState((false))
  
-  console.log(tasksToBeCompleted)
+  console.log(tasksArray)
   const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
   const moveToPreviousePage = () => {
@@ -82,6 +85,19 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.tasksToBeCompleted`]: increment(-1)
     })
   }
+  const calcTotalTasksTime = (totalTime,currPomodoroLength,numbSelectedPomodoro) => {
+    const totalTasksTime = totalTime + (currPomodoroLength * numbSelectedPomodoro)
+    return totalTasksTime
+  }
+  //Calculate Total Tasks Time
+  const totalTasksTime = calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoro)
+  const updateTotalTasksTime = async (currTotalTime,index) => {
+    const newTotalTime = currTotalTime 
+     await updateDoc(userTasksRef,{
+      [`projectTasks${[index]}.totalEstimatedTasksTime`]: newTotalTime 
+
+     })
+  }
 
    const inputRef = useRef()
     ///Add task handler////////
@@ -98,6 +114,10 @@ const AddTaskComponent = ({resource}) => {
     taskUpdateHandler(inputRef.current.value,currTaskObject,tasksArray)
     incrementTasksTodo(tasksToBeCompleted)
     dispatch(FetchTasks(userId))
+    //1.Get total number of pomodoros 
+    //2. Get current pomodorolength
+    //3. Calculate total tasks time
+    //4. Get total tasks time
     setShowUI(false)
     inputRef.current.value = ""
     // dispatch(hidePomodoroSettings())
