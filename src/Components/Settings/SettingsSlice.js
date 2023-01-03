@@ -33,7 +33,8 @@ const initialState = {
 	elapsedTime: 0,
 	estimatedTime: 0,
 	numbSelectedPomodoro: 1,
-	totalEstimatedTasksTime: 0
+	totalEstimatedTasksTime: 0,
+	tasksHourMinutesArray: [0,0]
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -138,6 +139,9 @@ const SettingSlice = createSlice({
 		getProjectTasks(state,action) {
 			state.tasks = action.payload
 		},
+		updateProjectTasks(state,action){
+			state.tasks = action.payload
+		},
 		updateCurrProjectTasks(state,action){
 			state.tasks.push(action.payload)
 		},
@@ -151,6 +155,7 @@ const SettingSlice = createSlice({
 			state.projectTasks.push(action.payload)
 			// console.log(state.projectTasks);
 		},
+		
 		setProjectId(state,action){
 			state.projectId = action.payload
 		},
@@ -188,6 +193,9 @@ const SettingSlice = createSlice({
 		},
 		setTotalEstimatedTaskTime(state,action){
 			state.totalEstimatedTasksTime = action.payload
+		},
+		setTasksHourMinutesArray(state,action){
+			state.tasksHourMinutesArray = action.payload
 		}
 	}
 });
@@ -228,6 +236,8 @@ export const {
 	setTimeElasped,
 	updateTasksToBeCompleted,
 	setNumSelectedPomodoro,
-	setTotalEstimatedTaskTime
+	setTotalEstimatedTaskTime,
+	setTasksHourMinutesArray,
+	updateProjectTasks
 } = SettingSlice.actions;
 export default SettingSlice.reducer;
