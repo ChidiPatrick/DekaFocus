@@ -41,7 +41,9 @@ const AddProject = ({title = "New Project"}) => {
                         estimatedTime: 0,
                         elaspedTime: 0,
                         tasks: [],
-                        totalEstimatedTasksTime: 0
+                        totalEstimatedTasksTime: 0,
+                        completedTasksArray: [],
+                        tasksTimesArray: []
                     }
         })
         dispatch(fetchUserSettings(userId))

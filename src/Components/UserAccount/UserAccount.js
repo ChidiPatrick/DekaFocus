@@ -36,8 +36,12 @@ import {
 	setEstimatedTime,
 	setTasksToBeCompleted,
 	setTimeElasped,
-  setTotalEstimatedTaskTime
+  setCompletedTasksArray,
+  setTotalEstimatedTaskTime,
+  setTasksHourMinutesArray,
+  setTasksTimesArray
 } from "../Settings/SettingsSlice";
+import {persistor} from "../Store/Store"
 import { FetchTasks } from "../Settings/SettingsSlice";
 
 const UserAccountUI = (props) => {
@@ -50,31 +54,48 @@ const UserAccountUI = (props) => {
   const userId = useSelector(state => state.signUpSlice.userId)
   const userTasks = useSelector(state => state.settings.userTasks)
   const projectCurrTask = useSelector(state => state.settings.projectTasks)
+  const currPomodoroLength = useSelector(state => state.settings.pomodoroCurrLength)
+  const numbSelectedPomodoros =  useSelector(state => state.settings.numbSelectedPomodoro)
   /////////Get projects /////////////////
   const linkRef = useRef()
   console.log(userTasks);
   const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
 		</div>
+   function calculateMinutesAndHours(minutes){
+    const remainingMinutes = minutes % 60
+    const hours = minutes / 60
+    dispatch(setTasksHourMinutesArray([parseInt(hours),remainingMinutes]))
+    return [parseInt(hours),remainingMinutes]
+  }
+  
+  function calcTotalTasksTime(totalTime,currPomodoroLength,numbSelectedPomodoro) {
+    const totalTasksTime = totalTime + (currPomodoroLength * numbSelectedPomodoro)
+    console.log(totalTasksTime);
+    return totalTasksTime
+  }
     const getProjectTaskData = (projectTask) => {
       dispatch(setCompletedTasks(projectTask.completedTasks))
       dispatch(setTasksToBeCompleted(projectTask.tasksToBeCompleted))
       dispatch(setTimeElasped(projectTask.elaspedTime))
       dispatch(setEstimatedTime(projectTask.estimatedTime))
+      dispatch(setCompletedTasksArray(projectTask.completedTasksArray))
+      dispatch(setTotalEstimatedTaskTime(projectTask.totalEstimatedTasksTime))
+      dispatch(setTasksTimesArray(projectTask.tasksTimesArray))
     }
     const selectProject = (projectId) => {
       projects.filter((project,index) => {
         if (index === projectId){
           const taskName = project.projectTitle.split(" ").join("")
-          console.log(userTasks[taskName])
           dispatch(setClickedProjectId(taskName))
           dispatch(setCurrTasks(userTasks[taskName]))
           dispatch(getProjectTasks(userTasks[taskName].tasks))
           dispatch(getProjectTitle(project.projectTitle))
           dispatch(setProjectId(projectId))
           getProjectTaskData(userTasks[taskName])
+          // persistor.purge()
+          calculateMinutesAndHours(calcTotalTasksTime(userTasks[taskName].totalEstimatedTasksTime,currPomodoroLength,numbSelectedPomodoros ))
           navigate("/todayTodo")
-          // console.log(linkRef.current);
           return 
         }
       })

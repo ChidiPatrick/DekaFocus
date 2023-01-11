@@ -1,4 +1,4 @@
-import React,{useRef,useState} from "react";
+import React,{useRef,useState,useEffect} from "react";
 import style from "./addTask.module.scss";
 import { useNavigate } from "react-router";
 import {ButtonBack} from "../NavButtons/NavButton";
@@ -16,7 +16,10 @@ import {
   setTotalEstimatedTaskTime,
   setTasksHourMinutesArray,
   setCompletedTasks,
-  updateProjectTasks 
+  updateProjectTasks, 
+  setCompletedTasksArray,
+  setNumSelectedPomodoro,
+  setTasksTimesArray
 } from "../Settings/SettingsSlice";
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { hidePomodoroSettings,showPomodoroSettings } from "../PomodoroSetting/PomodoroSettingSlice";
@@ -35,8 +38,6 @@ const AddTaskComponent = ({resource}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch()
   const projects = useSelector(state => state.settings.projects)
-  // const tasks = useSelector(state => state.settings.projectTasks)
-  // const tasks = useSelector(state => state.settings.tasks)
   const projectTitle = useSelector(state => state.settings.taskHeader)
   const projectCurrTask = useSelector(state => state.settings.projectTasks)
   const projectId = useSelector(state => state.settings.projectId)
@@ -50,32 +51,51 @@ const AddTaskComponent = ({resource}) => {
   const completedTasks = useSelector(state => state.settings.completedTasks)
   const pomodoroCurrLength = useSelector(state => state.settings.pomodoroCurrLength)
   const totalEstimatedTasksTime = useSelector(state => state.settings.totalEstimatedTasksTime)
-  const numbSelectedPomodoro = useSelector(state => state.settings.numbSelectedPomodoro)
-  const tasksHoursMinutesArray = useSelector(state => state.settings.tasksHourMinutesArray)
+  const numbSelectedPomodoros = useSelector(state => state.settings.numbSelectedPomodoro)
+  // const tasksHoursMinutesArray = useSelector(state => state.settings.tasksHourMinutesArray)
+  const [tasksHoursMinutesArray,setTasksHoursMinutesArray] = useState(calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros)))
+  const completedTasksArray = useSelector(state => state.settings.completedTasksArray)
+  const tasksTimesArray = useSelector(state => state.settings.tasksTimesArray)
   const [showUI,setShowUI] = useState(false)
   const [showFinishedTasks,setShowFinishedTask] = useState((false))
- 
-  console.log(tasksArray)
-  const settingsRef = doc(db,"users",`${userId}`,"userSettingsCollection","settings")
+  const finishedTasksArray = []
    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
-   console.log(projectCurrTask);
+   ///////////////////////////////////////////////////////////////
+   console.log(tasksTimesArray)
+//  const tasksHoursMinutesArray =   calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros))
   const moveToPreviousePage = () => {
     navigate(-1);
   };
-  console.log([]);
-  const calculateMinutesAndHours = (minutes) => {
+  useEffect(() =>{
+    const cleanUp = () => {
+      dispatch(setNumSelectedPomodoro(0))
+    }
+    return cleanUp
+  },[totalEstimatedTasksTime])
+  function calculateMinutesAndHours(minutes){
     const remainingMinutes = minutes % 60
     const hours = minutes / 60
-    // const 
-    console.log(`Minutes: ${remainingMinutes}minutes, Hours: ${parseInt(hours)}hrs`);
     dispatch(setTasksHourMinutesArray([parseInt(hours),remainingMinutes]))
-    
     return [parseInt(hours),remainingMinutes]
   }
-  const calcTotalTasksTime = (totalTime,currPomodoroLength,numbSelectedPomodoro) => {
+  function calcTotalTasksTime(totalTime,currPomodoroLength,numbSelectedPomodoro) {
     const totalTasksTime = totalTime + (currPomodoroLength * numbSelectedPomodoro)
     console.log(totalTasksTime);
     return totalTasksTime
+  }
+  const updateTasksHourMinutesArray = (minutes) => {
+    const remainingMinutes = minutes % 60
+    const hours = minutes / 60
+    setTasksHoursMinutesArray([parseInt(hours),remainingMinutes])
+  }
+  const updateTasksTimesArray = async (tasksTimesArray,currPomodoroLength,numbSelectedPomodoros) => {
+    const newTime = currPomodoroLength * numbSelectedPomodoros
+    const newArray = [...tasksTimesArray,newTime]
+    dispatch(setTasksTimesArray(newArray))
+    // console.log(`New Time: ${newTime} /n New Time Array: ${newArray}, Old array: ${tasksTimesArray}`);
+    await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.tasksTimesArray`]: newArray
+    })
   }
   // const tasksHourMinutesArray = calculateMinutesAndHours(estimatedTime)
   // const timeElapsedArray = calculateMinutesAndHours(timeElapsed)
@@ -101,6 +121,14 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.tasksToBeCompleted`]: increment(-1)
     })
   }
+  const decreaseTotalEstimatedTasksTime = async (currPomodoroLength,totalEstimatedTasksTime) =>{
+    if(totalEstimatedTasksTime === 0) return
+    const newTotalEstimatedTasksTime = totalEstimatedTasksTime - currPomodoroLength
+    dispatch(setTotalEstimatedTaskTime(newTotalEstimatedTasksTime))
+    await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.totalEstimatedTasksTime`]: increment(-currPomodoroLength)
+    })
+  }
   
   console.log(totalEstimatedTasksTime);
   //Calculate Total Tasks Time
@@ -116,7 +144,7 @@ const AddTaskComponent = ({resource}) => {
    const inputRef = useRef()
     ///Add task handler////////
     console.log(currTaskObject);
-    ///Add task ////
+    ///Handle   Add task ////
     const handleAddTask = () => {
     if(inputRef.current.value === ""){
       setShowUI(false)
@@ -128,30 +156,35 @@ const AddTaskComponent = ({resource}) => {
     taskUpdateHandler(inputRef.current.value,currTaskObject,tasksArray)
     incrementTasksTodo(tasksToBeCompleted)
     dispatch(FetchTasks(userId))
-    const totalTasksTime = calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoro)
+    const totalTasksTime = calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros)
     calculateMinutesAndHours(totalTasksTime)
+    updateTasksHourMinutesArray(totalTasksTime)
     updateTotalTasksTime(totalTasksTime)
+    updateTasksTimesArray(tasksTimesArray,pomodoroCurrLength,numbSelectedPomodoros)
     setShowUI(false)
     inputRef.current.value = ""
-    // dispatch(hidePomodoroSettings())
+    
   }
   const updateCurrTasksArray = (currTasksArray,taskIndex) => {
-    const newTasksArray =  currTasksArray.filter((task,index) => index !== taskIndex)
+    const newTasksArray =  currTasksArray.filter((task,index) => index !== taskIndex) 
     console.log(newTasksArray);
     dispatch(updateProjectTasks(newTasksArray))
-    // const newTasksArray = 
+   
   }
   const handleComplete = async (index) => {
-    //1. Compute and update completed tasks
-    //2. Update project tasks array,
-    //3. Filter projects array
+    const newTasksArray = [...completedTasksArray,tasksArray[index]]
+    dispatch(setCompletedTasksArray(newTasksArray))
     updateCurrTasksArray(tasksArray,index)
     const numCompletedTasks = completedTasks + 1
     dispatch(setCompletedTasks(numCompletedTasks))
    await updateDoc(userTasksRef,{
-      [`projectsTasks.${taskName}.completedTasks`]: increment(1)
+      [`projectsTasks.${taskName}.completedTasks`]: increment(1),
+     })
+      await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.completedTasksArray`]: newTasksArray
 
      })
+   decreaseTotalEstimatedTasksTime(pomodoroCurrLength)
   }
   const toggleDisplay = () => {
     if(showFinishedTasks) {
@@ -256,7 +289,7 @@ const AddTaskComponent = ({resource}) => {
           <IoMdArrowDropdown className={style.dropDownIcon}/>
         </div>
       </div>
-      <CompletedTasks showFinishedTasks={showFinishedTasks} projectCurrTask ={tasksArray}/>
+      <CompletedTasks showFinishedTasks={showFinishedTasks} completedTasksArray = {completedTasksArray}/>
      <PomodoroSetting showUI ={showUI} handleAddTask={handleAddTask}/>
     </div>
   );

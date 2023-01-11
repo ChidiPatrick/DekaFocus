@@ -13,7 +13,13 @@ import autoMergeLevel1 from "redux-persist/es/stateReconciler/autoMergeLevel1";
 const persistConfig = {
   key: "root",
   storage,
-  stateReconciler: autoMergeLevel1
+  stateReconciler: autoMergeLevel1,
+  // blacklist: ['settingSlice']
+}
+const settingsConfig = {
+  key: 'settingSlice',
+  storage,
+  // blacklist: ['numbSelectedPomodoro','totalEstimatedTasksTime','tasksHourMinutesArray']
 }
 const rootReducer = combineReducers({
     frontPage: FrontPageSlice,

@@ -3,12 +3,15 @@ import styles from "./CompletedTask.module.scss"
 import { BiCalendar, BiCheckCircle } from "react-icons/bi";
 import { FaStopwatch,FaAngleRight,FaCaretRight} from "react-icons/fa";
 import { IoIosCheckmark } from "react-icons/io";
+import { useSelector } from "react-redux";
 ////////////////////////////////////////////////
-const CompletedTasks = ({projectCurrTask, showFinishedTasks}) => {
-    console.log(projectCurrTask);
+const CompletedTasks = ({completedTasksArray, showFinishedTasks}) => {
+    // const completedTasksArray = useSelector(state => state.settings.completedTasksArray)
     return(
+        
+        completedTasksArray.length > 1 ?
         <div className={showFinishedTasks ? styles.finishedTaskComponent : styles.hideTasks}>
-            {projectCurrTask.map((task,index) => {
+            {completedTasksArray.map((task,index) => {
               return <div className={styles.finishedTasksWrapper} key = {index}>
                     <div className={styles.taskDate}>Date</div>
                     <div className={styles.finishedTaskContainer}>
@@ -16,7 +19,7 @@ const CompletedTasks = ({projectCurrTask, showFinishedTasks}) => {
                             <IoIosCheckmark className={styles.finishedTaskIcon}/>
                         </div>
                         <div className={styles.finishedTaskInnerWrapper}>
-                            <div className={styles.finishedTask}>Finished task</div>
+                            <div className={styles.finishedTask}>{task}</div>
                             <div className={styles.pomodoroIcon}>
                                 <FaStopwatch className={styles.stopwatch}/>
                             </div>
@@ -26,6 +29,7 @@ const CompletedTasks = ({projectCurrTask, showFinishedTasks}) => {
                 </div>
             })}
         </div>
+        : null
     )
 }
 export default CompletedTasks
