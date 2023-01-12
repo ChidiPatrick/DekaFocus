@@ -63,6 +63,7 @@ export const FetchTasks = createAsyncThunk("settings/fetchProjectTasks",async (u
 		// const tasks = projectsTasks
 		dispatch(setUserTasks(projectsTasks))
 		dispatch(setTaskDataAvailable())
+		// dispatch(setTasksTimesArray())
          return projectsTasks
    	 }
 	}
@@ -151,11 +152,7 @@ const SettingSlice = createSlice({
 			state.taskHeader = action.payload
 		},
 		getProjectTodos(state,action){
-			// const newTask = []
-			// newTask.push(action.payload)
-			// state.projectTasks = [...state.projectTasks,...newTask] 
 			state.projectTasks.push(action.payload)
-			// console.log(state.projectTasks);
 		},
 		
 		setProjectId(state,action){
@@ -181,6 +178,11 @@ const SettingSlice = createSlice({
 		updateTasksToBeCompleted(state, action){
 			state.tasksToBeCompleted = state.tasksToBeCompleted + 1
 		},
+		reduceTasksToBeCompleted(state,action){
+			if(action.payload < 1) return
+			state.tasksToBeCompleted = action.payload - 1
+		}
+		,
 		setTimeElasped(state,action){
 			state.elapsedTime = action.payload
 		},
@@ -249,6 +251,7 @@ export const {
 	setTasksHourMinutesArray,
 	updateProjectTasks,
 	setCompletedTasksArray,
-	setTasksTimesArray
+	setTasksTimesArray,
+	reduceTasksToBeCompleted
 } = SettingSlice.actions;
 export default SettingSlice.reducer;

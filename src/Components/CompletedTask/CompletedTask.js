@@ -9,7 +9,7 @@ const CompletedTasks = ({completedTasksArray, showFinishedTasks}) => {
     // const completedTasksArray = useSelector(state => state.settings.completedTasksArray)
     return(
         
-        completedTasksArray.length > 1 ?
+        completedTasksArray.length > 0 ?
         <div className={showFinishedTasks ? styles.finishedTaskComponent : styles.hideTasks}>
             {completedTasksArray.map((task,index) => {
               return <div className={styles.finishedTasksWrapper} key = {index}>

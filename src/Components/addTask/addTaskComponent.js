@@ -19,7 +19,9 @@ import {
   updateProjectTasks, 
   setCompletedTasksArray,
   setNumSelectedPomodoro,
-  setTasksTimesArray
+  setTasksTimesArray,
+  setCurrTasks,
+  reduceTasksToBeCompleted
 } from "../Settings/SettingsSlice";
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
 import { hidePomodoroSettings,showPomodoroSettings } from "../PomodoroSetting/PomodoroSettingSlice";
@@ -61,7 +63,7 @@ const AddTaskComponent = ({resource}) => {
   const finishedTasksArray = []
    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
    ///////////////////////////////////////////////////////////////
-   console.log(tasksTimesArray)
+   console.log(tasksToBeCompleted)
 //  const tasksHoursMinutesArray =   calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros))
   const moveToPreviousePage = () => {
     navigate(-1);
@@ -116,18 +118,40 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.tasksToBeCompleted`]: totalTasks
     })
   }
-  const decrementTasksTodo = async () => {
+  const decrementTasksTodo = async (tasksToBeCompleted) => {
+    const newTasksToBeCompletedNum = tasksToBeCompleted - 1
+    // dispatch(se)
    await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.tasksToBeCompleted`]: increment(-1)
     })
   }
-  const decreaseTotalEstimatedTasksTime = async (currPomodoroLength,totalEstimatedTasksTime) =>{
-    if(totalEstimatedTasksTime === 0) return
-    const newTotalEstimatedTasksTime = totalEstimatedTasksTime - currPomodoroLength
-    dispatch(setTotalEstimatedTaskTime(newTotalEstimatedTasksTime))
+  const removeTaskTime = async (tasksTimesArray,taskTimeIndex) => {
+    const newTasksTimesArray = tasksTimesArray.filter((tasksTimes,index) => taskTimeIndex !== index)
+    setTasksHourMinutesArray(newTasksTimesArray)
     await updateDoc(userTasksRef,{
-      [`projectsTasks.${taskName}.totalEstimatedTasksTime`]: increment(-currPomodoroLength)
+      [`projectsTasks.${taskName}.tasksTimesArray`]: newTasksTimesArray
     })
+  }
+  const decreaseTotalEstimatedTasksTime = async (taskIndex,totalEstimatedTasksTime,tasksTimesArray) =>{
+    if(totalEstimatedTasksTime === 0) return
+    if(tasksTimesArray.length < 1) {
+      return
+    }
+    let newTotalEstimatedTasksTime = totalEstimatedTasksTime - tasksTimesArray[taskIndex]
+    if(newTotalEstimatedTasksTime >= 0){
+      dispatch(setTotalEstimatedTaskTime(newTotalEstimatedTasksTime))
+      await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.totalEstimatedTasksTime`]: newTotalEstimatedTasksTime
+    })
+    }
+    else {
+      dispatch(setTotalEstimatedTaskTime(0))
+      await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.totalEstimatedTasksTime`]: 0
+    })
+    }
+    
+    // dispatch(FetchTasks(userId))
   }
   
   console.log(totalEstimatedTasksTime);
@@ -171,7 +195,20 @@ const AddTaskComponent = ({resource}) => {
     dispatch(updateProjectTasks(newTasksArray))
    
   }
-  const handleComplete = async (index) => {
+  const removeAndUpdateTaskFromTasksArray = async (taskIndex,tasksArray,completedTasksArray) => {
+    const newCompletedTasksArray = [...completedTasksArray,tasksArray[taskIndex]]
+    dispatch(setCompletedTasksArray(newCompletedTasksArray))
+   const newTasksArray = tasksArray.filter((task,index) => index !== taskIndex)
+   console.log(newTasksArray);
+   dispatch(setCurrTasks(newTasksArray))
+   await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.tasks`]: newTasksArray
+     })
+     await updateDoc(userTasksRef,{
+    [`projectsTasks.${taskName}.completedTasksArray`]: newCompletedTasksArray
+     })
+  }
+  const handleComplete = async (index,totalEstimatedTasksTime,tasksTimesArray,tasksArray,completedTasksArray) => {
     const newTasksArray = [...completedTasksArray,tasksArray[index]]
     dispatch(setCompletedTasksArray(newTasksArray))
     updateCurrTasksArray(tasksArray,index)
@@ -184,7 +221,12 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.completedTasksArray`]: newTasksArray
 
      })
-   decreaseTotalEstimatedTasksTime(pomodoroCurrLength)
+   decreaseTotalEstimatedTasksTime(index,totalEstimatedTasksTime,tasksTimesArray)
+   removeTaskTime(tasksTimesArray,index)
+   removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
+   decrementTasksTodo(tasksToBeCompleted)
+   dispatch(reduceTasksToBeCompleted(tasksToBeCompleted))
+   navigate(0)
   }
   const toggleDisplay = () => {
     if(showFinishedTasks) {
@@ -203,9 +245,6 @@ const AddTaskComponent = ({resource}) => {
     <div className={style.TaskWrapper}>
       <div className={style.TaskHeaderWrapper}>
         <ButtonBack/>
-        {/* <button className={style.backBtn} onClick={moveToPreviousePage}>
-          <HiChevronLeft className={style.navigateBackIcon} />
-        </button> */}
         <h2 className={style.TaskHeader}>{projectTitle.length > 20 ? projectTitle.slice(0,17).padEnd(20,"."): projectTitle}</h2>
         <button className={style.sort} >
           <TbArrowsDownUp />
@@ -274,8 +313,7 @@ const AddTaskComponent = ({resource}) => {
      <div className={style.tasksWrapper}>
         {tasksArray.length > 0 ? tasksArray.map((task, i) => {
         return (<div className={style.taskContainer} key ={i}>
-          {/* <ImBin className={style.trashBin}/> */}
-          <div className={style.circle} onClick = {() => handleComplete(i)}></div>
+          <div className={style.circle} onClick = {() => handleComplete(i,totalEstimatedTasksTime,tasksTimesArray,tasksArray,completedTasksArray)}></div>
            <div className={style.task}>
             <span>{task}</span>
             <span onClick={handleStart}>Play</span>
