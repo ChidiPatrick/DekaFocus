@@ -90,7 +90,7 @@ const AddTaskComponent = ({resource}) => {
     const hours = minutes / 60
     setTasksHoursMinutesArray([parseInt(hours),remainingMinutes])
   }
-  const updateTasksTimesArray = async (tasksTimesArray,currPomodoroLength,numbSelectedPomodoros) => {
+  const addTaskTimeToTasksTimesArray = async (tasksTimesArray,currPomodoroLength,numbSelectedPomodoros) => {
     const newTime = currPomodoroLength * numbSelectedPomodoros
     const newArray = [...tasksTimesArray,newTime]
     dispatch(setTasksTimesArray(newArray))
@@ -126,9 +126,14 @@ const AddTaskComponent = ({resource}) => {
   }
   const removeTaskTime = async (tasksTimesArray,taskTimeIndex) => {
     const newTasksTimesArray = tasksTimesArray.filter((tasksTimes,index) => taskTimeIndex !== index)
-    setTasksHourMinutesArray(newTasksTimesArray)
+    const newTotalEstimatedTasksTime = newTasksTimesArray.reduce((firstValue,secondValue) => firstValue + secondValue,0)
+    dispatch(setTotalEstimatedTaskTime(newTotalEstimatedTasksTime))
+    setTasksHoursMinutesArray(newTasksTimesArray)
     await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.tasksTimesArray`]: newTasksTimesArray
+    })
+    await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.totalEstimatedTasksTime`]: newTotalEstimatedTasksTime
     })
   }
   const decreaseTotalEstimatedTasksTime = async (taskIndex,totalEstimatedTasksTime,tasksTimesArray) =>{
@@ -183,7 +188,7 @@ const AddTaskComponent = ({resource}) => {
     calculateMinutesAndHours(totalTasksTime)
     updateTasksHourMinutesArray(totalTasksTime)
     updateTotalTasksTime(totalTasksTime)
-    updateTasksTimesArray(tasksTimesArray,pomodoroCurrLength,numbSelectedPomodoros)
+    addTaskTimeToTasksTimesArray(tasksTimesArray,pomodoroCurrLength,numbSelectedPomodoros)
     setShowUI(false)
     inputRef.current.value = ""
     
