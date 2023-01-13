@@ -12,7 +12,7 @@ import {
   getProjectTodos,
   FetchTasks,
   updateCurrProjectTasks,
-  updateTasksToBeCompleted,
+  increaseTasksToBeCompleted,
   setTotalEstimatedTaskTime,
   setTasksHourMinutesArray,
   setCompletedTasks,
@@ -63,7 +63,7 @@ const AddTaskComponent = ({resource}) => {
   const finishedTasksArray = []
    const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
    ///////////////////////////////////////////////////////////////
-   console.log(tasksToBeCompleted)
+   console.log(completedTasksArray)
 //  const tasksHoursMinutesArray =   calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros))
   const moveToPreviousePage = () => {
     navigate(-1);
@@ -99,8 +99,6 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.tasksTimesArray`]: newArray
     })
   }
-  // const tasksHourMinutesArray = calculateMinutesAndHours(estimatedTime)
-  // const timeElapsedArray = calculateMinutesAndHours(timeElapsed)
   /////////Update Tasks in the server ////
   const taskUpdateHandler = async (task,oldTaskObject,updatedTaskArray) => {
     const oldObjectTasksArray = oldTaskObject.tasks
@@ -113,16 +111,17 @@ const AddTaskComponent = ({resource}) => {
   const incrementTasksTodo = async (tasksToBeCompleted) => {
     const totalTasks = tasksToBeCompleted + 1
     console.log(totalTasks)
-    dispatch(updateTasksToBeCompleted())
+    dispatch(increaseTasksToBeCompleted())
     await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.tasksToBeCompleted`]: totalTasks
     })
   }
   const decrementTasksTodo = async (tasksToBeCompleted) => {
+    if(tasksToBeCompleted === 0) return
     const newTasksToBeCompletedNum = tasksToBeCompleted - 1
-    // dispatch(se)
+   dispatch(reduceTasksToBeCompleted(newTasksToBeCompletedNum))
    await updateDoc(userTasksRef,{
-      [`projectsTasks.${taskName}.tasksToBeCompleted`]: increment(-1)
+      [`projectsTasks.${taskName}.tasksToBeCompleted`]: newTasksToBeCompletedNum
     })
   }
   const removeTaskTime = async (tasksTimesArray,taskTimeIndex) => {
@@ -195,6 +194,11 @@ const AddTaskComponent = ({resource}) => {
     dispatch(updateProjectTasks(newTasksArray))
    
   }
+  const updateCompletedTasksArray = async (newCompletedTasksArray) => {
+     await updateDoc(userTasksRef,{
+    [`projectsTasks.${taskName}.completedTasksArray`]: newCompletedTasksArray
+     })
+  }
   const removeAndUpdateTaskFromTasksArray = async (taskIndex,tasksArray,completedTasksArray) => {
     const newCompletedTasksArray = [...completedTasksArray,tasksArray[taskIndex]]
     dispatch(setCompletedTasksArray(newCompletedTasksArray))
@@ -204,9 +208,7 @@ const AddTaskComponent = ({resource}) => {
    await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.tasks`]: newTasksArray
      })
-     await updateDoc(userTasksRef,{
-    [`projectsTasks.${taskName}.completedTasksArray`]: newCompletedTasksArray
-     })
+    // updateCompletedTasksArray(newCompletedTasksArray)
   }
   const handleComplete = async (index,totalEstimatedTasksTime,tasksTimesArray,tasksArray,completedTasksArray) => {
     const newTasksArray = [...completedTasksArray,tasksArray[index]]
@@ -214,6 +216,10 @@ const AddTaskComponent = ({resource}) => {
     updateCurrTasksArray(tasksArray,index)
     const numCompletedTasks = completedTasks + 1
     dispatch(setCompletedTasks(numCompletedTasks))
+    decreaseTotalEstimatedTasksTime(index,totalEstimatedTasksTime,tasksTimesArray)
+   removeTaskTime(tasksTimesArray,index)
+   removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
+   decrementTasksTodo(tasksToBeCompleted)
    await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.completedTasks`]: increment(1),
      })
@@ -221,11 +227,7 @@ const AddTaskComponent = ({resource}) => {
       [`projectsTasks.${taskName}.completedTasksArray`]: newTasksArray
 
      })
-   decreaseTotalEstimatedTasksTime(index,totalEstimatedTasksTime,tasksTimesArray)
-   removeTaskTime(tasksTimesArray,index)
-   removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
-   decrementTasksTodo(tasksToBeCompleted)
-   dispatch(reduceTasksToBeCompleted(tasksToBeCompleted))
+   
    navigate(0)
   }
   const toggleDisplay = () => {

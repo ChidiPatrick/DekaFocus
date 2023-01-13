@@ -175,12 +175,12 @@ const SettingSlice = createSlice({
 		setTasksToBeCompleted(state,action){
 			state.tasksToBeCompleted = action.payload
 		},
-		updateTasksToBeCompleted(state, action){
+		increaseTasksToBeCompleted(state, action){
 			state.tasksToBeCompleted = state.tasksToBeCompleted + 1
 		},
 		reduceTasksToBeCompleted(state,action){
-			if(action.payload < 1) return
-			state.tasksToBeCompleted = action.payload - 1
+			// if(action.payload < 1) return
+			state.tasksToBeCompleted = action.payload
 		}
 		,
 		setTimeElasped(state,action){
@@ -245,7 +245,7 @@ export const {
 	setEstimatedTime,
 	setTasksToBeCompleted,
 	setTimeElasped,
-	updateTasksToBeCompleted,
+	increaseTasksToBeCompleted,
 	setNumSelectedPomodoro,
 	setTotalEstimatedTaskTime,
 	setTasksHourMinutesArray,
