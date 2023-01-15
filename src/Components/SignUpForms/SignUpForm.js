@@ -74,6 +74,7 @@ const SignUpForm = () => {
 		},
 		completed: [],
 		projectsTasks: {},
+		projectsTasksTimesArrays : []
 	})
 	}
 	const createNewUser = async (values) => {

@@ -39,6 +39,7 @@ import {
   setCompletedTasksArray,
   setTotalEstimatedTaskTime,
   setTasksHourMinutesArray,
+  updateNumbersArray,
   setTasksTimesArray
 } from "../Settings/SettingsSlice";
 import {persistor} from "../Store/Store"
@@ -56,9 +57,23 @@ const UserAccountUI = (props) => {
   const projectCurrTask = useSelector(state => state.settings.projectTasks)
   const currPomodoroLength = useSelector(state => state.settings.pomodoroCurrLength)
   const numbSelectedPomodoros =  useSelector(state => state.settings.numbSelectedPomodoro)
-  /////////Get projects /////////////////
-  const linkRef = useRef()
+  const numbersArray = useSelector(state => state.settings.numbersArray)
   console.log(userTasks);
+  /////////Get projects /////////////////
+  // let finishedTasksArray = [1,2,3,4,5,6,7,8,9,10]
+  // const [numArray,setNumArray] = useState(numbersArray)
+  const removeNum = (array,numIndex) => {
+    const newArray = numbersArray.filter((num,index) => numIndex !== index)
+    const totalNum = newArray.reduce((i,s) => i+s,0)
+    console.log(totalNum);
+    // setNumArray(newArray)
+    // finishedTasksArray = newArray
+    // console.log(newArray);
+    dispatch(updateNumbersArray(newArray))
+  }
+  console.log(numbersArray);
+  const linkRef = useRef()
+  console.log(projects);
   const loadingSpinner = <div className={styles.loadingSpinner}>
 			<span className={styles.loader}></span>
 		</div>
@@ -83,7 +98,7 @@ const UserAccountUI = (props) => {
       dispatch(setTotalEstimatedTaskTime(projectTask.totalEstimatedTasksTime))
       dispatch(setTasksTimesArray(projectTask.tasksTimesArray))
     }
-    const selectProject = (projectId) => {
+    const selectProject = (projects,projectId) => {
       projects.filter((project,index) => {
         if (index === projectId){
           const taskName = project.projectTitle.split(" ").join("")
@@ -94,7 +109,7 @@ const UserAccountUI = (props) => {
           dispatch(setProjectId(projectId))
           getProjectTaskData(userTasks[taskName])
           // persistor.purge()
-          calculateMinutesAndHours(calcTotalTasksTime(userTasks[taskName].totalEstimatedTasksTime,currPomodoroLength,numbSelectedPomodoros ))
+          // calculateMinutesAndHours(calcTotalTasksTime(userTasks[taskName].totalEstimatedTasksTime,currPomodoroLength,numbSelectedPomodoros ))
           navigate("/todayTodo")
           return 
         }
@@ -102,9 +117,9 @@ const UserAccountUI = (props) => {
     }
     
     
-    const handleClicked =  (projectId) => {
+    const handleClicked =  (projects,projectId) => {
       //1.Get selected project from projects object and dispatch add task action
-      selectProject(projectId)
+      selectProject(projects,projectId)
      
       //2. Get selected project's task object
       //3. Add task to task store
@@ -195,7 +210,7 @@ const UserAccountUI = (props) => {
           {
 
           projects && projects.map((project,i) => {
-           return <div  className={styles.project} ref = {linkRef} onClick = {() => handleClicked(i)} key = {i}>
+           return <div  className={styles.project} ref = {linkRef} onClick = {() => handleClicked(projects,i)} key = {i}>
               <div className={styles.projectWrapper}>
                 <div className={styles.colorAndProjectWrapper}>
                   <span style={{backgroundColor: `${project.projectColor}`}} className={styles.projectColor}></span>
@@ -224,6 +239,11 @@ const UserAccountUI = (props) => {
               </div>
           </Link>
         </div>
+        {/* <div style={{display: "flex",width: '100%', justifyContent: "space-around"}}>
+      {numbersArray.map((time,index) =>{
+        return <div onClick={() => removeNum(numbersArray,index)}>{time}</div>
+      })}
+     </div> */}
     </div>
   );
 };

@@ -46,6 +46,7 @@ const AddProject = ({title = "New Project"}) => {
                         tasksTimesArray: []
                     }
         })
+        
         dispatch(fetchUserSettings(userId))
         dispatch(FetchTasks(userId))
     }

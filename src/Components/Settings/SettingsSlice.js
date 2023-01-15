@@ -36,7 +36,8 @@ const initialState = {
 	totalEstimatedTasksTime: 0,
 	tasksHourMinutesArray: [0,0],
 	completedTasksArray: [],
-	tasksTimesArray: [] 
+	tasksTimesArray: [],
+	numbersArray: [1,2,3,4,5,6,7,8,9,10] 
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -207,6 +208,9 @@ const SettingSlice = createSlice({
 		},
 		setTasksTimesArray(state,action){
 			state.tasksTimesArray = action.payload
+		},
+		updateNumbersArray(state,action){
+			state.numbersArray = action.payload
 		}
 	}
 });
@@ -252,6 +256,7 @@ export const {
 	updateProjectTasks,
 	setCompletedTasksArray,
 	setTasksTimesArray,
-	reduceTasksToBeCompleted
+	reduceTasksToBeCompleted,
+	updateNumbersArray
 } = SettingSlice.actions;
 export default SettingSlice.reducer;
