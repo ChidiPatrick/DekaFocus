@@ -35,7 +35,8 @@ import {
   setCompletedTasks,
 	setEstimatedTime,
 	setTasksToBeCompleted,
-	setTimeElasped,
+	// setTimeElasped,
+  setElapsedTimeHoursMinutesArray,
   setCompletedTasksArray,
   setTotalEstimatedTaskTime,
   setTasksHourMinutesArray,
@@ -92,7 +93,7 @@ const UserAccountUI = (props) => {
     const getProjectTaskData = (projectTask) => {
       dispatch(setCompletedTasks(projectTask.completedTasks))
       dispatch(setTasksToBeCompleted(projectTask.tasksToBeCompleted))
-      dispatch(setTimeElasped(projectTask.elaspedTime))
+      dispatch(setElapsedTimeHoursMinutesArray(projectTask.elaspedTime))
       dispatch(setEstimatedTime(projectTask.estimatedTime))
       dispatch(setCompletedTasksArray(projectTask.completedTasksArray))
       dispatch(setTotalEstimatedTaskTime(projectTask.totalEstimatedTasksTime))
@@ -108,8 +109,6 @@ const UserAccountUI = (props) => {
           dispatch(getProjectTitle(project.projectTitle))
           dispatch(setProjectId(projectId))
           getProjectTaskData(userTasks[taskName])
-          // persistor.purge()
-          // calculateMinutesAndHours(calcTotalTasksTime(userTasks[taskName].totalEstimatedTasksTime,currPomodoroLength,numbSelectedPomodoros ))
           navigate("/todayTodo")
           return 
         }

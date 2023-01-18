@@ -21,6 +21,7 @@ import {
   setNumSelectedPomodoro,
   setTasksTimesArray,
   setCurrTasks,
+  setActivePomodoroLength,
   reduceTasksToBeCompleted
 } from "../Settings/SettingsSlice";
 import { ImBin,ImRadioUnchecked } from "react-icons/im";
@@ -48,7 +49,7 @@ const AddTaskComponent = ({resource}) => {
   const currTaskObject = useSelector(state => state.settings.currTasks)
   const taskName = useSelector(state => state.settings.clickedProjectIdentitfier)
   const tasksArray = useSelector(state => state.settings.tasks)
-  const timeElapsed = useSelector(state => state.settings.elapsedTime)
+  const elapsedTime = useSelector(state => state.settings.elapsedTime)
   const tasksToBeCompleted = useSelector(state => state.settings.tasksToBeCompleted)
   const estimatedTime = useSelector(state => state.settings.estimatedTime)
   const completedTasks = useSelector(state => state.settings.completedTasks)
@@ -57,14 +58,16 @@ const AddTaskComponent = ({resource}) => {
   const numbSelectedPomodoros = useSelector(state => state.settings.numbSelectedPomodoro)
   // const tasksHoursMinutesArray = useSelector(state => state.settings.tasksHourMinutesArray)
   const [tasksHoursMinutesArray,setTasksHoursMinutesArray] = useState(calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros)))
+  // const [elaspedTimeHoursMinutesArray,setElapsedTimeHoursMinutes] = useState(calculateMinutesAndHours(elapsedTime))
   const completedTasksArray = useSelector(state => state.settings.completedTasksArray)
   const tasksTimesArray = useSelector(state => state.settings.tasksTimesArray)
+  const elapsedTimeHoursMinutesArray = useSelector(state => state.settings.elapsedTimeHoursMinutesArray)
   const [showUI,setShowUI] = useState(false)
   const [showFinishedTasks,setShowFinishedTask] = useState((false))
   const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
   
    ///////////////////////////////////////////////////////////////
-   console.log(completedTasksArray)
+   console.log(elapsedTimeHoursMinutesArray)
 //  const tasksHoursMinutesArray =   calculateMinutesAndHours(calcTotalTasksTime(totalEstimatedTasksTime,pomodoroCurrLength,numbSelectedPomodoros))
   const moveToPreviousePage = () => {
     navigate(-1);
@@ -275,8 +278,10 @@ const AddTaskComponent = ({resource}) => {
     }
   }
   const handleStart = () => {
-    navigate('/')
     dispatch(setTriggerPlayFromTask())
+    dispatch(setActivePomodoroLength(pomodoroCurrLength))
+    
+     navigate('/')
   } 
   
   return (
@@ -320,12 +325,12 @@ const AddTaskComponent = ({resource}) => {
           </div>
           <div className={style.TaskEstimatedTime}>
             <span>
-               {tasksHoursMinutesArray[0] < 10 ? `0${tasksHoursMinutesArray[0]}` : tasksHoursMinutesArray[0]}
+               {elapsedTimeHoursMinutesArray[0] < 10 ? `0${elapsedTimeHoursMinutesArray[0]}` : elapsedTimeHoursMinutesArray[0]}
             </span>
              <span>:</span>
              <span>
               
-                {tasksHoursMinutesArray[1] < 10 ? `0${tasksHoursMinutesArray[1]}` : tasksHoursMinutesArray[1]}
+                {elapsedTimeHoursMinutesArray[1] < 10 ? `0${elapsedTimeHoursMinutesArray[1]}` : elapsedTimeHoursMinutesArray[1]}
               
              </span>
           </div>

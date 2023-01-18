@@ -35,8 +35,10 @@ import {
   startCounting,
   updateCurrnetTime,
   turnOffCountDownRunning,
-  turnOnCountDownRunning
+  turnOnCountDownRunning,
+
 } from "./FrontPageSlice";
+import {setTimeElasped,setElapsedTimeHoursMinutesArray} from "../Settings/SettingsSlice"
 import { getUserId } from "../SignUpForms/SignUpFormSlice";
 // import Toness from "../audioFiles/AudioFiles"
 import Bell from "../audioFiles/Bell.mp3"
@@ -49,6 +51,9 @@ import Notification from "../audioFiles/Notification.mp3"
 import Thriller from "../audioFiles/Thriller.mp3"
 import TubularBell from "../audioFiles/TubularBell.mp3"
 import Announcement from "../audioFiles/Announcement.mp3"
+import { updateDoc,doc, arrayUnion, increment } from "firebase/firestore";
+import { db } from "../Firebase/Firebase";
+import { settings } from "firebase/analytics";
 /////////////////////////////////
 const FrontPage = ({ expiryTimestamp }) => {
   const dispatch = useDispatch();
@@ -64,10 +69,18 @@ const FrontPage = ({ expiryTimestamp }) => {
   const pomodoroTime = useSelector(state => state.settings.pomodoroCurrLength)
   const countDownRunning = useSelector(state => state.frontPage.countDownRunning)
   const triggerPlayFromTask = useSelector(state => state.frontPage.triggerPlayFromTask)
+  const activeRunningPomodoroLength = useSelector(state => state.settings.activeRunningPomodoroLength)
   console.log(triggerPlayFromTask);
+  const userId =  useSelector((state) => state.signUpSlice.userId)
+  const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
+
+  const taskName = useSelector(state => state.settings.clickedProjectIdentitfier)
+   const timeElapsed = useSelector(state => state.settings.elapsedTimeHoursMinutesArray)
  ////////////////////////////////////////////////////////////
 
-   console.log(typeof tone);
+   console.log(timeElapsed);
+   const arr = [...timeElapsed,activeRunningPomodoroLength]
+   console.log(arr);
    ///Create an object of tones///
    const tones = {
     Bell,Swoosh,Thriller,TubularBell,Announcement,Notification,Buzzer,Decide,Ding,Impact
@@ -93,7 +106,27 @@ const FrontPage = ({ expiryTimestamp }) => {
       onExpiry();
     },
   });
-  
+  //Handle Time Elapsed ///
+  function calculateElapsedMinutesAndHours(minutes){
+    const remainingMinutes = minutes % 60
+    const hours = minutes / 60
+    // dispatch(setElapsedTimeHoursMinutesArray([parseInt(hours),remainingMinutes]))
+    console.log(minutes);
+    return [parseInt(hours),parseInt(remainingMinutes)]
+  }
+  const handleTimeElapsed = async (timeElapsed,activeRunningPomodoroLength) => {
+    const newTasksElapsedTimeArray = [...timeElapsed,activeRunningPomodoroLength]
+    const newTotalElapsedTime = newTasksElapsedTimeArray.reduce((firstValue,secondValue) => firstValue + secondValue,0)
+    console.log('TIME ELAPSED!');
+    console.log();
+    const newElapsedHourseMinutesArray = calculateElapsedMinutesAndHours(newTotalElapsedTime)
+    dispatch(setElapsedTimeHoursMinutesArray(newElapsedHourseMinutesArray))
+    console.log(`TIMES ARRAY: ${newElapsedHourseMinutesArray}`);
+    await updateDoc(userTasksRef,{
+      [`projectsTasks.${taskName}.elaspedTime`]: newElapsedHourseMinutesArray
+     
+     })
+  }
   useEffect(() => {
     if(countDownRunning) {
       start()
@@ -123,7 +156,8 @@ const FrontPage = ({ expiryTimestamp }) => {
   },[countDownRunning,isRunning])
   // console.log(expiryTimestamp);
   const onExpiry = () => {
-    // workAlarm.play();
+    workAlarm.play();
+    handleTimeElapsed(timeElapsed,parseInt(activeRunningPomodoroLength))
     dispatch(resetState());
     restart(getDate(), false);
     dispatch(breakStart());
@@ -163,6 +197,7 @@ const FrontPage = ({ expiryTimestamp }) => {
     dispatch(hideContinueBtn());
     dispatch(hideStopBtn());
     dispatch(turnOffCountDownRunning())
+   
   };
   
   return (
