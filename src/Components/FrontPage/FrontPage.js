@@ -73,6 +73,8 @@ const FrontPage = ({ expiryTimestamp }) => {
   console.log(triggerPlayFromTask);
   const userId =  useSelector((state) => state.signUpSlice.userId)
   const userTasksRef = doc(db,"users",`${userId}`,`userTasksCollection`,`tasks`)
+  const date = new Date()
+  console.log(date);
 
   const taskName = useSelector(state => state.settings.clickedProjectIdentitfier)
    const timeElapsed = useSelector(state => state.settings.elapsedTimeHoursMinutesArray)

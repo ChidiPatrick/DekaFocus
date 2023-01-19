@@ -43,7 +43,8 @@ const AddProject = ({title = "New Project"}) => {
                         tasks: [],
                         totalEstimatedTasksTime: 0,
                         completedTasksArray: [],
-                        tasksTimesArray: []
+                        tasksTimesArray: [],
+                        
                     }
         })
         

@@ -31,8 +31,7 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import { db } from "../Firebase/Firebase";
 import { updateDoc,doc, arrayUnion, increment } from "firebase/firestore";
 import { setTriggerPlayFromTask } from "../FrontPage/FrontPageSlice";
-import { async } from "@firebase/util";
-import { push } from "firebase/database";
+
 //////////////////////////////////////////////////
 ////Add task Component//////////////
 /////////To do list ////////////
@@ -224,7 +223,12 @@ const AddTaskComponent = ({resource}) => {
     dispatch(updateProjectTasks(newTasksArray))
    
   }
-  const updateCompletedTasksArray = async (newCompletedTasksArray) => {
+  const updateCompletedTasksArray = async (completedTasksArray,tasksArray,index) => {
+    const date = new Date().toString()
+    const completedTaskTitle = tasksArray[index]
+    const newCompletedTasksArray = [...completedTasksArray,{taskTitle: completedTaskTitle,date}]
+    console.log(newCompletedTasksArray);
+    dispatch(setCompletedTasksArray(newCompletedTasksArray))
      await updateDoc(userTasksRef,{
     [`projectsTasks.${taskName}.completedTasksArray`]: newCompletedTasksArray
      })
@@ -238,36 +242,18 @@ const AddTaskComponent = ({resource}) => {
    await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.tasks`]: newTasksArray
      })
-    // updateCompletedTasksArray(newCompletedTasksArray)
   }
   const handleComplete = async (index,totalEstimatedTasksTime,tasksTimesArray,tasksArray,completedTasksArray) => {
-    const newTasksArray = [...completedTasksArray,tasksArray[index]]
-    dispatch(setCompletedTasksArray(newTasksArray))
     updateCurrTasksArray(tasksArray,index)
     const numCompletedTasks = completedTasks + 1
     dispatch(setCompletedTasks(numCompletedTasks))
     removeTaskTime(tasksTimesArray,index)
-    // decreaseTotalEstimatedTasksTime(index,totalEstimatedTasksTime, removeTaskTime(tasksTimesArray,index))
-      removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
-      decrementTasksTodo(tasksToBeCompleted)
-    
-    // console.log(newTasksTimesArray);
-    // newTasksTimesArray.then(res => {
-    //   decreaseTotalEstimatedTasksTime(index,totalEstimatedTasksTime,newTasksTimesArray)
-    //   removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
-    //   decrementTasksTodo(tasksToBeCompleted)
-    // })
-   
+    removeAndUpdateTaskFromTasksArray(index,tasksArray,completedTasksArray)
+    decrementTasksTodo(tasksToBeCompleted)
+    updateCompletedTasksArray(completedTasksArray,tasksArray,index)
     await updateDoc(userTasksRef,{
       [`projectsTasks.${taskName}.completedTasks`]: increment(1),
-      [`projectsTasks.${taskName}.completedTasksArray`]: newTasksArray,
      })
-    //   await updateDoc(userTasksRef,{
-    //   [`projectsTasks.${taskName}.completedTasksArray`]: newTasksArray
-
-    //  })
-   
-  //  navigate(0)
   }
   const toggleDisplay = () => {
     if(showFinishedTasks) {
