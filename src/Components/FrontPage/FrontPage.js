@@ -80,9 +80,9 @@ const FrontPage = ({ expiryTimestamp }) => {
    const timeElapsed = useSelector(state => state.settings.elapsedTimeHoursMinutesArray)
  ////////////////////////////////////////////////////////////
 
-   console.log(timeElapsed);
-   const arr = [...timeElapsed,activeRunningPomodoroLength]
-   console.log(arr);
+  //  console.log(timeElapsed);
+  //  const arr = [...timeElapsed,parseInt(activeRunningPomodoroLength)]
+  //  console.log(arr);
    ///Create an object of tones///
    const tones = {
     Bell,Swoosh,Thriller,TubularBell,Announcement,Notification,Buzzer,Decide,Ding,Impact
@@ -117,7 +117,7 @@ const FrontPage = ({ expiryTimestamp }) => {
     return [parseInt(hours),parseInt(remainingMinutes)]
   }
   const handleTimeElapsed = async (timeElapsed,activeRunningPomodoroLength) => {
-    const newTasksElapsedTimeArray = [...timeElapsed,activeRunningPomodoroLength]
+    const newTasksElapsedTimeArray = [...timeElapsed,parseInt(activeRunningPomodoroLength)]
     const newTotalElapsedTime = newTasksElapsedTimeArray.reduce((firstValue,secondValue) => firstValue + secondValue,0)
     console.log('TIME ELAPSED!');
     console.log();
