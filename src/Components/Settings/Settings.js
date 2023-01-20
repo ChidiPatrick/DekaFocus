@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import NavButton from '../NavButtons/NavButton';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import {useCollection, useDocument, useDocumentData, useDocumentOnce} from "react-firebase-hooks/firestore"
-import { db,auth,app } from '../Firebase/Firebase';
+import { db,auth,app,storage } from '../Firebase/Firebase';
 import {doc,collection,getDoc,updateDoc} from "firebase/firestore"
 import { getAuth,onAuthStateChanged } from 'firebase/auth';
 import Spinner from '../Spinner/Spinner';
@@ -30,6 +30,7 @@ import {
 	disableGoForBreak,
 	enableGoForBreak,
 	getUserSettings,
+	setUserAvatarURL
 	
 } from '../Settings/SettingsSlice';
 import { fetchUserSettings } from '../Settings/SettingsSlice';
@@ -39,9 +40,11 @@ import Switch from '@mui/material/Switch';
 // import { Switch } from 'evergreen-ui';
 import { ClipLoader } from 'react-spinners/ClipLoader';
 import { createResource } from '../PersonApi/PersonApi';
-
 import SettingsComponent from './settingsComponent';
-import {persistor} from "../Store/Store"
+import  Avatar  from 'react-avatar';
+import {ref,getDownloadURL,uploadBytesResumable} from "@firebase/storage"
+import FrontPage from '../FrontPage/FrontPage';
+
 
 const Settings = (props) => {	
 onAuthStateChanged(auth, (user) => {
@@ -50,9 +53,14 @@ onAuthStateChanged(auth, (user) => {
 	///////////////////
 	//HOOKS//
 	const [ checked, setChecked ] = useState(false);
+	const [selectedFile,setSelectedFile] = useState(null)
+	const [imgUrl,setImgUrl] = useState("")
+	// const []
+	const [loadingPercentage,setLoadingPercentage] = useState(`${0}%`)
 	///GLOBALS/////////
 	const dispatch = useDispatch();
 	////Select Display states/////
+	console.log(selectedFile);
 	const selected = useSelector((state) => state.settings.selected);
 	const pomodoroLengthSelected = useSelector((state) => state.settings.pomodoroLengthSelected);
 	const shortBreakLengthSelected = useSelector((state) => state.settings.shortBreakLengthSelected);
@@ -71,11 +79,19 @@ onAuthStateChanged(auth, (user) => {
 	const breakAlarm = useSelector(state => state.tones.breakAlarm)
 	const userId = useSelector((state) => state.signUpSlice.userId)
 	const [settings,setSettings] = useState(userSettings)
+	const userBioData = useSelector(state => state.settings.userBioData)
+	const userAvatarURL = useSelector(state => state.settings.userAvatarURL)
+	const [avatarFile,setAvatarFile] = useState("No file")
 	//////////////////////////////////////
 	// const [user, loading, error ] = useAuthState(auth)
+	const formHandler = (e) => {
+		e.preventDefault();
+		const file = e.target[9]
+		console.log(file );
+	}
 	dispatch(getUserSettings())
 	let userData = []
-	console.log(workAlarm);
+	console.log(userBioData);
 	// const usersId = localStorage.getItem("userId")
 	console.log(userSettings);
 	/////Get data function	
@@ -89,8 +105,29 @@ onAuthStateChanged(auth, (user) => {
 	for (let i = 0; i <= 60; i++) {
 		Minutes.push(i + 1);
 	}
-	
+	const avatarRef = useRef()
+	const handleChnage = (e) => {
+		setSelectedFile(e.target.files[0])
 
+	}
+	const uploadTask = async(selectedFile) => {
+		if(!selectedFile) return
+		const storageRef = ref(storage, `/usersAvatars/${selectedFile.name}`)
+		const  uploadAvatar = uploadBytesResumable(storageRef, selectedFile)
+		uploadAvatar.on("state_changed", (snapshot) => {
+			const progress = Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 100
+			setLoadingPercentage(progress)
+		},(error) => {
+			console.log(error);
+		},
+		() => {
+			getDownloadURL(uploadAvatar.snapshot.ref).then((downloadURL) => {
+				dispatch(setUserAvatarURL(downloadURL))
+				setImgUrl(downloadURL)
+			})
+		})
+	} 
+	console.log(imgUrl);
 	///////////////////////////////////
 	//GET SELECTED MINUTE
 	const getPomodoroTime = (e) => {
@@ -231,8 +268,24 @@ onAuthStateChanged(auth, (user) => {
 				<h3 className={styles.SettingHeader}>Settings</h3>
 			</div>
 			<Link to="/userAccount" className={styles.accountDetails}>
-				<figure className={styles.Avatar} />
-				<div className={styles.userName}>Mr. Somebody</div>
+			<figure className = {styles.avatarImage}>
+				{/* <div className={styles.avatarImage}>
+				<label htmlFor='avatar' >Add File</label>
+				<input 
+					type="file" 
+					ref ={avatarRef} 
+					placeholder='Add' 
+					id = "avatar" 
+					className={styles.Avatar} 
+					name = "User Avater" 
+					accept = "image/png,image/jpg"
+					onChange ={getFileLink}
+					/>
+				
+				</div> */}
+				<img src={userAvatarURL} alt ="user avater" className={styles.userAvatar}/>
+			 </figure>
+				<div className={styles.userName}>{userBioData.firstName} {userBioData.lastName} </div>
 				<FaChevronRight className={styles.iconBack} />
 			</Link>
 			<Link to ="/Projects" className={styles.projectsLink}>
@@ -267,7 +320,7 @@ onAuthStateChanged(auth, (user) => {
 					</Link>
 			</div>
 			<div className={styles.timeSettingsWrapper}>
-				<form className={styles.minuteList}>
+				<form className={styles.minuteList} onSubmit = {formHandler}>
 					<label htmlFor="minutes" className={styles.minutesLabel} onClick={togglePomodoroSelect}>
 						<span>Pomodoro Length</span>
 						<span>{settings ? settings.pomodoroLength : pomodoroCurrLength} Minutes</span>
@@ -333,6 +386,25 @@ onAuthStateChanged(auth, (user) => {
 							);
 						})}
 					</select>
+			 {/* <form onSubmit = {getFileLink}>
+				<div className={styles.avatarImage}>
+				<label htmlFor='avatar' >Add File</label>
+				<input 
+					type="file" 
+					ref ={avatarRef} 
+					placeholder='Add' 
+					id = "avatar" 
+					className={styles.Avatar} 
+					name = "User Avater" 
+					accept = "image/png,image/PNG,image/jpg,image/JPG"
+					// onChange ={(e) => getFileLink(e)}
+					/>
+				</div>
+			 </form> */}
+			 <input type= "file" onChange={handleChnage}  className = {styles.input}/>
+				<button type = "submit" onClick={() => uploadTask(selectedFile)}>Upload</button>
+				<div>Uploaded {loadingPercentage}</div>
+				{/* <div>{selectedFile}</div> */}
 				</form>
 			</div>
 		</div>

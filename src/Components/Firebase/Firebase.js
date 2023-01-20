@@ -12,6 +12,7 @@ import {useDispatch, useSelector} from "react-redux"
 import {useNavigate} from 'react-router'
 import uuid from "react-uuid"
 import { getEmailVerificationState } from '../SignUpForms/SignUpFormSlice';
+import { getStorage } from 'firebase/storage';
 
 
 const GetUserName = () => {
@@ -33,6 +34,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app)
 const docsContainer = []
 export const db = getFirestore(app)
+export const storage = getStorage(app)
 
 const creatUserBioDB = async (user,data) => {
 	try{

@@ -1,3 +1,4 @@
+import { async } from '@firebase/util';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {doc,getDoc} from "firebase/firestore"
 import { act } from 'react-dom/test-utils';
@@ -39,8 +40,8 @@ const initialState = {
 	tasksHourMinutesArray: [0,0],
 	completedTasksArray: [],
 	tasksTimesArray: [],
-	
-	numbersArray: [1,2,3,4,5,6,7,8,9,10] 
+	userBioData: null,
+	userAvatarURL: null,
 };
 export const fetchUserSettings = createAsyncThunk("settings/fetchUserSettings", async (userId,{dispatch,getState}) =>{
 	try{
@@ -70,6 +71,20 @@ export const FetchTasks = createAsyncThunk("settings/fetchProjectTasks",async (u
 		// dispatch(setTasksTimesArray())
          return projectsTasks
    	 }
+	}
+	catch(err) {
+		console.log(err);
+	}
+})
+export const FetchUserData = createAsyncThunk("settings/fetchUserData",async (userId,{dispatch,getState}) =>{
+	try{
+		const userDataRef = doc(db,"users",`${userId}`,"userInfoFolder","userData")
+		const userData = await getDoc(userDataRef)
+		if(userData.exists()){
+			const userBio = userData.data()
+			dispatch(setUserBioData(userBio))
+			console.log(userBio);
+		}
 	}
 	catch(err) {
 		console.log(err);
@@ -220,6 +235,12 @@ const SettingSlice = createSlice({
 		},
 		setElapsedTimeHoursMinutesArray(state,action) {
 			state.elapsedTimeHoursMinutesArray = action.payload
+		},
+		setUserBioData(state,action){
+			state.userBioData = action.payload
+		},
+		setUserAvatarURL(state,action){
+			state.userAvatarURL = action.payload
 		}
 	}
 });
@@ -268,7 +289,8 @@ export const {
 	reduceTasksToBeCompleted,
 	updateNumbersArray,
 	setActivePomodoroLength,
-	setElapsedTimeHoursMinutesArray
-	
+	setElapsedTimeHoursMinutesArray,
+	setUserBioData,
+	setUserAvatarURL
 } = SettingSlice.actions;
 export default SettingSlice.reducer;

@@ -23,7 +23,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import {auth} from "./Components/Firebase/Firebase"
 import {getUserId} from "./Components/SignUpForms/SignUpFormSlice"
 import Projects from './Components/Projects/Projects';
-import {fetchUserSettings,FetchTasks} from "./Components/Settings/SettingsSlice"
+import {fetchUserSettings,FetchTasks,FetchUserData} from "./Components/Settings/SettingsSlice"
 import PasswordReset from './Components/SignUpForms/forgottenPassword';
 
 
@@ -47,6 +47,7 @@ function App() {
 			console.log(user.uid);
 			dispatch(fetchUserSettings(user.uid))
 			dispatch(FetchTasks(user.uid))
+			dispatch(FetchUserData(user.uid))
 
 		}
 	})
